@@ -52,6 +52,7 @@ export default function ArticleEditor({ article, categories }: Props) {
   )
   const [coverImageUrl, setCoverImageUrl] = useState(article?.cover_image_url ?? '')
   const [coverImageAlt, setCoverImageAlt] = useState(article?.cover_image_alt ?? '')
+  const [sources, setSources] = useState(article?.sources ?? '')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
@@ -164,6 +165,7 @@ function handleTitleChange(value: string) {
       content: editor?.getHTML() ?? '',
       cover_image_url: coverImageUrl || null,
       cover_image_alt: coverImageAlt.trim() || null,
+      sources: sources.trim() || null,
       category_id: categoryId || null,
       status: saveStatus,
       published_at: savePublishedAt,
@@ -191,7 +193,7 @@ function handleTitleChange(value: string) {
       if (!article?.id) router.push('/admin/articles')
       else router.refresh()
     }
-  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, categoryId, publishMode, scheduledAt, article, router, supabase])
+  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, sources, categoryId, publishMode, scheduledAt, article, router, supabase])
 
   return (
     <>
@@ -402,6 +404,19 @@ function handleTitleChange(value: string) {
               )}
             </div>
           </div>
+
+          <div className="bg-white rounded-xl border border-gray-100 p-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Sources</label>
+            <textarea
+              value={sources}
+              onChange={(e) => { setSources(e.target.value); setSaved(false) }}
+              placeholder={"Une source par ligne :\nhttps://example.com/article\nhttps://autre-source.com"}
+              rows={4}
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-gray-400 font-mono"
+            />
+            <p className="text-xs text-gray-400 mt-1">Une URL ou référence par ligne</p>
+          </div>
+
         </div>
       </div>
     </div>

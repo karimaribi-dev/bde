@@ -95,6 +95,7 @@ export interface Article {
   content: string | null
   cover_image_url: string | null
   cover_image_alt: string | null
+  sources: string | null
   status: ArticleStatus
   category_id: string | null
   category?: Category
