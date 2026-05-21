@@ -27,10 +27,11 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  // Maintenance mode check (skip admin, maintenance page itself, static files)
+  // Maintenance mode check (skip admin, maintenance page itself, static files, et utilisateurs connectés)
   if (
+    !user &&
     !pathname.startsWith('/admin') &&
     !pathname.startsWith('/maintenance') &&
     !pathname.startsWith('/_next') &&
