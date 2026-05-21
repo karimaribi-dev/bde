@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -27,9 +29,34 @@ export async function proxy(request: NextRequest) {
 
   await supabase.auth.getUser()
 
+  // Maintenance mode check (skip admin, maintenance page itself, static files)
+  if (
+    !pathname.startsWith('/admin') &&
+    !pathname.startsWith('/maintenance') &&
+    !pathname.startsWith('/_next') &&
+    !pathname.startsWith('/api') &&
+    !pathname.includes('.')
+  ) {
+    try {
+      const { data } = await supabase
+        .from('site_settings')
+        .select('value')
+        .eq('key', 'maintenance')
+        .single()
+
+      if (data?.value?.enabled === true) {
+        return NextResponse.rewrite(new URL('/maintenance', request.url))
+      }
+    } catch {
+      // En cas d'erreur, ne pas bloquer le site
+    }
+  }
+
   return supabaseResponse
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
 }

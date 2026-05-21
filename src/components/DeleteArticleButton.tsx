@@ -16,7 +16,7 @@ export default function DeleteArticleButton({ id, title }: { id: string; title: 
   return (
     <button
       onClick={handleDelete}
-      className="text-red-500 hover:text-red-700 text-xs font-medium transition-colors"
+      className="admin-action-delete"
     >
       Supprimer
     </button>

@@ -16,7 +16,7 @@ export default function AdminLogout() {
   return (
     <button
       onClick={handleLogout}
-      className="w-full text-left text-xs text-red-500 hover:text-red-700 transition-colors px-1"
+      className="admin-logout-btn"
     >
       Se déconnecter
     </button>

@@ -1,18 +1,28 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import SitePopup from "@/components/SitePopup";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
-const geist = Geist({ subsets: ["latin"] });
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
-  title: "AI Trends News",
+  title: "AI Trends News — Veille IA quotidienne",
   description: "Les dernières tendances en intelligence artificielle",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className="h-full">
-      <body className={`${geist.className} min-h-full antialiased`}>{children}</body>
+    <html lang="fr" className={jetbrainsMono.variable}>
+      <body>
+        {children}
+        <SitePopup />
+        <GoogleAnalytics />
+      </body>
     </html>
   );
 }

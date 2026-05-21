@@ -1,8 +1,11 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminDashboard() {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
   const [
     { count: totalArticles },
@@ -19,63 +22,56 @@ export default async function AdminDashboard() {
   ])
 
   const stats = [
-    { label: 'Total articles', value: totalArticles ?? 0, color: 'bg-blue-50 text-blue-600' },
-    { label: 'Publiés', value: published ?? 0, color: 'bg-green-50 text-green-600' },
-    { label: 'Brouillons', value: drafts ?? 0, color: 'bg-yellow-50 text-yellow-600' },
-    { label: 'Catégories', value: categories ?? 0, color: 'bg-purple-50 text-purple-600' },
+    { label: 'Total articles', value: totalArticles ?? 0, icon: 'fa-solid fa-newspaper' },
+    { label: 'Publiés', value: published ?? 0, icon: 'fa-solid fa-check' },
+    { label: 'Brouillons', value: drafts ?? 0, icon: 'fa-regular fa-file-lines' },
+    { label: 'Catégories', value: categories ?? 0, icon: 'fa-solid fa-tag' },
   ]
 
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
-        <Link
-          href="/admin/articles/new"
-          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-        >
-          + Nouvel article
-        </Link>
-      </div>
+  const username = user?.email?.split('@')[0] ?? 'Admin'
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  return (
+    <>
+      <header className="admin-header">
+        <h1>Hi, {username} !</h1>
+        <Link href="/admin/articles/new" className="admin-btn-primary">
+          <i className="fa-solid fa-plus"></i> Nouvel article
+        </Link>
+      </header>
+
+      <div className="admin-stats-grid">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-gray-100 p-5">
-            <p className="text-sm text-gray-500">{s.label}</p>
-            <p className={`text-3xl font-bold mt-1 ${s.color.split(' ')[1]}`}>{s.value}</p>
+          <div key={s.label} className="admin-stat-card">
+            <div className="admin-stat-top">
+              <span className="admin-stat-label">{s.label}</span>
+              <i className={`${s.icon} admin-stat-icon`}></i>
+            </div>
+            <div className="admin-stat-value">{s.value}</div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100">
-        <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="font-semibold text-gray-900">Articles récents</h2>
-          <Link href="/admin/articles" className="text-sm text-blue-600 hover:text-blue-800">
-            Voir tous →
-          </Link>
+      <div className="admin-card" style={{ padding: 0 }}>
+        <div className="admin-card-header" style={{ padding: '20px 25px 0 25px' }}>
+          <h3>Articles récents</h3>
+          <Link href="/admin/articles" className="admin-card-link">Voir tous</Link>
         </div>
-        <div className="divide-y divide-gray-50">
+        <div style={{ padding: '0 25px 10px 25px' }}>
           {recent?.map((article) => (
-            <div key={article.id} className="flex items-center justify-between px-5 py-3">
-              <Link
-                href={`/admin/articles/${article.id}`}
-                className="text-sm text-gray-900 hover:text-blue-600 font-medium truncate flex-1"
-              >
+            <div key={article.id} className="admin-article-row">
+              <Link href={`/admin/articles/${article.id}`} className="admin-article-title">
                 {article.title}
               </Link>
-              <span className={`ml-4 text-xs font-medium px-2 py-0.5 rounded-full ${
-                article.status === 'published'
-                  ? 'bg-green-100 text-green-700'
-                  : 'bg-yellow-100 text-yellow-700'
-              }`}>
+              <span className={`admin-badge${article.status !== 'published' ? ' admin-badge-draft' : ''}`}>
                 {article.status === 'published' ? 'Publié' : 'Brouillon'}
               </span>
             </div>
           ))}
           {!recent?.length && (
-            <p className="px-5 py-8 text-sm text-gray-400 text-center">Aucun article.</p>
+            <p className="admin-empty">Aucun article pour le moment.</p>
           )}
         </div>
       </div>
-    </div>
+    </>
   )
 }
