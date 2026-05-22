@@ -48,7 +48,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
 
         {/* Brandblock */}
         <div className="brandblock">
-          <Image src="/logo-black.png" alt="AI Trends News" width={48} height={48} style={{ objectFit: 'contain', marginBottom: 14 }} />
+          <Image src="/logo-black.png" alt="AI Trends News" width={48} height={48} style={{ objectFit: 'contain', marginBottom: 14 }} unoptimized />
           <h3>AI TRENDS<br />NEWS.</h3>
           <p>Veille quotidienne sur l&apos;intelligence artificielle. Analyses, modèles, agents et régulation.</p>
         </div>

@@ -119,7 +119,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
       <header className="topbar">
         <div className="brand">
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Image src="/logo-black.png" alt="AI Trends News" width={36} height={36} style={{ objectFit: 'contain' }} priority />
+            <Image src="/logo-black.png" alt="AI Trends News" width={36} height={36} style={{ objectFit: 'contain' }} priority unoptimized />
             <span className="brand-name">AI TRENDS NEWS</span>
           </Link>
           <span className="brand-sub">— Veille IA · Quotidienne</span>
@@ -198,7 +198,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
 
         <div className="nav-panel__head">
           <Link href="/" onClick={closePanel} className="nav-panel__brand">
-            <Image src="/logo-black.png" alt="AI Trends News" width={28} height={28} style={{ objectFit: 'contain' }} />
+            <Image src="/logo-black.png" alt="AI Trends News" width={28} height={28} style={{ objectFit: 'contain' }} unoptimized />
             <span className="brand-name" style={{ marginLeft: 8 }}>AI TRENDS NEWS</span>
           </Link>
           <button className="nav-panel__close" onClick={closePanel} aria-label="Fermer le menu">
