@@ -32,7 +32,7 @@ export default async function AdminArticlesPage() {
                 <th>Titre</th>
                 <th>Catégorie</th>
                 <th>Statut</th>
-                <th>Modifié</th>
+                <th>Date</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -53,7 +53,20 @@ export default async function AdminArticlesPage() {
                     </span>
                   </td>
                   <td style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
-                    {format(new Date(article.updated_at), 'd MMM yyyy', { locale: fr })}
+                    {article.status === 'draft'
+                      ? <span title="Intégré le">
+                          {format(new Date(article.created_at), 'd MMM yyyy', { locale: fr })}
+                          <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '11px', opacity: 0.7 }}>
+                            {format(new Date(article.created_at), 'HH:mm')}
+                          </span>
+                        </span>
+                      : <span>
+                          {format(new Date(article.updated_at), 'd MMM yyyy', { locale: fr })}
+                          <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '11px', opacity: 0.7 }}>
+                            {format(new Date(article.updated_at), 'HH:mm')}
+                          </span>
+                        </span>
+                    }
                   </td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
