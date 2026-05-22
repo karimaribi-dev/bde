@@ -29,6 +29,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
     contact: tNav('contact'),
     search_placeholder: tNav('search_placeholder'),
     no_results: tNav('no_results'),
+    tagline: tNav('tagline'),
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

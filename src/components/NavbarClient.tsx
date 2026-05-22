@@ -11,6 +11,7 @@ interface NavLabels {
   contact: string
   search_placeholder: string
   no_results: string
+  tagline: string
 }
 
 interface Props {
@@ -35,6 +36,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
     contact: 'Contact',
     search_placeholder: 'Rechercher…',
     no_results: 'Aucun résultat',
+    tagline: 'Veille IA · Quotidienne',
   }
   const l = labels ?? defaultLabels
   const [panelOpen, setPanelOpen]       = useState(false)
@@ -139,7 +141,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
             <Image src="/logo-black.png" alt="AI Trends News" width={36} height={36} style={{ objectFit: 'contain' }} priority unoptimized />
             <span className="brand-name">AI TRENDS NEWS</span>
           </Link>
-          <span className="brand-sub">Veille IA · Quotidienne</span>
+          <span className="brand-sub">{l.tagline}</span>
         </div>
         <button className="topbar-hamburger" onClick={() => setPanelOpen(true)} aria-label="Ouvrir le menu">
           <span /><span /><span />
@@ -243,14 +245,14 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
 
           {/* Langue — rangée horizontale */}
           <div className="nav-panel__locales">
-            {['fr', 'en', 'es', 'de'].map(l => (
+            {['fr', 'en', 'es', 'de'].map(code => (
               <a
-                key={l}
-                href={l === 'fr' ? '/' : `/${l}`}
-                className={`nav-panel__locale${l === locale ? ' active' : ''}`}
+                key={code}
+                href={code === 'fr' ? '/' : `/${code}`}
+                className={`nav-panel__locale${code === locale ? ' active' : ''}`}
                 onClick={closePanel}
               >
-                {l.toUpperCase()}
+                {code.toUpperCase()}
               </a>
             ))}
           </div>

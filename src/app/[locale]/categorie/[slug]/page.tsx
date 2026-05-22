@@ -27,6 +27,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
     contact: tNav('contact'),
     search_placeholder: tNav('search_placeholder'),
     no_results: tNav('no_results'),
+    tagline: tNav('tagline'),
   }
 
   const [{ data: category }, { data: allCategories }, { data: marqueeRaw }] = await Promise.all([

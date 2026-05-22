@@ -22,7 +22,7 @@ function PhotoDiv({ className, style, children }: { className?: string; style?: 
   return <div className={`photo ${className ?? ''}`} style={style}>{children}</div>
 }
 
-function SiteHeader({ categories, locale, labels }: { categories: Category[], locale: string, labels: { home: string; contact: string; search_placeholder: string; no_results: string } }) {
+function SiteHeader({ categories, locale, labels }: { categories: Category[], locale: string, labels: { home: string; contact: string; search_placeholder: string; no_results: string; tagline: string } }) {
   return <NavbarClient categories={categories} withSearch locale={locale} labels={labels} />
 }
 
@@ -82,6 +82,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
     contact: tNav('contact'),
     search_placeholder: tNav('search_placeholder'),
     no_results: tNav('no_results'),
+    tagline: tNav('tagline'),
   }
 
   // Initial load
