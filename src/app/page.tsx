@@ -144,7 +144,7 @@ export default function HomePage() {
         <article style={{ padding: '28px 28px 24px', display: 'flex', flexDirection: 'column', gap: 20, background: 'var(--paper)', borderRight: 'var(--hair)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: 'var(--hair)', paddingBottom: 10 }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>À la une</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>Analyse</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>Synthèse IA</span>
           </div>
           {featured ? (
             <Link href={`/articles/${featured.slug}`} style={{ display: 'contents' }}>
