@@ -10,7 +10,7 @@ echo "🚀 Déploiement sur le VPS..."
 echo ""
 
 # 1. Vérifier que les fichiers src/ sont bien commités (on ignore .claude/)
-UNCOMMITTED=$(git -C "$LOCAL_DIR" status --porcelain | grep -v '^\s*[?M] \.claude' | grep -v '^\s*[?M] \.claude/' || true)
+UNCOMMITTED=$(git -C "$LOCAL_DIR" status --porcelain | grep -v '\.claude' || true)
 if [ -n "$UNCOMMITTED" ]; then
   echo "⚠️  Des fichiers non commités existent. Commit d'abord avec git."
   echo "$UNCOMMITTED"
