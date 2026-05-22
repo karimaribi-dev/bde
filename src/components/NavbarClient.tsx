@@ -226,6 +226,20 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
           ))}
           <Link href="#" onClick={closePanel}>Contact</Link>
 
+          {/* Langue — rangée horizontale */}
+          <div className="nav-panel__locales">
+            {['fr', 'en', 'es', 'de'].map(l => (
+              <a
+                key={l}
+                href={l === 'fr' ? '/' : `/${l}`}
+                className={`nav-panel__locale${l === locale ? ' active' : ''}`}
+                onClick={closePanel}
+              >
+                {l.toUpperCase()}
+              </a>
+            ))}
+          </div>
+
           {/* Recherche — en bas de la liste */}
           <div className="nav-panel__search">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">

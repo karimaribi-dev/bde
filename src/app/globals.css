@@ -179,6 +179,18 @@ a { color: inherit; text-decoration: none; }
   display: inline-block; margin-right: 8px; transform: translateY(-1px); flex-shrink: 0;
 }
 .nav-panel__brand .brand-name { font-weight: 700; letter-spacing: .06em; font-size: 17px; }
+.nav-panel__locales {
+  display: flex; gap: 0; border-top: var(--hair); flex-shrink: 0;
+}
+.nav-panel__locale {
+  flex: 1; height: 44px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em;
+  color: var(--mute); text-decoration: none; border-right: var(--hair);
+  transition: color .15s, background .15s;
+}
+.nav-panel__locale:last-child { border-right: none; }
+.nav-panel__locale:hover { color: var(--ink); background: var(--paper-2); }
+.nav-panel__locale.active { color: var(--ink); font-weight: 700; background: var(--paper-2); }
 .nav-panel__search {
   display: flex; align-items: center; gap: 12px;
   padding: 0 24px; border-top: var(--hair); flex-shrink: 0; height: 48px;

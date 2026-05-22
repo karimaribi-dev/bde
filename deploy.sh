@@ -36,7 +36,7 @@ rsync -az --delete \
 
 # 3. Build et restart sur le VPS
 echo "🔨 Build en cours sur le VPS..."
-ssh "$VPS" "cd $REMOTE_DIR && pnpm build 2>&1 | tail -20"
+ssh "$VPS" "cd $REMOTE_DIR && pnpm install --ignore-scripts 2>&1 | tail -3 && pnpm build 2>&1 | tail -20"
 
 echo "🔄 Redémarrage du serveur..."
 ssh "$VPS" "pm2 restart ai-trends-news --update-env"
