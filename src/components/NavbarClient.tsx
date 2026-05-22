@@ -122,7 +122,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
             <Image src="/logo-black.png" alt="AI Trends News" width={36} height={36} style={{ objectFit: 'contain' }} priority unoptimized />
             <span className="brand-name">AI TRENDS NEWS</span>
           </Link>
-          <span className="brand-sub">— Veille IA · Quotidienne</span>
+          <span className="brand-sub">Veille IA · Quotidienne</span>
         </div>
         <button className="topbar-hamburger" onClick={() => setPanelOpen(true)} aria-label="Ouvrir le menu">
           <span /><span /><span />
