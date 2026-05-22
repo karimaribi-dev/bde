@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Category } from '@/lib/types'
 
 interface Props {
@@ -117,7 +118,10 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
       {/* ── Topbar ── */}
       <header className="topbar">
         <div className="brand">
-          <Link href="/"><span><span className="dot" /><span className="brand-name">AI TRENDS NEWS</span></span></Link>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <Image src="/logo-black.png" alt="AI Trends News" width={36} height={36} style={{ objectFit: 'contain' }} priority />
+            <span className="brand-name">AI TRENDS NEWS</span>
+          </Link>
           <span className="brand-sub">— Veille IA · Quotidienne</span>
         </div>
         <button className="topbar-hamburger" onClick={() => setPanelOpen(true)} aria-label="Ouvrir le menu">
@@ -194,8 +198,8 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
 
         <div className="nav-panel__head">
           <Link href="/" onClick={closePanel} className="nav-panel__brand">
-            <span className="dot" />
-            <span className="brand-name">AI TRENDS NEWS</span>
+            <Image src="/logo-black.png" alt="AI Trends News" width={28} height={28} style={{ objectFit: 'contain' }} />
+            <span className="brand-name" style={{ marginLeft: 8 }}>AI TRENDS NEWS</span>
           </Link>
           <button className="nav-panel__close" onClick={closePanel} aria-label="Fermer le menu">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Category, SocialLinks } from '@/lib/types'
 import { createClient } from '@/lib/supabase/client'
 
@@ -47,6 +48,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
 
         {/* Brandblock */}
         <div className="brandblock">
+          <Image src="/logo-black.png" alt="AI Trends News" width={48} height={48} style={{ objectFit: 'contain', marginBottom: 14 }} />
           <h3>AI TRENDS<br />NEWS.</h3>
           <p>Veille quotidienne sur l&apos;intelligence artificielle. Analyses, modèles, agents et régulation.</p>
         </div>
