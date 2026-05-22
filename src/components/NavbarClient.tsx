@@ -6,11 +6,19 @@ import Image from 'next/image'
 import { Category } from '@/lib/types'
 import LocaleSwitcher from './LocaleSwitcher'
 
+interface NavLabels {
+  home: string
+  contact: string
+  search_placeholder: string
+  no_results: string
+}
+
 interface Props {
   categories: Category[]
   activeSlug?: string
   withSearch?: boolean
   locale?: string
+  labels?: NavLabels
 }
 
 interface SearchResult {
@@ -21,7 +29,14 @@ interface SearchResult {
   cat_name: string | null
 }
 
-export default function NavbarClient({ categories, activeSlug, withSearch = false, locale = 'fr' }: Props) {
+export default function NavbarClient({ categories, activeSlug, withSearch = false, locale = 'fr', labels }: Props) {
+  const defaultLabels: NavLabels = {
+    home: 'Accueil',
+    contact: 'Contact',
+    search_placeholder: 'Rechercher…',
+    no_results: 'Aucun résultat',
+  }
+  const l = labels ?? defaultLabels
   const [panelOpen, setPanelOpen]       = useState(false)
   const [searchOpen, setSearchOpen]     = useState(false)
   const [desktopQuery, setDesktopQuery] = useState('')
@@ -158,7 +173,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
                 ref={inputRef}
                 className="search-input"
                 type="text"
-                placeholder="Rechercher…"
+                placeholder={l.search_placeholder}
                 value={desktopQuery}
                 onChange={e => setDesktopQuery(e.target.value)}
               />
@@ -171,8 +186,8 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
               {/* Dropdown résultats desktop */}
               {showDesktopDrop && (
                 <div className="search-dropdown">
-                  {desktopLoading && <div className="search-dropdown__empty">Recherche…</div>}
-                  {showDesktopEmpty && <div className="search-dropdown__empty">Aucun résultat</div>}
+                  {desktopLoading && <div className="search-dropdown__empty">{l.search_placeholder}</div>}
+                  {showDesktopEmpty && <div className="search-dropdown__empty">{l.no_results}</div>}
                   {desktopResults.map(r => (
                     <Link key={r.id} href={`/articles/${r.slug}`} className="search-dropdown__item" onClick={closeDesktopSearch}>
                       {r.cat_name && <span className="search-dropdown__cat">{r.cat_name}</span>}
@@ -213,7 +228,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
         </div>
 
         <nav className="nav-panel__links">
-          <Link href="/" onClick={closePanel}>Accueil</Link>
+          <Link href="/" onClick={closePanel}>{l.home}</Link>
           {categories.map((cat) => (
             <Link
               key={cat.id}
@@ -224,7 +239,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
               {cat.name}
             </Link>
           ))}
-          <Link href="#" onClick={closePanel}>Contact</Link>
+          <Link href="#" onClick={closePanel}>{l.contact}</Link>
 
           {/* Langue — rangée horizontale */}
           <div className="nav-panel__locales">
@@ -250,7 +265,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
               type="text"
               value={panelSearch}
               onChange={e => setPanelSearch(e.target.value)}
-              placeholder="Rechercher…"
+              placeholder={l.search_placeholder}
             />
             {panelLoading && (
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--mute)', flexShrink: 0 }}>…</span>
@@ -268,7 +283,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
             </div>
           )}
           {panelSearch.trim().length >= 2 && !panelLoading && panelResults.length === 0 && (
-            <div className="nav-panel__no-results">Aucun résultat</div>
+            <div className="nav-panel__no-results">{l.no_results}</div>
           )}
         </nav>
       </div>

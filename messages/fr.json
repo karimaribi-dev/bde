@@ -2,7 +2,11 @@
   "nav": {
     "tagline": "Veille IA · Quotidienne",
     "search": "Rechercher",
-    "close": "Fermer"
+    "close": "Fermer",
+    "home": "Accueil",
+    "contact": "Contact",
+    "search_placeholder": "Rechercher…",
+    "no_results": "Aucun résultat"
   },
   "home": {
     "featured": "À la une",
@@ -12,7 +16,18 @@
     "newsletter_placeholder": "Votre adresse e-mail",
     "newsletter_btn": "S'abonner",
     "load_more": "Voir plus d'articles",
-    "read": "Lire"
+    "read": "Lire",
+    "latest_articles": "Derniers articles",
+    "today": "Aujourd'hui",
+    "no_articles": "Aucun article publié",
+    "read_more": "Lire la suite",
+    "ad_partner": "Espace partenaire",
+    "newsletter_label": "Newsletter · Quotidienne",
+    "newsletter_headline": "RESTER DANS LA BOUCLE.",
+    "newsletter_sub": "Une veille IA essentielle, chaque matin, pour ne rien manquer.",
+    "newsletter_no_ads": "Sans publicité",
+    "newsletter_unsub": "Désabonnement en 1 clic",
+    "loading": "Chargement…"
   },
   "article": {
     "published": "Publié le",

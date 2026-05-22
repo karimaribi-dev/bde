@@ -2,7 +2,11 @@
   "nav": {
     "tagline": "Daily AI Watch",
     "search": "Search",
-    "close": "Close"
+    "close": "Close",
+    "home": "Home",
+    "contact": "Contact",
+    "search_placeholder": "Search…",
+    "no_results": "No results"
   },
   "home": {
     "featured": "Top Story",
@@ -12,7 +16,18 @@
     "newsletter_placeholder": "Your email address",
     "newsletter_btn": "Subscribe",
     "load_more": "Load more articles",
-    "read": "Read"
+    "read": "Read",
+    "latest_articles": "Latest Articles",
+    "today": "Today",
+    "no_articles": "No articles published",
+    "read_more": "Read more",
+    "ad_partner": "Partner space",
+    "newsletter_label": "Newsletter · Daily",
+    "newsletter_headline": "STAY IN THE LOOP.",
+    "newsletter_sub": "Essential AI news, every morning, so you miss nothing.",
+    "newsletter_no_ads": "Ad-free",
+    "newsletter_unsub": "Unsubscribe in 1 click",
+    "loading": "Loading…"
   },
   "article": {
     "published": "Published on",

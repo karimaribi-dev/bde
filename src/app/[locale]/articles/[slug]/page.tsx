@@ -8,6 +8,7 @@ import { fr } from 'date-fns/locale'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
 import AdSlot from '@/components/AdSlot'
+import { getTranslations } from 'next-intl/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +20,16 @@ function formatDate(dateStr: string | null) {
 export default async function ArticlePage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params
   const supabase = await createClient()
+  const tNav = await getTranslations({ locale, namespace: 'nav' })
+  const tHome = await getTranslations({ locale, namespace: 'home' })
+  const tArticle = await getTranslations({ locale, namespace: 'article' })
+
+  const navLabels = {
+    home: tNav('home'),
+    contact: tNav('contact'),
+    search_placeholder: tNav('search_placeholder'),
+    no_results: tNav('no_results'),
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [{ data: article }, { data: relatedRaw }, { data: allCats }, { data: marqueeRaw }] = await Promise.all([
@@ -63,7 +74,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
   return (
     <>
       {/* ── Navbar ── */}
-      <NavbarClient categories={cats} activeSlug={categorySlug} withSearch locale={locale} />
+      <NavbarClient categories={cats} activeSlug={categorySlug} withSearch locale={locale} labels={navLabels} />
 
       {/* ── Marquee ── */}
       <div className="marquee">
@@ -80,7 +91,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
       {/* ── Breadcrumb ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 28px', borderBottom: 'var(--hair-mute)', fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--mute)' }}>
         <div>
-          <Link href="/" style={{ color: 'var(--mute)' }}>Accueil</Link>
+          <Link href="/" style={{ color: 'var(--mute)' }}>{tNav('home')}</Link>
           <span style={{ padding: '0 10px', opacity: .5 }}>/</span>
           {categorySlug && <><Link href={`/categorie/${categorySlug}`} style={{ color: 'var(--mute)' }}>{categoryName}</Link><span style={{ padding: '0 10px', opacity: .5 }}>/</span></>}
           <span style={{ color: 'var(--ink)' }}>{article.title.slice(0, 40)}{article.title.length > 40 ? '…' : ''}</span>
@@ -129,7 +140,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
           {related && related.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.22em', textTransform: 'uppercase', borderBottom: 'var(--hair)', paddingBottom: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>À lire aussi</span>
+                <span>{tArticle('related')}</span>
                 <span style={{ color: 'var(--mute)' }}>0{related.length}</span>
               </div>
               {related.map((rel) => (
@@ -209,7 +220,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
 
           {/* Back link */}
           <div style={{ marginTop: 32 }}>
-            <Link href="/" className="lire">← Retour à l&apos;accueil</Link>
+            <Link href="/" className="lire">← {tNav('home')}</Link>
           </div>
         </article>
 
@@ -231,7 +242,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
       {related && related.length > 0 && (
         <section style={{ padding: '48px 28px', borderBottom: 'var(--hair)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24, gap: 14, flexWrap: 'wrap' }}>
-            <h3 style={{ margin: 0, fontSize: 56, lineHeight: .9, letterSpacing: '-.02em', fontWeight: 700 }}>À LIRE<br />AUSSI.</h3>
+            <h3 style={{ margin: 0, fontSize: 56, lineHeight: .9, letterSpacing: '-.02em', fontWeight: 700 }}>{tArticle('related').toUpperCase()}.</h3>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--mute)' }}>
               <Link href="/" className="lire">Voir tous les articles →</Link>
             </span>

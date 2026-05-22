@@ -2,7 +2,11 @@
   "nav": {
     "tagline": "Tägliche KI-Beobachtung",
     "search": "Suchen",
-    "close": "Schließen"
+    "close": "Schließen",
+    "home": "Startseite",
+    "contact": "Kontakt",
+    "search_placeholder": "Suchen…",
+    "no_results": "Keine Ergebnisse"
   },
   "home": {
     "featured": "Aufmacher",
@@ -12,7 +16,18 @@
     "newsletter_placeholder": "Ihre E-Mail-Adresse",
     "newsletter_btn": "Abonnieren",
     "load_more": "Mehr Artikel laden",
-    "read": "Lesen"
+    "read": "Lesen",
+    "latest_articles": "Neueste Artikel",
+    "today": "Heute",
+    "no_articles": "Keine Artikel veröffentlicht",
+    "read_more": "Weiterlesen",
+    "ad_partner": "Partnerbereich",
+    "newsletter_label": "Newsletter · Täglich",
+    "newsletter_headline": "BLEIB AUF DEM LAUFENDEN.",
+    "newsletter_sub": "Wesentliche KI-News, jeden Morgen, damit Sie nichts verpassen.",
+    "newsletter_no_ads": "Werbefrei",
+    "newsletter_unsub": "Abmelden in 1 Klick",
+    "loading": "Laden…"
   },
   "article": {
     "published": "Veröffentlicht am",

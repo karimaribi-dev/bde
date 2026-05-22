@@ -2,7 +2,11 @@
   "nav": {
     "tagline": "Seguimiento IA · Diario",
     "search": "Buscar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "home": "Inicio",
+    "contact": "Contacto",
+    "search_placeholder": "Buscar…",
+    "no_results": "Sin resultados"
   },
   "home": {
     "featured": "Portada",
@@ -12,7 +16,18 @@
     "newsletter_placeholder": "Tu correo electrónico",
     "newsletter_btn": "Suscribirse",
     "load_more": "Ver más artículos",
-    "read": "Leer"
+    "read": "Leer",
+    "latest_articles": "Últimos artículos",
+    "today": "Hoy",
+    "no_articles": "No hay artículos publicados",
+    "read_more": "Leer más",
+    "ad_partner": "Espacio socio",
+    "newsletter_label": "Newsletter · Diaria",
+    "newsletter_headline": "MANTENTE INFORMADO.",
+    "newsletter_sub": "Noticias esenciales de IA, cada mañana, para no perderte nada.",
+    "newsletter_no_ads": "Sin publicidad",
+    "newsletter_unsub": "Cancelar en 1 clic",
+    "loading": "Cargando…"
   },
   "article": {
     "published": "Publicado el",

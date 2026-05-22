@@ -11,6 +11,7 @@ import SiteFooter from '@/components/SiteFooter'
 import AdSectionClient from '@/components/AdSectionClient'
 import SubscribeForm from '@/components/SubscribeForm'
 import { use } from 'react'
+import { useTranslations } from 'next-intl'
 
 function formatDate(dateStr: string | null) {
   if (!dateStr) return ''
@@ -21,8 +22,8 @@ function PhotoDiv({ className, style, children }: { className?: string; style?: 
   return <div className={`photo ${className ?? ''}`} style={style}>{children}</div>
 }
 
-function SiteHeader({ categories, locale }: { categories: Category[], locale: string }) {
-  return <NavbarClient categories={categories} withSearch locale={locale} />
+function SiteHeader({ categories, locale, labels }: { categories: Category[], locale: string, labels: { home: string; contact: string; search_placeholder: string; no_results: string } }) {
+  return <NavbarClient categories={categories} withSearch locale={locale} labels={labels} />
 }
 
 function Marquee({ articles }: { articles: { title: string; slug: string }[] }) {
@@ -43,11 +44,11 @@ function Marquee({ articles }: { articles: { title: string; slug: string }[] }) 
   )
 }
 
-function AdColumn() {
+function AdColumn({ adPartnerLabel }: { adPartnerLabel: string }) {
   return (
     <aside style={{ display: 'flex', flexDirection: 'column', background: 'var(--paper-2)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: 'var(--hair)' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>Espace partenaire</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>{adPartnerLabel}</span>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--mute)' }}>A.D.</span>
       </div>
       <AdSectionClient slotId="sidebar_display" variant="display" />
@@ -61,6 +62,8 @@ const PAGE_SIZE = 6
 
 export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params)
+  const t = useTranslations('home')
+  const tNav = useTranslations('nav')
   type ArticleWithCat = Article & { category: Category | null }
 
   const [featured, setFeatured] = useState<ArticleWithCat | null>(null)
@@ -73,6 +76,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const [initialized, setInitialized] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const supabaseRef = useRef<ReturnType<typeof import('@/lib/supabase/client').createClient> | null>(null)
+
+  const navLabels = {
+    home: tNav('home'),
+    contact: tNav('contact'),
+    search_placeholder: tNav('search_placeholder'),
+    no_results: tNav('no_results'),
+  }
 
   // Initial load
   useEffect(() => {
@@ -138,7 +148,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
 
   return (
     <>
-      <SiteHeader categories={categories} locale={locale} />
+      <SiteHeader categories={categories} locale={locale} labels={navLabels} />
       <Marquee articles={[featured, ...latest].filter((a): a is ArticleWithCat => a !== null)} />
 
       {/* ── Hero ── */}
@@ -177,12 +187,12 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase' }}>
                   {formatDate(featured.published_at)}
                 </span>
-                <span className="lire">Lire la suite <span>→</span></span>
+                <span className="lire">{t('read_more')} <span>→</span></span>
               </div>
             </Link>
           ) : (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--mute)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>
-              Aucun article publié
+              {t('no_articles')}
             </div>
           )}
         </article>
@@ -190,8 +200,8 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         {/* Col 2 — Latest */}
         <aside style={{ display: 'flex', flexDirection: 'column', background: 'var(--paper)', borderRight: 'var(--hair)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px', borderBottom: 'var(--hair)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>Derniers articles</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>Aujourd&apos;hui</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>{t('latest_articles')}</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{t('today')}</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
             {latest.map((art, i) => (
@@ -218,7 +228,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </aside>
 
         {/* Col 3 — Ad */}
-        <AdColumn />
+        <AdColumn adPartnerLabel={t('ad_partner')} />
       </section>
 
       {/* ── Ad strip ── */}
@@ -258,13 +268,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             <h3 style={{ fontSize: 22, lineHeight: 1.08, letterSpacing: '-.01em', fontWeight: 700, margin: 0 }}>{art.title}</h3>
             {art.excerpt && <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)' }}>{art.excerpt}</p>}
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', paddingTop: 10, borderTop: 'var(--hair-mute)' }}>
-              <span className="lire">Lire la suite <span>→</span></span>
+              <span className="lire">{t('read_more')} <span>→</span></span>
             </div>
           </Link>
         ))}
         {grid.length === 0 && (
           <div style={{ gridColumn: '1 / -1', padding: '64px 28px', textAlign: 'center', color: 'var(--mute)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>
-            Aucun article publié pour le moment.
+            {t('no_articles')}
           </div>
         )}
       </section>
@@ -272,11 +282,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* ── Newsletter ── */}
       <section className="c-newsletter" style={{ borderTop: 'var(--hair)', borderBottom: 'var(--hair)' }}>
         <div style={{ padding: '24px 28px 20px', borderRight: 'var(--hair)' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', marginBottom: 12 }}>Newsletter · Quotidienne</div>
-          <h2 style={{ fontSize: 44, lineHeight: .95, letterSpacing: '-.025em', fontWeight: 700, margin: '0 0 12px' }}>RESTER DANS LA BOUCLE.</h2>
-          <p style={{ fontSize: 15, lineHeight: 1.4, color: 'var(--ink-2)', maxWidth: '36ch', margin: '0 0 12px' }}>Une veille IA essentielle, chaque matin, pour ne rien manquer.</p>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', marginBottom: 12 }}>{t('newsletter_label')}</div>
+          <h2 style={{ fontSize: 44, lineHeight: .95, letterSpacing: '-.025em', fontWeight: 700, margin: '0 0 12px' }}>{t('newsletter_headline')}</h2>
+          <p style={{ fontSize: 15, lineHeight: 1.4, color: 'var(--ink-2)', maxWidth: '36ch', margin: '0 0 12px' }}>{t('newsletter_sub')}</p>
           <div style={{ display: 'flex', gap: 18, fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--mute)' }}>
-            <span>Sans publicité</span><span>·</span><span>Désabonnement en 1 clic</span>
+            <span>{t('newsletter_no_ads')}</span><span>·</span><span>{t('newsletter_unsub')}</span>
           </div>
         </div>
         <div style={{ padding: '24px 28px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 16 }}>
@@ -303,7 +313,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
               </Link>
             ))}
           </section>
-          <AdColumn />
+          <AdColumn adPartnerLabel={t('ad_partner')} />
         </div>
       )}
 
@@ -311,7 +321,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       <div ref={sentinelRef}>
         {loadingMore && (
           <div style={{ padding: '28px', textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--mute)', borderTop: 'var(--hair)' }}>
-            Chargement…
+            {t('loading')}
           </div>
         )}
       </div>

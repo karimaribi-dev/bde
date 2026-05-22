@@ -7,6 +7,7 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import { getTranslations } from 'next-intl/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,15 @@ function formatDate(dateStr: string | null) {
 export default async function CategoryPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params
   const supabase = await createClient()
+  const tNav = await getTranslations({ locale, namespace: 'nav' })
+  const tHome = await getTranslations({ locale, namespace: 'home' })
+
+  const navLabels = {
+    home: tNav('home'),
+    contact: tNav('contact'),
+    search_placeholder: tNav('search_placeholder'),
+    no_results: tNav('no_results'),
+  }
 
   const [{ data: category }, { data: allCategories }, { data: marqueeRaw }] = await Promise.all([
     supabase.from('categories').select('*').eq('slug', slug).single(),
@@ -60,7 +70,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
   return (
     <>
       {/* Navbar */}
-      <NavbarClient categories={cats} activeSlug={slug} withSearch locale={locale} />
+      <NavbarClient categories={cats} activeSlug={slug} withSearch locale={locale} labels={navLabels} />
 
       {/* Marquee */}
       <div className="marquee">
@@ -77,7 +87,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
       {/* Category header */}
       <div className="c-cat-header" style={{ padding: '48px 28px 32px', borderBottom: 'var(--hair)' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', marginBottom: 12 }}>
-          <Link href="/" style={{ color: 'var(--mute)' }}>Accueil</Link>
+          <Link href="/" style={{ color: 'var(--mute)' }}>{tNav('home')}</Link>
           <span style={{ padding: '0 10px', opacity: .5 }}>/</span>
           <span>{category.name}</span>
         </div>
@@ -135,14 +145,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
                 <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)' }}>{art.excerpt}</p>
               )}
               <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', paddingTop: 10, borderTop: 'var(--hair-mute)' }}>
-                <span className="lire">Lire la suite <span>→</span></span>
+                <span className="lire">{tHome('read_more')} <span>→</span></span>
               </div>
             </Link>
           ))}
         </section>
       ) : (
         <div style={{ padding: '80px 28px', textAlign: 'center', borderBottom: 'var(--hair)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--mute)' }}>
-          Aucun article dans cette catégorie pour le moment.
+          {tHome('no_articles')}
         </div>
       )}
 
