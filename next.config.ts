@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  compress: true,
+  experimental: {
+    optimizePackageImports: ["@tiptap/react", "@tiptap/starter-kit", "browser-image-compression"],
+  },
   images: {
     remotePatterns: [
       {

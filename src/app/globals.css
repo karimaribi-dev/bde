@@ -310,6 +310,29 @@ footer { padding: 64px 28px 24px; }
   color: #999; pointer-events: none; float: left; height: 0; content: attr(data-placeholder);
 }
 
+/* ── Grain / film noise on images ── */
+.grain::after,
+.cover-image::after,
+.photo::before {
+  content: "";
+}
+.grain,
+.cover-image {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after,
+.cover-image::after {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
 /* ── Hover cards ── */
 .hover-card { transition: background .2s; }
 .hover-card:hover { background: var(--paper-2) !important; }

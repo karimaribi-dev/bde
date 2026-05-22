@@ -411,7 +411,7 @@ function handleTitleChange(value: string) {
               value={sources}
               onChange={(e) => { setSources(e.target.value); setSaved(false) }}
               placeholder={"Une source par ligne :\nhttps://example.com/article\nhttps://autre-source.com"}
-              rows={4}
+              rows={8}
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-gray-400 font-mono"
             />
             <p className="text-xs text-gray-400 mt-1">Une URL ou référence par ligne</p>
