@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "tagline": "Veille IA · Quotidienne",
+    "search": "Rechercher",
+    "close": "Fermer"
+  },
+  "home": {
+    "featured": "À la une",
+    "latest": "Dernières",
+    "newsletter_title": "La veille IA dans votre boîte mail",
+    "newsletter_desc": "Recevez chaque matin notre sélection : une analyse de fond, trois signaux à surveiller, un rapport décrypté.",
+    "newsletter_placeholder": "Votre adresse e-mail",
+    "newsletter_btn": "S'abonner",
+    "load_more": "Voir plus d'articles",
+    "read": "Lire"
+  },
+  "article": {
+    "published": "Publié le",
+    "sources": "Sources",
+    "related": "À lire aussi"
+  },
+  "footer": {
+    "tagline": "Veille quotidienne sur l'intelligence artificielle. Analyses, modèles, agents et régulation.",
+    "sections": "Rubriques",
+    "pages": "Pages",
+    "legal": "Légal",
+    "follow": "Nous suivre",
+    "rights": "Tous droits réservés"
+  },
+  "category": {
+    "articles": "articles"
+  },
+  "not_found": {
+    "label": "Erreur",
+    "message": "Cette page n'existe pas ou a été déplacée.",
+    "back": "Retour à l'accueil"
+  }
+}

@@ -93,6 +93,32 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: center; justify-content: center; color: var(--mute);
 }
 
+/* ── Locale switcher ── */
+.locale-switcher {
+  position: relative; border-left: var(--hair);
+  display: flex; align-items: center;
+}
+.locale-switcher__current {
+  height: 100%; padding: 0 12px;
+  display: flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em;
+  color: var(--mute); background: none; border: none; cursor: pointer;
+  transition: color .15s, background .15s;
+}
+.locale-switcher__current:hover { color: var(--ink); background: var(--paper-2); }
+.locale-switcher__dropdown {
+  position: absolute; top: 100%; right: 0; min-width: 52px;
+  background: var(--paper); border: var(--hair); border-top: none;
+  z-index: 40; display: flex; flex-direction: column;
+}
+.locale-switcher__option {
+  padding: 8px 12px; text-align: center;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em;
+  color: var(--mute); background: none; border: none; cursor: pointer;
+  transition: color .15s, background .15s;
+}
+.locale-switcher__option:hover { color: var(--ink); background: var(--paper-2); }
+
 /* ── Desktop search dropdown ── */
 .search-dropdown {
   position: absolute; top: 100%; right: 0; width: 340px;

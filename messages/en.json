@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "tagline": "Daily AI Watch",
+    "search": "Search",
+    "close": "Close"
+  },
+  "home": {
+    "featured": "Top Story",
+    "latest": "Latest",
+    "newsletter_title": "AI insights in your inbox",
+    "newsletter_desc": "Every morning: one in-depth analysis, three signals to watch, one decoded report.",
+    "newsletter_placeholder": "Your email address",
+    "newsletter_btn": "Subscribe",
+    "load_more": "Load more articles",
+    "read": "Read"
+  },
+  "article": {
+    "published": "Published on",
+    "sources": "Sources",
+    "related": "Read also"
+  },
+  "footer": {
+    "tagline": "Daily intelligence on artificial intelligence. Analysis, models, agents and regulation.",
+    "sections": "Topics",
+    "pages": "Pages",
+    "legal": "Legal",
+    "follow": "Follow us",
+    "rights": "All rights reserved"
+  },
+  "category": {
+    "articles": "articles"
+  },
+  "not_found": {
+    "label": "Error",
+    "message": "This page does not exist or has been moved.",
+    "back": "Back to home"
+  }
+}

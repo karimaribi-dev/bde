@@ -1,9 +1,21 @@
+import createMiddleware from 'next-intl/middleware'
+import { routing } from './i18n/routing'
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+
+const intlMiddleware = createMiddleware(routing)
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Skip intl for admin, api, static files
+  const isAdminOrStatic =
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.includes('.')
+
+  // --- Supabase session refresh (all routes) ---
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -29,14 +41,11 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Maintenance mode check (skip admin, maintenance page itself, static files, et utilisateurs connectés)
+  // --- Maintenance mode (public routes only) ---
   if (
     !user &&
-    !pathname.startsWith('/admin') &&
-    !pathname.startsWith('/maintenance') &&
-    !pathname.startsWith('/_next') &&
-    !pathname.startsWith('/api') &&
-    !pathname.includes('.')
+    !isAdminOrStatic &&
+    !pathname.startsWith('/maintenance')
   ) {
     try {
       const { data } = await supabase
@@ -51,6 +60,18 @@ export async function proxy(request: NextRequest) {
     } catch {
       // En cas d'erreur, ne pas bloquer le site
     }
+  }
+
+  // --- Intl routing (public routes only) ---
+  if (!isAdminOrStatic) {
+    const intlResponse = intlMiddleware(request)
+
+    // Propagate supabase cookies onto the intl response
+    supabaseResponse.cookies.getAll().forEach(({ name, value, ...options }) => {
+      intlResponse.cookies.set(name, value, options)
+    })
+
+    return intlResponse
   }
 
   return supabaseResponse

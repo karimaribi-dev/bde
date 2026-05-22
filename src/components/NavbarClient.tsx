@@ -4,11 +4,13 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Category } from '@/lib/types'
+import LocaleSwitcher from './LocaleSwitcher'
 
 interface Props {
   categories: Category[]
   activeSlug?: string
   withSearch?: boolean
+  locale?: string
 }
 
 interface SearchResult {
@@ -19,7 +21,7 @@ interface SearchResult {
   cat_name: string | null
 }
 
-export default function NavbarClient({ categories, activeSlug, withSearch = false }: Props) {
+export default function NavbarClient({ categories, activeSlug, withSearch = false, locale = 'fr' }: Props) {
   const [panelOpen, setPanelOpen]       = useState(false)
   const [searchOpen, setSearchOpen]     = useState(false)
   const [desktopQuery, setDesktopQuery] = useState('')
@@ -187,6 +189,8 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
               </svg>
             </div>
           )}
+
+          <LocaleSwitcher currentLocale={locale} />
         </nav>
       </div>
 

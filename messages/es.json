@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "tagline": "Seguimiento IA · Diario",
+    "search": "Buscar",
+    "close": "Cerrar"
+  },
+  "home": {
+    "featured": "Portada",
+    "latest": "Últimas",
+    "newsletter_title": "La IA en tu bandeja de entrada",
+    "newsletter_desc": "Cada mañana: un análisis en profundidad, tres señales a vigilar, un informe descifrado.",
+    "newsletter_placeholder": "Tu correo electrónico",
+    "newsletter_btn": "Suscribirse",
+    "load_more": "Ver más artículos",
+    "read": "Leer"
+  },
+  "article": {
+    "published": "Publicado el",
+    "sources": "Fuentes",
+    "related": "Leer también"
+  },
+  "footer": {
+    "tagline": "Seguimiento diario de la inteligencia artificial. Análisis, modelos, agentes y regulación.",
+    "sections": "Secciones",
+    "pages": "Páginas",
+    "legal": "Legal",
+    "follow": "Síguenos",
+    "rights": "Todos los derechos reservados"
+  },
+  "category": {
+    "articles": "artículos"
+  },
+  "not_found": {
+    "label": "Error",
+    "message": "Esta página no existe o ha sido trasladada.",
+    "back": "Volver al inicio"
+  }
+}

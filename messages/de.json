@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "tagline": "Tägliche KI-Beobachtung",
+    "search": "Suchen",
+    "close": "Schließen"
+  },
+  "home": {
+    "featured": "Aufmacher",
+    "latest": "Aktuelles",
+    "newsletter_title": "KI-News in Ihrem Posteingang",
+    "newsletter_desc": "Jeden Morgen: eine Tiefenanalyse, drei Signale im Blick, ein entschlüsselter Bericht.",
+    "newsletter_placeholder": "Ihre E-Mail-Adresse",
+    "newsletter_btn": "Abonnieren",
+    "load_more": "Mehr Artikel laden",
+    "read": "Lesen"
+  },
+  "article": {
+    "published": "Veröffentlicht am",
+    "sources": "Quellen",
+    "related": "Auch lesen"
+  },
+  "footer": {
+    "tagline": "Tägliche Beobachtung der künstlichen Intelligenz. Analysen, Modelle, Agenten und Regulierung.",
+    "sections": "Rubriken",
+    "pages": "Seiten",
+    "legal": "Rechtliches",
+    "follow": "Folgen Sie uns",
+    "rights": "Alle Rechte vorbehalten"
+  },
+  "category": {
+    "articles": "Artikel"
+  },
+  "not_found": {
+    "label": "Fehler",
+    "message": "Diese Seite existiert nicht oder wurde verschoben.",
+    "back": "Zurück zur Startseite"
+  }
+}
