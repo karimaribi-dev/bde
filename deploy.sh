@@ -9,10 +9,11 @@ echo ""
 echo "🚀 Déploiement sur le VPS..."
 echo ""
 
-# 1. Push git en local si des changements sont en attente
-if [ -n "$(git -C "$LOCAL_DIR" status --porcelain)" ]; then
+# 1. Vérifier que les fichiers src/ sont bien commités (on ignore .claude/)
+UNCOMMITTED=$(git -C "$LOCAL_DIR" status --porcelain | grep -v '^\s*[?M] \.claude' | grep -v '^\s*[?M] \.claude/' || true)
+if [ -n "$UNCOMMITTED" ]; then
   echo "⚠️  Des fichiers non commités existent. Commit d'abord avec git."
-  git -C "$LOCAL_DIR" status --short
+  echo "$UNCOMMITTED"
   exit 1
 fi
 
