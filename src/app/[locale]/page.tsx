@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Article, Category } from '@/lib/types'
+import { getCategoryName } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import NavbarClient from '@/components/NavbarClient'
@@ -167,7 +168,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                   <Image src={featured.cover_image_url} alt={featured.title} fill sizes="(max-width: 900px) 100vw, (max-width: 1100px) 60vw, 45vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} priority />
                 ) : null}
                 <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
-                  {featured.category?.name ?? ''}
+                  {getCategoryName(featured.category, locale)}
                 </span>
                 <span style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
                   {formatDate(featured.published_at)}
@@ -175,7 +176,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
               </div>
               {featured.category && (
                 <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase', background: 'var(--ink)', color: 'var(--paper)', padding: '6px 10px', width: 'max-content' }}>
-                  {featured.category.name}
+                  {getCategoryName(featured.category, locale)}
                 </span>
               )}
               <h1 style={{ fontSize: 54, lineHeight: .96, letterSpacing: '-.02em', fontWeight: 700, margin: 0 }}>
@@ -217,7 +218,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase' }}>{art.category?.name ?? ''}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase' }}>{getCategoryName(art.category, locale)}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(art.published_at)}</span>
                   </div>
                   <h3 style={{ fontSize: 16, lineHeight: 1.18, fontWeight: 700, margin: '2px 0', letterSpacing: '-.005em' }}>{art.title}</h3>
@@ -255,7 +256,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{art.category?.name ?? ''}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{getCategoryName(art.category, locale)}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(art.published_at)}</span>
             </div>
             <div style={{ aspectRatio: '16/10', background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">
@@ -307,8 +308,8 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                     <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} />
                   )}
                 </div>
-                {art.category?.name && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', display: 'block', marginBottom: 6 }}>{art.category.name}</span>
+                {art.category && (
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', display: 'block', marginBottom: 6 }}>{getCategoryName(art.category, locale)}</span>
                 )}
                 <h3 style={{ fontSize: 19, lineHeight: 1.15, letterSpacing: '-.01em', fontWeight: 700, margin: 0 }}>{art.title}</h3>
               </Link>

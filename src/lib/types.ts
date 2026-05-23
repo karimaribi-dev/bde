@@ -81,6 +81,9 @@ export interface Newsletter {
 export interface Category {
   id: string
   name: string
+  name_en: string | null
+  name_es: string | null
+  name_de: string | null
   slug: string
   description: string | null
   sort_order: number

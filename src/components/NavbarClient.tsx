@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Category } from '@/lib/types'
+import { getCategoryName } from '@/lib/utils'
 import LocaleSwitcher from './LocaleSwitcher'
 
 interface NavLabels {
@@ -154,7 +155,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
           <div className="nav-links">
             {categories.slice(0, 5).map((cat) => (
               <Link key={cat.id} href={`/categorie/${cat.slug}`} className={cat.slug === activeSlug ? 'active' : ''}>
-                {cat.name}
+                {getCategoryName(cat, locale)}
               </Link>
             ))}
           </div>
@@ -238,7 +239,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
               className={cat.slug === activeSlug ? 'active' : ''}
               onClick={closePanel}
             >
-              {cat.name}
+              {getCategoryName(cat, locale)}
             </Link>
           ))}
           <Link href="#" onClick={closePanel}>{l.contact}</Link>

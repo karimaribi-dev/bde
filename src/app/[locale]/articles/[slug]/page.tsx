@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Category } from '@/lib/types'
+import { getCategoryName } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import NavbarClient from '@/components/NavbarClient'
@@ -59,7 +60,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
 
   const cats = (allCats ?? []) as Category[]
 
-  type RelatedArticle = { id: string; title: string; slug: string; published_at: string | null; cover_image_url: string | null; category: { id: string; name: string; slug: string } | null }
+  type RelatedArticle = { id: string; title: string; slug: string; published_at: string | null; cover_image_url: string | null; category: Category | null }
   // Supabase returns category as array from join, normalize to single object
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const related: RelatedArticle[] = ((relatedRaw ?? []) as any[]).map((r: any) => ({
@@ -69,8 +70,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
 
   if (!article) notFound()
 
-  const categoryName = (article.category as { id: string; name: string; slug: string } | null)?.name ?? ''
-  const categorySlug = (article.category as { id: string; name: string; slug: string } | null)?.slug ?? ''
+  const articleCategory = article.category as Category | null
+  const categoryName = getCategoryName(articleCategory, locale)
+  const categorySlug = articleCategory?.slug ?? ''
 
   return (
     <>
@@ -153,7 +155,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
                   </div>
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{rel.category?.name ?? ''}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{getCategoryName(rel.category, locale)}</span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(rel.published_at)}</span>
                     </div>
                     <h6 style={{ margin: 0, fontSize: 13.5, lineHeight: 1.22, letterSpacing: '-.005em', fontWeight: 700 }}>{rel.title}</h6>
@@ -255,7 +257,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
                 style={{ padding: '24px 24px 22px', borderRight: i < 2 ? 'var(--hair-mute)' : 0, display: 'flex', flexDirection: 'column', gap: 14, cursor: 'pointer', textDecoration: 'none' }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{rel.category?.name ?? ''}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{getCategoryName(rel.category, locale)}</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(rel.published_at)}</span>
                 </div>
                 <div style={{ aspectRatio: '16/10', background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">

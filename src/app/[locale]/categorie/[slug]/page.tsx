@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Article, Category } from '@/lib/types'
+import { getCategoryName } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import NavbarClient from '@/components/NavbarClient'
@@ -90,10 +91,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', marginBottom: 12 }}>
           <Link href="/" style={{ color: 'var(--mute)' }}>{tNav('home')}</Link>
           <span style={{ padding: '0 10px', opacity: .5 }}>/</span>
-          <span>{category.name}</span>
+          <span>{getCategoryName(category, locale)}</span>
         </div>
         <h1 style={{ fontSize: 72, lineHeight: .92, letterSpacing: '-.025em', fontWeight: 700, margin: '0 0 16px' }}>
-          {category.name.toUpperCase()}.
+          {getCategoryName(category, locale).toUpperCase()}.
         </h1>
         {category.description && (
           <p style={{ fontSize: 18, lineHeight: 1.5, color: 'var(--ink-2)', maxWidth: '60ch', margin: 0 }}>
@@ -119,7 +120,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>
-                  {category.name}
+                  {getCategoryName(category, locale)}
                 </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>
                   {formatDate(art.published_at)}
