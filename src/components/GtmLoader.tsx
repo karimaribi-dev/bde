@@ -4,14 +4,18 @@ import Script from 'next/script'
 // GTM charge toujours (standard Google) — les tags internes sont contrôlés
 // par le Consent Mode configuré dans le dashboard GTM.
 export default async function GtmLoader() {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('site_settings')
-    .select('value')
-    .eq('key', 'analytics')
-    .single()
+  let gtmId: string = process.env.NEXT_PUBLIC_GTM_ID ?? ''
 
-  const gtmId: string = data?.value?.gtm_id ?? ''
+  if (!gtmId) {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'analytics')
+      .single()
+    gtmId = data?.value?.gtm_id ?? ''
+  }
+
   if (!gtmId || !gtmId.startsWith('GTM-')) return null
 
   return (
