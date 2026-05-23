@@ -4,42 +4,23 @@ import { useState, useEffect } from 'react'
 
 const CONSENT_KEY = 'cookie_consent_v1'
 
-interface Props {
-  gtmId: string
-  gaId: string
+// GTM est déjà chargé par GtmLoader (inconditionnellement).
+// On pousse juste l'événement de consentement dans le dataLayer.
+function pushConsentAccepted() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const w = window as any
+  w.dataLayer = w.dataLayer || []
+  w.dataLayer.push({ event: 'cookie_consent_accepted' })
 }
 
-function injectGTM(gtmId: string) {
-  if (!gtmId || document.getElementById('gtm-runtime')) return
-  // Head script
-  const script = document.createElement('script')
-  script.id = 'gtm-runtime'
-  script.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${gtmId}');`
-  document.head.appendChild(script)
-  // Noscript iframe in body
-  const noscript = document.createElement('noscript')
-  noscript.id = 'gtm-noscript'
-  noscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`
-  document.body.insertBefore(noscript, document.body.firstChild)
+function pushConsentRefused() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const w = window as any
+  w.dataLayer = w.dataLayer || []
+  w.dataLayer.push({ event: 'cookie_consent_refused' })
 }
 
-function injectGA(gaId: string) {
-  if (!gaId || document.getElementById('ga-runtime')) return
-  const script1 = document.createElement('script')
-  script1.async = true
-  script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
-  document.head.appendChild(script1)
-  const script2 = document.createElement('script')
-  script2.id = 'ga-runtime'
-  script2.innerHTML = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`
-  document.head.appendChild(script2)
-}
-
-export default function CookieBanner({ gtmId, gaId }: Props) {
+export default function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -50,16 +31,14 @@ export default function CookieBanner({ gtmId, gaId }: Props) {
       return () => clearTimeout(t)
     }
     if (stored === 'accepted') {
-      if (gtmId) injectGTM(gtmId)
-      if (gaId) injectGA(gaId)
+      pushConsentAccepted()
     }
-  }, [gtmId, gaId])
+  }, [])
 
   function accept() {
     localStorage.setItem(CONSENT_KEY, 'accepted')
     setVisible(false)
-    if (gtmId) injectGTM(gtmId)
-    if (gaId) injectGA(gaId)
+    pushConsentAccepted()
   }
 
   function refuse() {
