@@ -44,16 +44,16 @@ function Marquee({ articles }: { articles: { title: string; slug: string }[] }) 
   )
 }
 
-function AdColumn({ adPartnerLabel }: { adPartnerLabel: string }) {
+function AdColumn({ adPartnerLabel, locale }: { adPartnerLabel: string; locale: string }) {
   return (
     <aside style={{ display: 'flex', flexDirection: 'column', background: 'var(--paper-2)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: 'var(--hair)' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>{adPartnerLabel}</span>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--mute)' }}>A.D.</span>
       </div>
-      <AdSectionClient slotId="sidebar_display" variant="display" />
-      <AdSectionClient slotId="sidebar_sponsored" variant="sponsored" />
-      <AdSectionClient slotId="sidebar_promo" variant="promo" />
+      <AdSectionClient slotId="sidebar_display" variant="display" locale={locale} />
+      <AdSectionClient slotId="sidebar_sponsored" variant="sponsored" locale={locale} />
+      <AdSectionClient slotId="sidebar_promo" variant="promo" locale={locale} />
     </aside>
   )
 }
@@ -158,7 +158,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         {/* Col 1 — Featured */}
         <article style={{ padding: '28px 28px 24px', display: 'flex', flexDirection: 'column', gap: 20, background: 'var(--paper)', borderRight: 'var(--hair)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: 'var(--hair)', paddingBottom: 10 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>À la une</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>{t('featured')}</span>
           </div>
           {featured ? (
             <Link href={`/articles/${featured.slug}`} style={{ display: 'contents' }}>
@@ -229,13 +229,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </aside>
 
         {/* Col 3 — Ad */}
-        <AdColumn adPartnerLabel={t('ad_partner')} />
+        <AdColumn adPartnerLabel={t('ad_partner')} locale={locale} />
       </section>
 
       {/* ── Ad strip ── */}
       <div style={{ padding: '20px 28px', borderBottom: 'var(--hair)' }}>
         <div style={{ border: '1px dashed rgba(12,12,12,.35)', height: 90, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, position: 'relative', background: 'var(--paper-2)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', color: 'var(--ink)', position: 'relative' }}>PUBLICITÉ</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', color: 'var(--ink)', position: 'relative' }}>{t('ad_label')}</span>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', position: 'relative' }}>970 × 90 · IAB Leaderboard</span>
         </div>
       </div>
@@ -314,7 +314,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
               </Link>
             ))}
           </section>
-          <AdColumn adPartnerLabel={t('ad_partner')} />
+          <AdColumn adPartnerLabel={t('ad_partner')} locale={locale} />
         </div>
       )}
 

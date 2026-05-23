@@ -27,7 +27,8 @@
     "newsletter_sub": "Une veille IA essentielle, chaque matin, pour ne rien manquer.",
     "newsletter_no_ads": "Sans publicité",
     "newsletter_unsub": "Désabonnement en 1 clic",
-    "loading": "Chargement…"
+    "loading": "Chargement…",
+    "ad_label": "Publicité"
   },
   "article": {
     "published": "Publié le",

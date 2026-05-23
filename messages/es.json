@@ -27,7 +27,8 @@
     "newsletter_sub": "Noticias esenciales de IA, cada mañana, para no perderte nada.",
     "newsletter_no_ads": "Sin publicidad",
     "newsletter_unsub": "Cancelar en 1 clic",
-    "loading": "Cargando…"
+    "loading": "Cargando…",
+    "ad_label": "Publicidad"
   },
   "article": {
     "published": "Publicado el",

@@ -8,9 +8,18 @@ import type { AdSlot } from '@/lib/types'
 interface Props {
   slotId: string
   variant: 'display' | 'sponsored' | 'promo'
+  locale?: string
 }
 
-export default function AdSectionClient({ slotId, variant }: Props) {
+const AD_LABELS: Record<string, { ad: string; sponsored: string; promo: string; placeholder: string }> = {
+  fr: { ad: 'Publicité',  sponsored: '— Contenu sponsorisé', promo: '— Annonce',  placeholder: 'Emplacement publicitaire' },
+  en: { ad: 'Advertising',sponsored: '— Sponsored content',  promo: '— Ad',       placeholder: 'Ad placement' },
+  es: { ad: 'Publicidad', sponsored: '— Contenido patrocinado', promo: '— Anuncio', placeholder: 'Espacio publicitario' },
+  de: { ad: 'Werbung',    sponsored: '— Gesponserter Inhalt', promo: '— Anzeige',  placeholder: 'Werbeplatz' },
+}
+
+export default function AdSectionClient({ slotId, variant, locale = 'fr' }: Props) {
+  const labels = AD_LABELS[locale] ?? AD_LABELS.fr
   const [slot, setSlot] = useState<AdSlot | null | undefined>(undefined)
 
   useEffect(() => {
@@ -62,14 +71,14 @@ export default function AdSectionClient({ slotId, variant }: Props) {
     return (
       <div style={{ borderBottom: 'var(--hair-mute)', padding: '22px 20px', display: 'flex', flexDirection: 'column', gap: 14, flex: 1 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em', color: 'var(--mute)', textTransform: 'uppercase' }}>
-          <span>Publicité</span>
+          <span>{labels.ad}</span>
           <span style={{ display: 'inline-flex', gap: 4 }}>
             <i style={{ width: 5, height: 5, background: 'var(--ink)', display: 'inline-block' }} />
             <i style={{ width: 5, height: 5, background: 'var(--ink)', display: 'inline-block' }} />
             <i style={{ width: 5, height: 5, background: 'var(--ink)', display: 'inline-block' }} />
           </span>
         </div>
-        <Placeholder size="300 × 250 · IAB" />
+        <Placeholder size="300 × 250 · IAB" emptyLabel={labels.placeholder} />
       </div>
     )
   }
@@ -77,8 +86,8 @@ export default function AdSectionClient({ slotId, variant }: Props) {
   if (variant === 'sponsored') {
     return (
       <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10, borderTop: 'var(--hair)' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--mute)' }}>— Contenu sponsorisé</span>
-        <Placeholder />
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--mute)' }}>{labels.sponsored}</span>
+        <Placeholder emptyLabel={labels.placeholder} />
       </div>
     )
   }
@@ -86,8 +95,8 @@ export default function AdSectionClient({ slotId, variant }: Props) {
   if (variant === 'promo') {
     return (
       <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10, borderTop: 'var(--hair)', background: 'var(--ink)', color: 'var(--paper)' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(243,239,230,.55)' }}>— Annonce</span>
-        <Placeholder dark />
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(243,239,230,.55)' }}>{labels.promo}</span>
+        <Placeholder dark emptyLabel={labels.placeholder} />
       </div>
     )
   }
@@ -102,7 +111,7 @@ function wrapperStyle(variant: Props['variant']): React.CSSProperties {
   return {}
 }
 
-function Placeholder({ size, dark }: { size?: string; dark?: boolean }) {
+function Placeholder({ size, dark, emptyLabel = 'Emplacement publicitaire' }: { size?: string; dark?: boolean; emptyLabel?: string }) {
   return (
     <div style={{
       border: `1px dashed ${dark ? 'rgba(243,239,230,.25)' : 'rgba(12,12,12,.45)'}`,
@@ -111,7 +120,7 @@ function Placeholder({ size, dark }: { size?: string; dark?: boolean }) {
     }}>
       <div style={{ position: 'absolute', inset: 8, background: 'linear-gradient(45deg,transparent calc(50% - .5px),rgba(12,12,12,.08) calc(50% - .5px),rgba(12,12,12,.08) calc(50% + .5px),transparent calc(50% + .5px)),linear-gradient(-45deg,transparent calc(50% - .5px),rgba(12,12,12,.08) calc(50% - .5px),rgba(12,12,12,.08) calc(50% + .5px),transparent calc(50% + .5px))', pointerEvents: 'none' }} />
       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: dark ? 'rgba(243,239,230,.4)' : 'var(--mute)', position: 'relative' }}>
-        {size ?? 'Emplacement publicitaire'}
+        {size ?? emptyLabel}
       </span>
     </div>
   )

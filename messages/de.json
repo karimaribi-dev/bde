@@ -27,7 +27,8 @@
     "newsletter_sub": "Wesentliche KI-News, jeden Morgen, damit Sie nichts verpassen.",
     "newsletter_no_ads": "Werbefrei",
     "newsletter_unsub": "Abmelden in 1 Klick",
-    "loading": "Laden…"
+    "loading": "Laden…",
+    "ad_label": "Werbung"
   },
   "article": {
     "published": "Veröffentlicht am",

@@ -27,7 +27,8 @@
     "newsletter_sub": "Essential AI news, every morning, so you miss nothing.",
     "newsletter_no_ads": "Ad-free",
     "newsletter_unsub": "Unsubscribe in 1 click",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "ad_label": "Advertising"
   },
   "article": {
     "published": "Published on",
