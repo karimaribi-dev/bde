@@ -36,6 +36,7 @@ export default function ArticleEditor({ article, categories }: Props) {
   const [slug, setSlug] = useState(article?.slug ?? '')
   const [excerpt, setExcerpt] = useState(article?.excerpt ?? '')
   const [categoryId, setCategoryId] = useState(article?.category_id ?? '')
+  const [locale, setLocale] = useState<string>((article as unknown as Record<string, string>)?.locale ?? 'fr')
 
   const isCurrentlyScheduled = article?.status === 'published' &&
     article?.published_at &&
@@ -169,6 +170,7 @@ function handleTitleChange(value: string) {
       category_id: categoryId || null,
       status: saveStatus,
       published_at: savePublishedAt,
+      locale: locale || 'fr',
     }
 
     let articleId = article?.id
@@ -193,7 +195,7 @@ function handleTitleChange(value: string) {
       if (!article?.id) router.push('/admin/articles')
       else router.refresh()
     }
-  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, sources, categoryId, publishMode, scheduledAt, article, router, supabase])
+  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, sources, categoryId, locale, publishMode, scheduledAt, article, router, supabase])
 
   return (
     <>
@@ -344,6 +346,20 @@ function handleTitleChange(value: string) {
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Langue</label>
+              <select
+                value={locale}
+                onChange={(e) => { setLocale(e.target.value); setSaved(false) }}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              >
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="de">🇩🇪 Deutsch</option>
               </select>
             </div>
 
