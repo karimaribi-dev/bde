@@ -5,7 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Category } from '@/lib/types'
 import { getCategoryName } from '@/lib/utils'
-import LocaleSwitcher from './LocaleSwitcher'
+import LocaleSwitcher, { buildLocalePath } from './LocaleSwitcher'
+import { usePathname } from 'next/navigation'
 
 interface NavLabels {
   home: string
@@ -49,6 +50,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
   const [panelResults, setPanelResults] = useState<SearchResult[]>([])
   const [panelLoading, setPanelLoading] = useState(false)
 
+  const pathname       = usePathname()
   const wrapRef        = useRef<HTMLDivElement>(null)
   const inputRef       = useRef<HTMLInputElement>(null)
   const panelSearchRef = useRef<HTMLInputElement>(null)
@@ -247,14 +249,17 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
           {/* Langue — rangée horizontale */}
           <div className="nav-panel__locales">
             {['fr', 'en', 'es', 'de'].map(code => (
-              <a
+              <button
                 key={code}
-                href={code === 'fr' ? '/' : `/${code}`}
                 className={`nav-panel__locale${code === locale ? ' active' : ''}`}
-                onClick={closePanel}
+                onClick={() => {
+                  closePanel()
+                  const target = buildLocalePath(pathname, code)
+                  window.location.href = target
+                }}
               >
                 {code.toUpperCase()}
-              </a>
+              </button>
             ))}
           </div>
 

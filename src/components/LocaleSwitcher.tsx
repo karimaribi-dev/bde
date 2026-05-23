@@ -10,6 +10,8 @@ const LOCALES = [
   { code: 'de', label: 'DE' },
 ]
 
+const LOCALE_CODES = LOCALES.map(l => l.code)
+
 // Strip non-default locale prefix (/en /es /de) from pathname
 function stripLocalePrefix(pathname: string): string {
   for (const { code } of LOCALES) {
@@ -20,8 +22,20 @@ function stripLocalePrefix(pathname: string): string {
   return pathname
 }
 
-function buildLocalePath(pathname: string, toLocale: string): string {
+export function buildLocalePath(pathname: string, toLocale: string): string {
   const base = stripLocalePrefix(pathname)
+
+  // For article pages: swap locale prefix in slug (fr-slug, en-slug, es-slug, de-slug)
+  const articleMatch = base.match(/^(\/articles\/)([a-z]{2}-)(.+)$/)
+  if (articleMatch) {
+    const [, prefix, currentPrefix, rest] = articleMatch
+    const isKnownLocale = LOCALE_CODES.includes(currentPrefix.slice(0, -1))
+    if (isKnownLocale) {
+      const newBase = `${prefix}${toLocale}-${rest}`
+      return toLocale === 'fr' ? newBase : `/${toLocale}${newBase}`
+    }
+  }
+
   if (toLocale === 'fr') return base
   return `/${toLocale}${base === '/' ? '' : base}`
 }
