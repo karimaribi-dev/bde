@@ -18,12 +18,12 @@ export default function NotFound() {
       }}
     >
       {/* SVG illustration */}
-      <div style={{ width: 'min(420px, 80vw)', marginBottom: '2rem' }}>
+      <div style={{ width: 'min(720px, 92vw)', marginBottom: '2rem' }}>
         <Image
           src="/page404.svg"
           alt="Page introuvable"
-          width={420}
-          height={420}
+          width={720}
+          height={371}
           style={{ width: '100%', height: 'auto' }}
           priority
           unoptimized

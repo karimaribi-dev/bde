@@ -254,6 +254,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
                 className={`nav-panel__locale${code === locale ? ' active' : ''}`}
                 onClick={() => {
                   closePanel()
+                  document.cookie = `locale_choice=${code};path=/;max-age=31536000;samesite=lax`
                   const target = buildLocalePath(pathname, code)
                   window.location.href = target
                 }}

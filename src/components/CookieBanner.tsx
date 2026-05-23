@@ -1,0 +1,138 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+
+const CONSENT_KEY = 'cookie_consent_v1'
+
+interface Props {
+  gtmId: string
+  gaId: string
+}
+
+function injectGTM(gtmId: string) {
+  if (!gtmId || document.getElementById('gtm-runtime')) return
+  // Head script
+  const script = document.createElement('script')
+  script.id = 'gtm-runtime'
+  script.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${gtmId}');`
+  document.head.appendChild(script)
+  // Noscript iframe in body
+  const noscript = document.createElement('noscript')
+  noscript.id = 'gtm-noscript'
+  noscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`
+  document.body.insertBefore(noscript, document.body.firstChild)
+}
+
+function injectGA(gaId: string) {
+  if (!gaId || document.getElementById('ga-runtime')) return
+  const script1 = document.createElement('script')
+  script1.async = true
+  script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
+  document.head.appendChild(script1)
+  const script2 = document.createElement('script')
+  script2.id = 'ga-runtime'
+  script2.innerHTML = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`
+  document.head.appendChild(script2)
+}
+
+export default function CookieBanner({ gtmId, gaId }: Props) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem(CONSENT_KEY)
+    if (!stored) {
+      // Small delay so page loads first
+      const t = setTimeout(() => setVisible(true), 800)
+      return () => clearTimeout(t)
+    }
+    if (stored === 'accepted') {
+      if (gtmId) injectGTM(gtmId)
+      if (gaId) injectGA(gaId)
+    }
+  }, [gtmId, gaId])
+
+  function accept() {
+    localStorage.setItem(CONSENT_KEY, 'accepted')
+    setVisible(false)
+    if (gtmId) injectGTM(gtmId)
+    if (gaId) injectGA(gaId)
+  }
+
+  function refuse() {
+    localStorage.setItem(CONSENT_KEY, 'refused')
+    setVisible(false)
+  }
+
+  if (!visible) return null
+
+  return (
+    <div
+      role="dialog"
+      aria-label="Consentement cookies"
+      aria-live="polite"
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10000,
+        background: '#0c0c0c',
+        color: '#f3efe6',
+        padding: '1.1rem 1.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.5rem',
+        flexWrap: 'wrap',
+        borderTop: '1px solid rgba(255,255,255,0.1)',
+        animation: 'cookieSlideUp 0.3s ease',
+      }}
+    >
+      <style>{`@keyframes cookieSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}`}</style>
+
+      <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, flex: 1, minWidth: 200, opacity: 0.85, fontFamily: 'var(--font-mono), monospace' }}>
+        Nous utilisons des cookies pour mesurer l&apos;audience de notre site et améliorer votre expérience.
+        {' '}<a href="/politique-confidentialite" style={{ color: '#f3efe6', opacity: 0.6, textDecoration: 'underline', fontSize: '0.75rem' }}>En savoir plus</a>
+      </p>
+
+      <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0 }}>
+        <button
+          onClick={refuse}
+          style={{
+            background: 'transparent',
+            border: '1px solid rgba(243,239,230,0.3)',
+            color: '#f3efe6',
+            padding: '0.45rem 1rem',
+            fontSize: '0.75rem',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            fontFamily: 'var(--font-mono), monospace',
+          }}
+        >
+          Refuser
+        </button>
+        <button
+          onClick={accept}
+          style={{
+            background: '#f3efe6',
+            border: '1px solid #f3efe6',
+            color: '#0c0c0c',
+            padding: '0.45rem 1rem',
+            fontSize: '0.75rem',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            fontFamily: 'var(--font-mono), monospace',
+            fontWeight: 600,
+          }}
+        >
+          Accepter
+        </button>
+      </div>
+    </div>
+  )
+}

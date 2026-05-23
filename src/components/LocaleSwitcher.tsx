@@ -61,6 +61,8 @@ export default function LocaleSwitcher({ currentLocale }: Props) {
 
   function switchLocale(next: string) {
     setOpen(false)
+    // Remember manual choice for 1 year so auto-redirect won't override it
+    document.cookie = `locale_choice=${next};path=/;max-age=31536000;samesite=lax`
     const target = buildLocalePath(pathname, next)
     window.location.href = target
   }
