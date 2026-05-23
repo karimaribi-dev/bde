@@ -4,11 +4,17 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export default function AnalyticsEditor({ initial }: { initial: string }) {
+interface Props {
+  initial: string
+  initialGtm: string
+}
+
+export default function AnalyticsEditor({ initial, initialGtm }: Props) {
   const router = useRouter()
   const supabase = createClient()
 
   const [measurementId, setMeasurementId] = useState(initial)
+  const [gtmId, setGtmId] = useState(initialGtm)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
@@ -18,7 +24,7 @@ export default function AnalyticsEditor({ initial }: { initial: string }) {
     setError('')
     const { error } = await supabase
       .from('site_settings')
-      .upsert({ key: 'analytics', value: { measurement_id: measurementId.trim() } })
+      .upsert({ key: 'analytics', value: { measurement_id: measurementId.trim(), gtm_id: gtmId.trim() } })
     setSaving(false)
     if (error) {
       setError(`Erreur : ${error.message}`)
@@ -28,15 +34,16 @@ export default function AnalyticsEditor({ initial }: { initial: string }) {
     }
   }
 
-  const isValid = !measurementId.trim() || measurementId.trim().startsWith('G-')
+  const isValidGa = !measurementId.trim() || measurementId.trim().startsWith('G-')
+  const isValidGtm = !gtmId.trim() || gtmId.trim().startsWith('GTM-')
 
   return (
     <div className="max-w-xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Google Analytics</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
         <button
           onClick={handleSave}
-          disabled={saving || saved || !isValid}
+          disabled={saving || saved || !isValidGa || !isValidGtm}
           className="px-4 py-2 text-sm font-medium text-white rounded transition-colors disabled:opacity-60"
           style={{ background: saved ? '#16a34a' : '#111' }}
         >
@@ -49,7 +56,36 @@ export default function AnalyticsEditor({ initial }: { initial: string }) {
       )}
 
       <div className="space-y-4">
+        {/* Google Tag Manager */}
         <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
+          <h2 className="text-sm font-semibold text-gray-900">Google Tag Manager</h2>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Container ID
+              <span className="ml-1 text-gray-400 font-normal text-xs">— format GTM-XXXXXXXX</span>
+            </label>
+            <input
+              value={gtmId}
+              onChange={(e) => { setGtmId(e.target.value); setSaved(false) }}
+              placeholder="GTM-XXXXXXXX"
+              className={`w-full border rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-gray-400 ${
+                !isValidGtm ? 'border-red-300 bg-red-50' : 'border-gray-200'
+              }`}
+            />
+            {!isValidGtm && (
+              <p className="text-xs text-red-500 mt-1">L'ID doit commencer par "GTM-"</p>
+            )}
+          </div>
+          <div className={`rounded-lg px-4 py-3 text-sm flex items-center gap-2 ${
+            gtmId.trim() && isValidGtm ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500'
+          }`}>
+            <span>{gtmId.trim() && isValidGtm ? '✓ Google Tag Manager actif' : '○ Google Tag Manager inactif'}</span>
+          </div>
+        </div>
+
+        {/* Google Analytics */}
+        <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
+          <h2 className="text-sm font-semibold text-gray-900">Google Analytics (GA4)</h2>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Measurement ID
@@ -60,31 +96,18 @@ export default function AnalyticsEditor({ initial }: { initial: string }) {
               onChange={(e) => { setMeasurementId(e.target.value); setSaved(false) }}
               placeholder="G-XXXXXXXXXX"
               className={`w-full border rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-gray-400 ${
-                !isValid ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                !isValidGa ? 'border-red-300 bg-red-50' : 'border-gray-200'
               }`}
             />
-            {!isValid && (
+            {!isValidGa && (
               <p className="text-xs text-red-500 mt-1">L'ID doit commencer par "G-"</p>
             )}
           </div>
-
           <div className={`rounded-lg px-4 py-3 text-sm flex items-center gap-2 ${
-            measurementId.trim() && isValid
-              ? 'bg-green-50 text-green-700'
-              : 'bg-gray-50 text-gray-500'
+            measurementId.trim() && isValidGa ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500'
           }`}>
-            <span>{measurementId.trim() && isValid ? '✓ Google Analytics actif' : '○ Google Analytics inactif'}</span>
+            <span>{measurementId.trim() && isValidGa ? '✓ Google Analytics actif' : '○ Google Analytics inactif'}</span>
           </div>
-        </div>
-
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">Comment obtenir votre Measurement ID</h2>
-          <ol className="space-y-2 text-sm text-gray-600">
-            <li className="flex gap-2"><span className="text-gray-400 font-mono">1.</span> Rendez-vous sur <a href="https://analytics.google.com" target="_blank" rel="noreferrer" className="underline text-gray-900 underline-offset-2">analytics.google.com</a></li>
-            <li className="flex gap-2"><span className="text-gray-400 font-mono">2.</span> Créez une propriété pour votre site</li>
-            <li className="flex gap-2"><span className="text-gray-400 font-mono">3.</span> Dans <strong>Admin → Flux de données</strong>, ajoutez un flux Web avec votre URL</li>
-            <li className="flex gap-2"><span className="text-gray-400 font-mono">4.</span> Copiez l'ID de mesure (G-XXXXXXXXXX) et collez-le ci-dessus</li>
-          </ol>
         </div>
       </div>
     </div>

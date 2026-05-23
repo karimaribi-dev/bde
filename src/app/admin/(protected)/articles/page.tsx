@@ -5,6 +5,18 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import DeleteArticleButton from '@/components/DeleteArticleButton'
 
+function fmtTime(dateStr: string) {
+  return new Intl.DateTimeFormat('fr-FR', {
+    timeZone: 'Europe/Paris',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(dateStr))
+}
+
+const LOCALE_FLAG: Record<string, string> = {
+  fr: '🇫🇷', en: '🇬🇧', es: '🇪🇸', de: '🇩🇪',
+}
+
 export const dynamic = 'force-dynamic'
 
 export default async function AdminArticlesPage() {
@@ -31,6 +43,7 @@ export default async function AdminArticlesPage() {
               <tr>
                 <th>Titre</th>
                 <th>Catégorie</th>
+                <th>Langue</th>
                 <th>Statut</th>
                 <th>Date</th>
                 <th>Actions</th>
@@ -47,6 +60,9 @@ export default async function AdminArticlesPage() {
                   <td style={{ color: 'var(--text-muted)' }}>
                     {article.category?.name ?? '—'}
                   </td>
+                  <td style={{ fontSize: '18px' }} title={(article as Article & { locale?: string }).locale ?? 'fr'}>
+                    {LOCALE_FLAG[(article as Article & { locale?: string }).locale ?? 'fr'] ?? '🇫🇷'}
+                  </td>
                   <td>
                     <span className={`admin-badge${article.status !== 'published' ? ' admin-badge-draft' : ''}`}>
                       {article.status === 'published' ? 'Publié' : 'Brouillon'}
@@ -57,13 +73,13 @@ export default async function AdminArticlesPage() {
                       ? <span title="Intégré le">
                           {format(new Date(article.created_at), 'd MMM yyyy', { locale: fr })}
                           <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '11px', opacity: 0.7 }}>
-                            {format(new Date(article.created_at), 'HH:mm')}
+                            {fmtTime(article.created_at)}
                           </span>
                         </span>
                       : <span>
                           {format(new Date(article.updated_at), 'd MMM yyyy', { locale: fr })}
                           <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '11px', opacity: 0.7 }}>
-                            {format(new Date(article.updated_at), 'HH:mm')}
+                            {fmtTime(article.updated_at)}
                           </span>
                         </span>
                     }

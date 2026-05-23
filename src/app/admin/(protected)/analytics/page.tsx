@@ -12,13 +12,14 @@ export default async function AdminAnalyticsPage() {
     .single()
 
   const measurementId: string = data?.value?.measurement_id ?? ''
+  const gtmId: string = data?.value?.gtm_id ?? ''
 
   return (
     <>
       <header className="admin-header">
         <h1>Analytics</h1>
       </header>
-      <AnalyticsEditor initial={measurementId} />
+      <AnalyticsEditor initial={measurementId} initialGtm={gtmId} />
     </>
   )
 }

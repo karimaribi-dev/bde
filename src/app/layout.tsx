@@ -3,6 +3,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SitePopup from "@/components/SitePopup";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import GtmNoscript from "@/components/GtmNoscript";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={jetbrainsMono.variable}>
       <body>
+        <GtmNoscript />
         {children}
         <SitePopup />
         <GoogleAnalytics />

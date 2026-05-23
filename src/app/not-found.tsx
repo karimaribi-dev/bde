@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function NotFound() {
   return (
     <div
@@ -15,14 +17,27 @@ export default function NotFound() {
         zIndex: 9999,
       }}
     >
-      <div style={{ maxWidth: "480px", padding: "2rem" }}>
+      {/* SVG illustration */}
+      <div style={{ width: 'min(420px, 80vw)', marginBottom: '2rem' }}>
+        <Image
+          src="/page404.svg"
+          alt="Page introuvable"
+          width={420}
+          height={420}
+          style={{ width: '100%', height: 'auto' }}
+          priority
+          unoptimized
+        />
+      </div>
+
+      <div style={{ maxWidth: "480px", padding: "0 2rem 2rem" }}>
         <p
           style={{
             fontSize: "0.75rem",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
             opacity: 0.4,
-            marginBottom: "1rem",
+            marginBottom: "0.75rem",
             fontFamily: "inherit",
           }}
         >
@@ -30,10 +45,10 @@ export default function NotFound() {
         </p>
         <h1
           style={{
-            fontSize: "clamp(6rem, 20vw, 12rem)",
+            fontSize: "clamp(4rem, 15vw, 8rem)",
             fontWeight: 700,
             lineHeight: 1,
-            margin: "0 0 1.5rem",
+            margin: "0 0 1rem",
             letterSpacing: "-0.04em",
           }}
         >
@@ -44,7 +59,7 @@ export default function NotFound() {
             fontSize: "1.1rem",
             lineHeight: 1.6,
             opacity: 0.65,
-            marginBottom: "2.5rem",
+            marginBottom: "2rem",
           }}
         >
           Cette page n&apos;existe pas ou a été déplacée.
@@ -66,5 +81,5 @@ export default function NotFound() {
         </a>
       </div>
     </div>
-  );
+  )
 }

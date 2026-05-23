@@ -418,3 +418,88 @@
 .admin-logout-btn:hover {
   color: var(--text-main);
 }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .admin-bg {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .admin-app {
+    flex-direction: column;
+    border-radius: 0;
+    padding: 12px;
+    gap: 12px;
+    min-height: 100vh;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .admin-logo {
+    margin-bottom: 0;
+    font-size: 15px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .admin-nav-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0;
+  }
+
+  .admin-nav-title { display: none; }
+
+  .admin-nav-item {
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .admin-spacer { display: none; }
+
+  .admin-user-info {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+
+  .admin-user-email { margin-bottom: 0; }
+
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .admin-table-card { overflow-x: auto; }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .admin-table-link { max-width: 180px; }
+
+  .admin-header h1 { font-size: 22px; }
+}
+
+@media (max-width: 480px) {
+  .admin-stats-grid { grid-template-columns: 1fr 1fr; }
+  .admin-stat-value { font-size: 28px; }
+}

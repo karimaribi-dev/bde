@@ -1,7 +1,7 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
-import { useTransition, useState, useRef, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import { useState, useRef, useEffect } from 'react'
 
 const LOCALES = [
   { code: 'fr', label: 'FR' },
@@ -32,8 +32,6 @@ interface Props {
 
 export default function LocaleSwitcher({ currentLocale }: Props) {
   const pathname = usePathname()
-  const router = useRouter()
-  const [, startTransition] = useTransition()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -50,9 +48,7 @@ export default function LocaleSwitcher({ currentLocale }: Props) {
   function switchLocale(next: string) {
     setOpen(false)
     const target = buildLocalePath(pathname, next)
-    startTransition(() => {
-      router.push(target)
-    })
+    window.location.href = target
   }
 
   const others = LOCALES.filter(l => l.code !== currentLocale)
