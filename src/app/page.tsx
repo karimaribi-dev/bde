@@ -147,10 +147,11 @@ export default function HomePage() {
           </div>
           {featured ? (
             <Link href={`/articles/${featured.slug}`} style={{ display: 'contents' }}>
-              <div style={{ position: 'relative', aspectRatio: '16/9', background: 'var(--ink)', overflow: 'hidden' }} className="photo">
+              <div style={{ position: 'relative', aspectRatio: '16/9', background: featured.duotone_color1 || '#000000', overflow: 'hidden', isolation: 'isolate' }} className="photo">
                 {featured.cover_image_url ? (
-                  <Image src={featured.cover_image_url} alt={featured.title} fill sizes="(max-width: 900px) 100vw, (max-width: 1100px) 60vw, 45vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} priority />
+                  <Image src={featured.cover_image_url} alt={featured.title} fill sizes="(max-width: 900px) 100vw, (max-width: 1100px) 60vw, 45vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} priority />
                 ) : null}
+                <div style={{ position: 'absolute', inset: 0, background: featured.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
                 <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
                   {featured.category?.name ?? ''}
                 </span>
@@ -195,10 +196,11 @@ export default function HomePage() {
                 onMouseEnter={e => (e.currentTarget.style.background = 'var(--paper-2)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
-                <div style={{ width: 84, aspectRatio: '1', background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">
+                <div style={{ width: 84, aspectRatio: '1', background: art.duotone_color1 || '#000000', position: 'relative', overflow: 'hidden', isolation: 'isolate' }} className="photo">
                   {art.cover_image_url && (
-                    <Image src={art.cover_image_url} alt={art.title} fill sizes="84px" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} />
+                    <Image src={art.cover_image_url} alt={art.title} fill sizes="84px" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} />
                   )}
+                  <div style={{ position: 'absolute', inset: 0, background: art.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -243,10 +245,11 @@ export default function HomePage() {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{art.category?.name ?? ''}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(art.published_at)}</span>
             </div>
-            <div style={{ aspectRatio: '16/10', background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">
+            <div style={{ aspectRatio: '16/10', background: art.duotone_color1 || '#000000', position: 'relative', overflow: 'hidden', isolation: 'isolate' }} className="photo">
               {art.cover_image_url && (
-                <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} />
+                <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} />
               )}
+              <div style={{ position: 'absolute', inset: 0, background: art.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
               <span style={{ position: 'absolute', top: 10, left: 10, fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
                 A.{String(i + 1).padStart(2, '0')}
               </span>
@@ -287,10 +290,11 @@ export default function HomePage() {
           <section className="c-article-grid-open">
             {grid.slice(PAGE_SIZE).map((art) => (
               <Link key={art.id} href={`/articles/${art.slug}`} className="hover-card c-article-card">
-                <div style={{ aspectRatio: '3/2', background: 'var(--ink)', position: 'relative', overflow: 'hidden', marginBottom: 12 }} className="photo">
+                <div style={{ aspectRatio: '3/2', background: art.duotone_color1 || '#000000', position: 'relative', overflow: 'hidden', marginBottom: 12, isolation: 'isolate' }} className="photo">
                   {art.cover_image_url && (
-                    <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} />
+                    <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} />
                   )}
+                  <div style={{ position: 'absolute', inset: 0, background: art.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
                 </div>
                 {art.category?.name && (
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', display: 'block', marginBottom: 6 }}>{art.category.name}</span>

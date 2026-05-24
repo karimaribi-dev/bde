@@ -198,21 +198,27 @@ function handleTitleChange(value: string) {
       let msg = labels[publishMode]
 
       // Propagate cover image to all articles in the same cluster
-      const clusterId = (article as unknown as Record<string, string>)?.cluster_id
+      const clusterId = article?.cluster_id
       if (clusterId && coverImageUrl && article?.id) {
         const { error: propError } = await supabase
           .from('articles')
           .update({ cover_image_url: coverImageUrl || null, cover_image_alt: coverImageAlt.trim() || null })
           .eq('cluster_id', clusterId)
           .neq('id', article.id)
-        if (!propError) msg += ' Image propagée aux autres langues.'
+        if (!propError) {
+          msg += ' Image propagée aux autres langues.'
+        } else {
+          msg += ` (Propagation échouée : ${propError.message})`
+        }
+      } else if (!clusterId && coverImageUrl) {
+        msg += ' (Article sans cluster_id — propagation non disponible)'
       }
 
       setMessage(msg)
       if (!article?.id) router.push('/admin/articles')
       else router.refresh()
     }
-  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, sources, categoryId, locale, publishMode, scheduledAt, article, router, supabase])
+  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, sources, duotoneColor1, duotoneColor2, categoryId, locale, publishMode, scheduledAt, article, router, supabase])
 
   return (
     <>

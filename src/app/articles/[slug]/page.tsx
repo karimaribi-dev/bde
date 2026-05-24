@@ -11,26 +11,6 @@ import AdSlot from '@/components/AdSlot'
 
 export const dynamic = 'force-dynamic'
 
-function hexToRgbNorm(hex: string): [number, number, number] {
-  const clean = hex.replace('#', '')
-  const r = parseInt(clean.substring(0, 2), 16) / 255
-  const g = parseInt(clean.substring(2, 4), 16) / 255
-  const b = parseInt(clean.substring(4, 6), 16) / 255
-  return [r, g, b]
-}
-
-function buildDuotoneFilter(color1: string | null, color2: string | null): string {
-  const [r1, g1, b1] = hexToRgbNorm(color1 || '#000000')
-  const [r2, g2, b2] = hexToRgbNorm(color2 || '#ffffff')
-  const matrix = [
-    `${r2 - r1} 0 0 0 ${r1}`,
-    `${g2 - g1} 0 0 0 ${g1}`,
-    `${b2 - b1} 0 0 0 ${b1}`,
-    `0 0 0 1 0`,
-  ].join(' ')
-  return matrix
-}
-
 function formatDate(dateStr: string | null) {
   if (!dateStr) return ''
   return format(new Date(dateStr), 'dd.MM.yyyy', { locale: fr })
@@ -78,24 +58,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const categoryName = (article.category as { id: string; name: string; slug: string } | null)?.name ?? ''
   const categorySlug = (article.category as { id: string; name: string; slug: string } | null)?.slug ?? ''
 
-  const duotoneMatrix = buildDuotoneFilter(
-    (article as { duotone_color1?: string | null }).duotone_color1 ?? null,
-    (article as { duotone_color2?: string | null }).duotone_color2 ?? null
-  )
+  const c1 = (article as { duotone_color1?: string | null }).duotone_color1 || '#000000'
+  const c2 = (article as { duotone_color2?: string | null }).duotone_color2 || '#ffffff'
 
   return (
     <>
-      {/* ── SVG duotone filter ── */}
-      <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
-        <defs>
-          <filter id="duotone-article" colorInterpolationFilters="sRGB">
-            <feColorMatrix type="saturate" values="0" result="gray" />
-            <feColorMatrix type="matrix" values={duotoneMatrix} in="gray" />
-          </filter>
-        </defs>
-      </svg>
-      <style>{`.article-content img { filter: url(#duotone-article); }`}</style>
-
       {/* ── Navbar ── */}
       <NavbarClient categories={cats} activeSlug={categorySlug} withSearch />
 
@@ -146,8 +113,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
           {article.cover_image_url && (
-            <div style={{ aspectRatio: '21/9', background: 'var(--ink)', position: 'relative', overflow: 'hidden', marginTop: 20 }} className="photo">
-              <Image src={article.cover_image_url} alt={(article as { cover_image_alt?: string | null }).cover_image_alt || article.title} fill sizes="(max-width: 1024px) 100vw, calc(100vw - 360px)" style={{ objectFit: 'cover', filter: 'url(#duotone-article)' }} priority />
+            <div style={{ aspectRatio: '21/9', background: c1, position: 'relative', overflow: 'hidden', marginTop: 20, isolation: 'isolate' }} className="photo">
+              <Image src={article.cover_image_url} alt={(article as { cover_image_alt?: string | null }).cover_image_alt || article.title} fill sizes="(max-width: 1024px) 100vw, calc(100vw - 360px)" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} priority />
+              <div style={{ position: 'absolute', inset: 0, background: c2, mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
               <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>F.01 · Image principale</span>
               <span style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>{categoryName}</span>
             </div>
