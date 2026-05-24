@@ -191,7 +191,20 @@ function handleTitleChange(value: string) {
     } else {
       setSaved(true)
       const labels = { draft: 'Brouillon sauvegardé.', now: 'Article publié !', schedule: `Programmé pour le ${new Date(scheduledAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.` }
-      setMessage(labels[publishMode])
+      let msg = labels[publishMode]
+
+      // Propagate cover image to all articles in the same cluster
+      const clusterId = (article as unknown as Record<string, string>)?.cluster_id
+      if (clusterId && coverImageUrl && article?.id) {
+        const { error: propError } = await supabase
+          .from('articles')
+          .update({ cover_image_url: coverImageUrl || null, cover_image_alt: coverImageAlt.trim() || null })
+          .eq('cluster_id', clusterId)
+          .neq('id', article.id)
+        if (!propError) msg += ' Image propagée aux autres langues.'
+      }
+
+      setMessage(msg)
       if (!article?.id) router.push('/admin/articles')
       else router.refresh()
     }
