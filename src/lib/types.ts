@@ -100,6 +100,8 @@ export interface Article {
   cover_image_alt: string | null
   sources: string | null
   cluster_id: string | null
+  duotone_color1: string | null
+  duotone_color2: string | null
   status: ArticleStatus
   category_id: string | null
   category?: Category

@@ -54,6 +54,8 @@ export default function ArticleEditor({ article, categories }: Props) {
   const [coverImageUrl, setCoverImageUrl] = useState(article?.cover_image_url ?? '')
   const [coverImageAlt, setCoverImageAlt] = useState(article?.cover_image_alt ?? '')
   const [sources, setSources] = useState(article?.sources ?? '')
+  const [duotoneColor1, setDuotoneColor1] = useState(article?.duotone_color1 ?? '#000000')
+  const [duotoneColor2, setDuotoneColor2] = useState(article?.duotone_color2 ?? '#ffffff')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
@@ -167,6 +169,8 @@ function handleTitleChange(value: string) {
       cover_image_url: coverImageUrl || null,
       cover_image_alt: coverImageAlt.trim() || null,
       sources: sources.trim() || null,
+      duotone_color1: duotoneColor1 || null,
+      duotone_color2: duotoneColor2 || null,
       category_id: categoryId || null,
       status: saveStatus,
       published_at: savePublishedAt,
@@ -431,6 +435,28 @@ function handleTitleChange(value: string) {
                   )}
                 </div>
               )}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-100 p-5">
+            <label className="block text-sm font-medium text-gray-700 mb-3">Duotone</label>
+            <p className="text-xs text-gray-400 mb-3">Couleurs appliquées sur les images (ombres → lumières)</p>
+            <div className="flex gap-3 items-center">
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">Ombres</label>
+                <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1.5">
+                  <input type="color" value={duotoneColor1} onChange={(e) => { setDuotoneColor1(e.target.value); setSaved(false) }} className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0" />
+                  <span className="text-xs font-mono text-gray-500">{duotoneColor1}</span>
+                </div>
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">Lumières</label>
+                <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1.5">
+                  <input type="color" value={duotoneColor2} onChange={(e) => { setDuotoneColor2(e.target.value); setSaved(false) }} className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0" />
+                  <span className="text-xs font-mono text-gray-500">{duotoneColor2}</span>
+                </div>
+              </div>
+              <button onClick={() => { setDuotoneColor1('#000000'); setDuotoneColor2('#ffffff'); setSaved(false) }} className="text-xs text-gray-400 hover:text-gray-600 mt-4" title="Réinitialiser">↺</button>
             </div>
           </div>
 
