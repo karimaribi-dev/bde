@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import Script from 'next/script'
 
 // GTM charge toujours (standard Google) — les tags internes sont contrôlés
 // par le Consent Mode configuré dans le dashboard GTM.
@@ -20,14 +19,16 @@ export default async function GtmLoader() {
 
   return (
     <>
-      {/* GTM head snippet — chargé inconditionnellement */}
-      <Script id="gtm-head" strategy="afterInteractive">
-        {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      {/* GTM head snippet — dans le HTML initial pour détection par Tag Assistant */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${gtmId}');`}
-      </Script>
+})(window,document,'script','dataLayer','${gtmId}');`
+        }}
+      />
 
       {/* GTM noscript body snippet */}
       <noscript>
