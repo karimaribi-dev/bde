@@ -8,6 +8,7 @@ import { fr } from 'date-fns/locale'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
 import AdSlot from '@/components/AdSlot'
+import DuotonePhoto from '@/components/DuotonePhoto'
 
 export const dynamic = 'force-dynamic'
 
@@ -113,12 +114,20 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
           {article.cover_image_url && (
-            <div style={{ aspectRatio: '21/9', background: c1, position: 'relative', overflow: 'hidden', marginTop: 20, isolation: 'isolate' }} className="photo">
-              <Image src={article.cover_image_url} alt={(article as { cover_image_alt?: string | null }).cover_image_alt || article.title} fill sizes="(max-width: 1024px) 100vw, calc(100vw - 360px)" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} priority />
-              <div style={{ position: 'absolute', inset: 0, background: c2, mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
-              <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>F.01 · Image principale</span>
-              <span style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>{categoryName}</span>
-            </div>
+            <DuotonePhoto
+              src={article.cover_image_url}
+              alt={(article as { cover_image_alt?: string | null }).cover_image_alt || article.title}
+              color1={c1}
+              color2={c2}
+              sizes="(max-width: 1024px) 100vw, calc(100vw - 360px)"
+              priority
+              aspectRatio="21/9"
+              style={{ marginTop: 20 }}
+              className="photo"
+            >
+              <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 5 }}>F.01 · Image principale</span>
+              <span style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 5 }}>{categoryName}</span>
+            </DuotonePhoto>
           )}
         </div>
 
@@ -138,7 +147,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 <Link key={rel.id} href={`/articles/${rel.slug}`} style={{ display: 'grid', gridTemplateColumns: '54px 1fr', gap: 12, alignItems: 'start', padding: '10px 0', borderBottom: 'var(--hair-mute)', textDecoration: 'none' }}>
                   <div style={{ width: 54, height: 54, background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">
                     {rel.cover_image_url && (
-                      <Image src={rel.cover_image_url} alt={rel.title} fill sizes="54px" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} />
+                      <Image src={rel.cover_image_url} alt={rel.title} fill sizes="54px" style={{ objectFit: 'cover' }} />
                     )}
                   </div>
                   <div>
@@ -250,7 +259,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div style={{ aspectRatio: '16/10', background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">
                   {rel.cover_image_url && (
-                    <Image src={rel.cover_image_url} alt={rel.title} fill sizes="(max-width: 720px) 100vw, (max-width: 1024px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }} />
+                    <Image src={rel.cover_image_url} alt={rel.title} fill sizes="(max-width: 720px) 100vw, (max-width: 1024px) 50vw, 33vw" style={{ objectFit: 'cover' }} />
                   )}
                 </div>
                 <h4 style={{ margin: 0, fontSize: 20, lineHeight: 1.1, letterSpacing: '-.005em', fontWeight: 700 }}>{rel.title}</h4>

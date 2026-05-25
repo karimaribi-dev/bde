@@ -10,6 +10,7 @@ import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
 import AdSectionClient from '@/components/AdSectionClient'
 import SubscribeForm from '@/components/SubscribeForm'
+import DuotonePhoto from '@/components/DuotonePhoto'
 
 function formatDate(dateStr: string | null) {
   if (!dateStr) return ''
@@ -147,18 +148,27 @@ export default function HomePage() {
           </div>
           {featured ? (
             <Link href={`/articles/${featured.slug}`} style={{ display: 'contents' }}>
-              <div style={{ position: 'relative', aspectRatio: '16/9', background: featured.duotone_color1 || '#000000', overflow: 'hidden', isolation: 'isolate' }} className="photo">
-                {featured.cover_image_url ? (
-                  <Image src={featured.cover_image_url} alt={featured.title} fill sizes="(max-width: 900px) 100vw, (max-width: 1100px) 60vw, 45vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} priority />
-                ) : null}
-                <div style={{ position: 'absolute', inset: 0, background: featured.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
-                <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
-                  {featured.category?.name ?? ''}
-                </span>
-                <span style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
-                  {formatDate(featured.published_at)}
-                </span>
-              </div>
+              {featured.cover_image_url ? (
+                <DuotonePhoto
+                  src={featured.cover_image_url}
+                  alt={featured.title}
+                  color1={featured.duotone_color1}
+                  color2={featured.duotone_color2}
+                  sizes="(max-width: 900px) 100vw, (max-width: 1100px) 60vw, 45vw"
+                  priority
+                  aspectRatio="16/9"
+                  className="photo"
+                >
+                  <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 5 }}>
+                    {featured.category?.name ?? ''}
+                  </span>
+                  <span style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 5 }}>
+                    {formatDate(featured.published_at)}
+                  </span>
+                </DuotonePhoto>
+              ) : (
+                <div style={{ position: 'relative', aspectRatio: '16/9', background: '#0a0a0a' }} className="photo" />
+              )}
               {featured.category && (
                 <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase', background: 'var(--ink)', color: 'var(--paper)', padding: '6px 10px', width: 'max-content' }}>
                   {featured.category.name}
@@ -196,12 +206,19 @@ export default function HomePage() {
                 onMouseEnter={e => (e.currentTarget.style.background = 'var(--paper-2)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
-                <div style={{ width: 84, aspectRatio: '1', background: art.duotone_color1 || '#000000', position: 'relative', overflow: 'hidden', isolation: 'isolate' }} className="photo">
-                  {art.cover_image_url && (
-                    <Image src={art.cover_image_url} alt={art.title} fill sizes="84px" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} />
-                  )}
-                  <div style={{ position: 'absolute', inset: 0, background: art.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
-                </div>
+                {art.cover_image_url ? (
+                  <DuotonePhoto
+                    src={art.cover_image_url}
+                    alt={art.title}
+                    color1={art.duotone_color1}
+                    color2={art.duotone_color2}
+                    sizes="84px"
+                    style={{ width: 84, flexShrink: 0, aspectRatio: '1' }}
+                    className="photo"
+                  />
+                ) : (
+                  <div style={{ width: 84, flexShrink: 0, aspectRatio: '1', background: '#0a0a0a' }} className="photo" />
+                )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase' }}>{art.category?.name ?? ''}</span>
@@ -245,15 +262,23 @@ export default function HomePage() {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{art.category?.name ?? ''}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(art.published_at)}</span>
             </div>
-            <div style={{ aspectRatio: '16/10', background: art.duotone_color1 || '#000000', position: 'relative', overflow: 'hidden', isolation: 'isolate' }} className="photo">
-              {art.cover_image_url && (
-                <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} />
-              )}
-              <div style={{ position: 'absolute', inset: 0, background: art.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
-              <span style={{ position: 'absolute', top: 10, left: 10, fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
-                A.{String(i + 1).padStart(2, '0')}
-              </span>
-            </div>
+            {art.cover_image_url ? (
+              <DuotonePhoto
+                src={art.cover_image_url}
+                alt={art.title}
+                color1={art.duotone_color1}
+                color2={art.duotone_color2}
+                sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw"
+                aspectRatio="16/10"
+                className="photo"
+              >
+                <span style={{ position: 'absolute', top: 10, left: 10, fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 5 }}>
+                  A.{String(i + 1).padStart(2, '0')}
+                </span>
+              </DuotonePhoto>
+            ) : (
+              <div style={{ aspectRatio: '16/10', background: '#0a0a0a' }} className="photo" />
+            )}
             <h3 style={{ fontSize: 22, lineHeight: 1.08, letterSpacing: '-.01em', fontWeight: 700, margin: 0 }}>{art.title}</h3>
             {art.excerpt && <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)' }}>{art.excerpt}</p>}
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', paddingTop: 10, borderTop: 'var(--hair-mute)' }}>
@@ -292,7 +317,7 @@ export default function HomePage() {
               <Link key={art.id} href={`/articles/${art.slug}`} className="hover-card c-article-card">
                 <div style={{ aspectRatio: '3/2', background: art.duotone_color1 || '#000000', position: 'relative', overflow: 'hidden', marginBottom: 12, isolation: 'isolate' }} className="photo">
                   {art.cover_image_url && (
-                    <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.1)', mixBlendMode: 'screen' }} />
+                    <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover',  }} />
                   )}
                   <div style={{ position: 'absolute', inset: 0, background: art.duotone_color2 || '#ffffff', mixBlendMode: 'multiply', pointerEvents: 'none', zIndex: 1 }} />
                 </div>

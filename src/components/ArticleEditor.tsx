@@ -54,8 +54,9 @@ export default function ArticleEditor({ article, categories }: Props) {
   const [coverImageUrl, setCoverImageUrl] = useState(article?.cover_image_url ?? '')
   const [coverImageAlt, setCoverImageAlt] = useState(article?.cover_image_alt ?? '')
   const [sources, setSources] = useState(article?.sources ?? '')
-  const [duotoneColor1, setDuotoneColor1] = useState(article?.duotone_color1 ?? '#000000')
-  const [duotoneColor2, setDuotoneColor2] = useState(article?.duotone_color2 ?? '#ffffff')
+  const [duotoneColor1, setDuotoneColor1] = useState(article?.duotone_color1 || '#000000')
+  const [duotoneColor2, setDuotoneColor2] = useState(article?.duotone_color2 || '#ffffff')
+  const [duotoneCustomized, setDuotoneCustomized] = useState(!!(article?.duotone_color1 || article?.duotone_color2))
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
@@ -169,8 +170,8 @@ function handleTitleChange(value: string) {
       cover_image_url: coverImageUrl || null,
       cover_image_alt: coverImageAlt.trim() || null,
       sources: sources.trim() || null,
-      duotone_color1: duotoneColor1 || null,
-      duotone_color2: duotoneColor2 || null,
+      duotone_color1: duotoneCustomized ? (duotoneColor1 || null) : (article?.duotone_color1 || null),
+      duotone_color2: duotoneCustomized ? (duotoneColor2 || null) : (article?.duotone_color2 || null),
       category_id: categoryId || null,
       status: saveStatus,
       published_at: savePublishedAt,
@@ -197,16 +198,24 @@ function handleTitleChange(value: string) {
       const labels = { draft: 'Brouillon sauvegardé.', now: 'Article publié !', schedule: `Programmé pour le ${new Date(scheduledAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.` }
       let msg = labels[publishMode]
 
-      // Propagate cover image to all articles in the same cluster
+      // Propagate cover image + duotone colors to all articles in the same cluster
       const clusterId = article?.cluster_id
-      if (clusterId && coverImageUrl && article?.id) {
+      if (clusterId && article?.id) {
+        const propagatePayload: Record<string, string | null> = {
+          duotone_color1: duotoneColor1 || null,
+          duotone_color2: duotoneColor2 || null,
+        }
+        if (coverImageUrl) {
+          propagatePayload.cover_image_url = coverImageUrl || null
+          propagatePayload.cover_image_alt = coverImageAlt.trim() || null
+        }
         const { error: propError } = await supabase
           .from('articles')
-          .update({ cover_image_url: coverImageUrl || null, cover_image_alt: coverImageAlt.trim() || null })
+          .update(propagatePayload)
           .eq('cluster_id', clusterId)
           .neq('id', article.id)
         if (!propError) {
-          msg += ' Image propagée aux autres langues.'
+          msg += coverImageUrl ? ' Image et couleurs propagées aux autres langues.' : ' Couleurs propagées aux autres langues.'
         } else {
           msg += ` (Propagation échouée : ${propError.message})`
         }
@@ -218,7 +227,7 @@ function handleTitleChange(value: string) {
       if (!article?.id) router.push('/admin/articles')
       else router.refresh()
     }
-  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, sources, duotoneColor1, duotoneColor2, categoryId, locale, publishMode, scheduledAt, article, router, supabase])
+  }, [title, slug, excerpt, editor, coverImageUrl, coverImageAlt, sources, duotoneColor1, duotoneColor2, duotoneCustomized, categoryId, locale, publishMode, scheduledAt, article, router, supabase])
 
   return (
     <>
@@ -451,14 +460,14 @@ function handleTitleChange(value: string) {
               <div className="flex-1">
                 <label className="block text-xs text-gray-500 mb-1">Ombres</label>
                 <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1.5">
-                  <input type="color" value={duotoneColor1} onChange={(e) => { setDuotoneColor1(e.target.value); setSaved(false) }} className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0" />
+                  <input type="color" value={duotoneColor1} onChange={(e) => { setDuotoneColor1(e.target.value); setDuotoneCustomized(true); setSaved(false) }} className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0" />
                   <span className="text-xs font-mono text-gray-500">{duotoneColor1}</span>
                 </div>
               </div>
               <div className="flex-1">
                 <label className="block text-xs text-gray-500 mb-1">Lumières</label>
                 <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1.5">
-                  <input type="color" value={duotoneColor2} onChange={(e) => { setDuotoneColor2(e.target.value); setSaved(false) }} className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0" />
+                  <input type="color" value={duotoneColor2} onChange={(e) => { setDuotoneColor2(e.target.value); setDuotoneCustomized(true); setSaved(false) }} className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent p-0" />
                   <span className="text-xs font-mono text-gray-500">{duotoneColor2}</span>
                 </div>
               </div>

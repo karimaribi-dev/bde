@@ -120,7 +120,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                     alt={art.title}
                     fill
                     sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw"
-                    style={{ objectFit: 'cover', filter: 'grayscale(1) contrast(1.04) brightness(.72)' }}
+                    style={{ objectFit: 'cover' }}
                   />
                 )}
                 <span style={{ position: 'absolute', top: 10, left: 10, fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
