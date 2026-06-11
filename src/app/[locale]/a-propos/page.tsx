@@ -19,13 +19,21 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
   const { locale } = await params
   const supabase   = await createClient()
 
-  const [{ data: categories }, { data: teamData }] = await Promise.all([
+  const FALLBACK_MEMBERS: TeamMember[] = [
+    { id: '1', name: 'LOUISON', role: null, badge_color: '#4FA3FF', photo_url: null, sort_order: 1 },
+    { id: '2', name: 'BENJI',   role: null, badge_color: '#FFB3F0', photo_url: null, sort_order: 2 },
+    { id: '3', name: 'ACHILLE', role: null, badge_color: '#FFE74A', photo_url: null, sort_order: 3 },
+  ]
+
+  const [{ data: categories }, teamResult] = await Promise.all([
     supabase.from('categories').select('*').order('name'),
     supabase.from('team_members').select('*').order('sort_order', { ascending: true }),
   ])
 
   const cats    = (categories ?? []) as Category[]
-  const members = (teamData   ?? []) as TeamMember[]
+  const members = (teamResult.error || !teamResult.data?.length)
+    ? FALLBACK_MEMBERS
+    : teamResult.data as TeamMember[]
 
   return (
     <>
