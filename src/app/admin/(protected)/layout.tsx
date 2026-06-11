@@ -26,10 +26,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <nav className="admin-nav-section">
             <div className="admin-nav-title">Contenu</div>
             <AdminNavItem href="/admin" icon="fa-solid fa-border-all" label="Tableau de bord" exact />
-            <AdminNavItem href="/admin/articles" icon="fa-solid fa-newspaper" label="Articles" />
-            <AdminNavItem href="/admin/articles/new" icon="fa-solid fa-plus-circle" label="Nouvel article" exact />
-            <AdminNavItem href="/admin/categories" icon="fa-solid fa-tags" label="Catégories" exact />
-            <AdminNavItem href="/admin/pages" icon="fa-solid fa-file-lines" label="Pages" />
             <AdminNavItem href="/admin/events" icon="fa-solid fa-calendar-days" label="Événements" />
             <AdminNavItem href="/admin/clubs" icon="fa-solid fa-people-group" label="Clubs" />
             <AdminNavItem href="/admin/club-requests" icon="fa-solid fa-envelope-open-text" label="Adhésions clubs" />
@@ -40,7 +36,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
           <nav className="admin-nav-section">
             <div className="admin-nav-title">Site</div>
-            <AdminNavItem href="/admin/newsletter" icon="fa-solid fa-envelope" label="Newsletter" />
             <AdminNavItem href="/admin/subscribers" icon="fa-solid fa-users" label="Abonnés" exact />
             <AdminNavItem href="/admin/ads" icon="fa-solid fa-rectangle-ad" label="Publicités" />
             <AdminNavItem href="/admin/popups" icon="fa-solid fa-window-restore" label="Popups" />
