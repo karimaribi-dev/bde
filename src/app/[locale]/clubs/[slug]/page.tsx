@@ -27,19 +27,20 @@ export default async function ClubDetailPage({
   if (!clubData) notFound()
 
   const club       = clubData as Club
-  const cats       = (categories ?? []) as Category[]
+  const cats       = (categories  ?? []) as Category[]
   const otherClubs = (otherClubsRaw ?? []) as Club[]
 
   const ac = club.accent_color
   const at = club.accent_text_color
 
-  /* Info rows — seulement les champs renseignés */
   const infoItems: { key: string; val: string }[] = [
-    club.schedule    && { key: 'HORAIRES',          val: club.schedule },
-    club.frequency   && { key: 'DATE / FRÉQUENCE',  val: club.frequency },
-    club.location    && { key: 'LIEU',               val: club.location },
-    club.member_count && { key: 'NOMBRE DE MEMBRES', val: club.member_count },
+    club.schedule     && { key: 'HORAIRES',           val: club.schedule },
+    club.frequency    && { key: 'DATE / FRÉQUENCE',   val: club.frequency },
+    club.location     && { key: 'LIEU',                val: club.location },
+    club.member_count && { key: 'NOMBRE DE MEMBRES',  val: club.member_count },
   ].filter(Boolean) as { key: string; val: string }[]
+
+  const hr = <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '22px 0' }} />
 
   return (
     <>
@@ -47,109 +48,184 @@ export default async function ClubDetailPage({
 
       <main style={{ padding: '0 40px' }}>
 
-        {/* ═══════════ HERO ═══════════ */}
-        <section style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 30, alignItems: 'flex-start', padding: '30px 0 24px' }}>
-          {/* Titre + flèche */}
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
-            fontWeight: 900,
-            fontSize: 'clamp(54px, 7vw, 108px)',
-            lineHeight: 0.95,
-            letterSpacing: '-0.02em',
-            color: 'var(--ink)',
-            margin: 0,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'clamp(16px, 2vw, 36px)',
-            textTransform: 'uppercase',
-          }}>
-            {club.title}
-            <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(50px,5vw,100px)', height: 'clamp(50px,5vw,100px)', flexShrink: 0 }}>
-              <svg viewBox="0 0 100 100" fill="none" stroke="#262626" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                <path d="M20 20L80 80M40 80H80V40"/>
-              </svg>
-            </span>
-          </h1>
+        {/* ═══════════ BLOC PRINCIPAL 2-COL ═══════════
+            Gauche : titre + photo empilés
+            Droite : taglines + séparateurs + sections + form           */}
+        <section style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '0 60px',
+          alignItems: 'flex-start',
+          padding: '30px 0 60px',
+        }}>
 
-          {/* Tagline à droite */}
-          <div style={{
-            fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
-            fontSize: 'clamp(13px, 1.1vw, 18px)',
-            lineHeight: 1.8,
-            alignSelf: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-            alignItems: 'flex-end',
-          }}>
-            {club.tagline && (
-              <span style={{ display: 'inline-block', background: ac, color: at, padding: '4px 10px 6px', letterSpacing: '0.01em', width: 'fit-content', textTransform: 'uppercase' }}>
-                {club.tagline}
+          {/* ── COLONNE GAUCHE ── */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+            {/* Titre + flèche diagonale */}
+            <h1 style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontWeight: 900,
+              fontSize: 'clamp(52px, 6.5vw, 100px)',
+              lineHeight: 0.92,
+              letterSpacing: '-0.02em',
+              textTransform: 'uppercase',
+              color: 'var(--ink)',
+              margin: '0 0 28px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'clamp(14px, 1.8vw, 30px)',
+            }}>
+              {club.title}
+              <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(44px, 5vw, 80px)', height: 'clamp(44px, 5vw, 80px)', flexShrink: 0 }}>
+                <svg viewBox="0 0 100 100" fill="none" stroke="#262626" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                  <path d="M20 20L80 80M40 80H80V40"/>
+                </svg>
               </span>
-            )}
-            {club.tagline_sub && (
-              <span style={{ display: 'inline-block', background: ac, color: at, padding: '4px 10px 6px', letterSpacing: '0.01em', width: 'fit-content', textTransform: 'uppercase', marginLeft: 40 }}>
-                {club.tagline_sub}
-              </span>
-            )}
-          </div>
-        </section>
+            </h1>
 
-        {/* ═══════════ DETAIL 2 COLONNES ═══════════ */}
-        <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 50, marginTop: 16 }}>
-
-          {/* Photo grande */}
-          <div style={{ aspectRatio: '1/1', overflow: 'hidden', background: club.image_url ? '#ddd' : ac, position: 'relative' }}>
-            {club.image_url ? (
-              <Image src={club.image_url} alt={club.title} fill sizes="(max-width:900px) 100vw, 50vw" style={{ objectFit: 'cover' }} />
-            ) : (
-              <div style={{ position: 'absolute', inset: 0, background: ac, opacity: 0.3 }} />
-            )}
+            {/* Grande photo */}
+            <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', background: ac, position: 'relative', flexShrink: 0 }}>
+              {club.image_url ? (
+                <Image
+                  src={club.image_url}
+                  alt={club.title}
+                  fill
+                  sizes="(max-width:900px) 100vw, 50vw"
+                  style={{ objectFit: 'cover' }}
+                />
+              ) : (
+                <div style={{ position: 'absolute', inset: 0, background: ac, opacity: 0.25 }} />
+              )}
+            </div>
           </div>
 
-          {/* Colonne info boxes */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {/* ── COLONNE DROITE ── */}
+          <div style={{ paddingTop: 8 }}>
+
+            {/* Taglines */}
+            {(club.tagline || club.tagline_sub) && (
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 4,
+                marginBottom: 28,
+              }}>
+                {club.tagline && (
+                  <span style={{
+                    display: 'inline-block',
+                    fontSize: 'clamp(12px, 1vw, 15px)',
+                    letterSpacing: '0.02em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink)',
+                  }}>
+                    {club.tagline}
+                  </span>
+                )}
+                {club.tagline_sub && (
+                  <span style={{
+                    display: 'inline-block',
+                    background: ac,
+                    color: at,
+                    padding: '5px 12px 7px',
+                    fontSize: 'clamp(18px, 2vw, 28px)',
+                    letterSpacing: '-0.01em',
+                    textTransform: 'uppercase',
+                    width: 'fit-content',
+                    marginLeft: 20,
+                  }}>
+                    {club.tagline_sub}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {hr}
 
             {/* QUI SOMMES NOUS */}
             {club.who_we_are && (
-              <InfoBox ac={ac} title="QUI SOMMES NOUS ?">
-                <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink)', margin: 0 }}>
+              <>
+                <h3 style={{
+                  fontFamily: 'var(--font-display)',
+                  fontStyle: 'italic',
+                  fontWeight: 900,
+                  fontSize: 'clamp(14px, 1.2vw, 18px)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.01em',
+                  color: 'var(--ink)',
+                  margin: '0 0 12px',
+                }}>
+                  QUI SOMMES NOUS ?
+                </h3>
+                <p style={{ fontSize: 13, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
                   {club.who_we_are}
                 </p>
-              </InfoBox>
+                {hr}
+              </>
             )}
 
             {/* NOTRE OBJECTIF */}
             {club.objective && (
-              <InfoBox ac={ac} title="NOTRE OBJECTIF :">
-                <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink)', margin: 0 }}>
+              <>
+                <h3 style={{
+                  fontFamily: 'var(--font-display)',
+                  fontStyle: 'italic',
+                  fontWeight: 900,
+                  fontSize: 'clamp(14px, 1.2vw, 18px)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.01em',
+                  color: 'var(--ink)',
+                  margin: '0 0 12px',
+                }}>
+                  NOTRE OBJECTIF :
+                </h3>
+                <p style={{ fontSize: 13, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
                   {club.objective}
                 </p>
-              </InfoBox>
+                {hr}
+              </>
             )}
 
-            {/* LES INFOS IMPORTANTES */}
+            {/* INFOS IMPORTANTES — lignes simples */}
             {infoItems.length > 0 && (
-              <InfoBox ac={ac} title="LES INFOS IMPORTANTES">
-                {infoItems.map((item, idx) => (
-                  <div key={item.key} style={{
-                    padding: '10px 12px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    border: `1.2px solid ${ac}`,
-                    borderTop: idx === 0 ? `1.2px solid ${ac}` : 'none',
-                    fontFamily: 'var(--font-display)',
-                    fontStyle: 'italic',
-                    fontSize: 13,
-                    textTransform: 'uppercase',
-                  }}>
-                    <span style={{ fontWeight: 900 }}>{item.key}</span>
-                    <span>{item.val}</span>
-                  </div>
-                ))}
-              </InfoBox>
+              <>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {infoItems.map((item, idx) => (
+                    <div key={item.key} style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'baseline',
+                      padding: '10px 0',
+                      borderTop: idx === 0 ? 'none' : '1px solid #ebebeb',
+                    }}>
+                      <span style={{
+                        fontFamily: 'var(--font-display)',
+                        fontStyle: 'italic',
+                        fontSize: 12,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em',
+                        color: 'var(--ink)',
+                      }}>
+                        {item.key}
+                      </span>
+                      <span style={{
+                        fontFamily: 'var(--font-display)',
+                        fontStyle: 'italic',
+                        fontSize: 12,
+                        textTransform: 'uppercase',
+                        color: 'var(--ink)',
+                        textAlign: 'right',
+                      }}>
+                        {item.val}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                {hr}
+              </>
             )}
 
             {/* Formulaire rejoindre */}
@@ -160,7 +236,7 @@ export default async function ClubDetailPage({
 
         {/* ═══════════ AUTRES CLUBS ═══════════ */}
         {otherClubs.length > 0 && (
-          <section style={{ marginTop: 60, paddingBottom: 30 }}>
+          <section style={{ paddingBottom: 30 }}>
             <h2 style={{
               fontFamily: 'var(--font-display)',
               fontStyle: 'italic',
@@ -186,30 +262,27 @@ export default async function ClubDetailPage({
                   textDecoration: 'none',
                   transition: 'transform 0.2s ease',
                 }}>
-                  {/* Photo */}
                   <div style={{ aspectRatio: '16/10', overflow: 'hidden', background: other.image_url ? '#ddd' : other.accent_color, position: 'relative' }}>
                     {other.image_url && (
                       <Image src={other.image_url} alt={other.title} fill sizes="33vw" style={{ objectFit: 'cover' }} />
                     )}
                   </div>
-                  {/* Titre */}
                   <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(20px, 1.6vw, 26px)', textTransform: 'uppercase', margin: 0 }}>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(18px, 1.5vw, 24px)', textTransform: 'uppercase', margin: 0 }}>
                       {other.title}
                     </h3>
-                    <span style={{ display: 'inline-flex', width: 26, height: 26 }}>
+                    <span style={{ display: 'inline-flex', width: 24, height: 24, flexShrink: 0 }}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     </span>
                   </header>
-                  {/* Info rows */}
                   {other.schedule && (
-                    <div style={{ padding: '8px 10px', border: `1.2px solid ${other.accent_color}`, display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderTop: `1.2px solid ${other.accent_color}`, fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>
                       <span style={{ fontWeight: 900 }}>HORAIRES</span><span>{other.schedule}</span>
                     </div>
                   )}
                   {other.location && (
-                    <div style={{ padding: '8px 10px', border: `1.2px solid ${other.accent_color}`, borderTop: other.schedule ? 'none' : `1.2px solid ${other.accent_color}`, display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderTop: `1.2px solid ${other.accent_color}`, fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>
                       <span style={{ fontWeight: 900 }}>LIEU</span><span>{other.location}</span>
                     </div>
                   )}
@@ -231,7 +304,6 @@ export default async function ClubDetailPage({
           </section>
         )}
 
-        {/* ═══════════ SÉPARATEUR ═══════════ */}
         <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '40px 0' }} />
 
         {/* ═══════════ BASKET CTA ═══════════ */}
@@ -279,25 +351,5 @@ export default async function ClubDetailPage({
 
       <SiteFooter categories={cats} />
     </>
-  )
-}
-
-/* ── Boîte info réutilisable ── */
-function InfoBox({ ac, title, children }: { ac: string; title: string; children: React.ReactNode }) {
-  return (
-    <div style={{ padding: '18px 20px', border: `1.5px solid ${ac}`, background: '#fff' }}>
-      <h3 style={{
-        fontFamily: 'var(--font-display)',
-        fontStyle: 'italic',
-        fontSize: 'clamp(16px, 1.3vw, 22px)',
-        textTransform: 'uppercase',
-        letterSpacing: '-0.01em',
-        margin: '0 0 10px',
-        color: 'var(--ink)',
-      }}>
-        {title}
-      </h3>
-      {children}
-    </div>
   )
 }
