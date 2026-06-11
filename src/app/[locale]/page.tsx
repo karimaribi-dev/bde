@@ -45,42 +45,6 @@ function Marquee({ articles }: { articles: { title: string; slug: string }[] }) 
   )
 }
 
-/* ── Placeholder events (à remplacer par la table DB agenda) ── */
-const PLACEHOLDER_EVENTS = [
-  {
-    id: 'e1',
-    badge: 'AFTERWORK',
-    badgeColor: 'var(--pink)',
-    badgeText: 'var(--ink)',
-    title: 'LA FÉLICITA',
-    date: 'jeudi 19 mars',
-    time: '19h',
-    price: 'gratuit',
-    img: '/images/event-felicita.jpg',
-  },
-  {
-    id: 'e2',
-    badge: 'OLYMPIADES',
-    badgeColor: 'var(--orange-deep)',
-    badgeText: '#fff',
-    title: 'JARDIN DES PLANTES',
-    date: 'vendredi 3 avril',
-    time: '16h',
-    price: '5€',
-    img: '/images/event-olympiades.jpg',
-  },
-  {
-    id: 'e3',
-    badge: 'DEJ DES CHAMPION(NE)S',
-    badgeColor: 'var(--yellow)',
-    badgeText: 'var(--ink)',
-    title: 'CAMPUS OLYMPIADES',
-    date: 'mardi 21 avril',
-    time: '10h',
-    price: 'gratuit',
-    img: '/images/event-dej.jpg',
-  },
-]
 
 function AdColumn({ adPartnerLabel, locale }: { adPartnerLabel: string; locale: string }) {
   return (
@@ -284,96 +248,76 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
       </div>
 
-      {/* ── Event cards — scroll horizontal : toujours 3 visibles, slider pour les suivants
-            Chaque nouvel event publié y apparaît automatiquement ── */}
-      <div style={{
-        display: 'flex',
-        gap: 22,
-        marginTop: 6,
-        /* négatif pour déborder du padding main (40px) et afficher le scroll bord à bord */
-        margin: '6px -40px 0',
-        padding: '0 40px',
-        overflowX: 'auto',
-        scrollSnapType: 'x mandatory',
-        WebkitOverflowScrolling: 'touch',
-        /* masque la scrollbar visuellement */
-        scrollbarWidth: 'none',
-      }}>
-        {(dbEvents.length > 0 ? dbEvents.map(ev => ({
-          id:         ev.id,
-          badge:      ev.badge,
-          badgeColor: ev.badge_color,
-          badgeText:  ev.badge_text_color,
-          title:      ev.title,
-          date:       format(new Date(ev.event_date), "EEEE d MMM", { locale: fr }),
-          time:       ev.event_time,
-          price:      ev.price,
-          img:        ev.image_url ?? '',
-          href:       `/${locale}/agenda/${ev.slug}`,
-        })) : PLACEHOLDER_EVENTS.map(ev => ({ ...ev, img: ev.img, href: `/${locale}/agenda` }))).map((ev) => (
-          <Link
-            key={ev.id}
-            href={ev.href}
-            style={{
-              /* largeur fixe : exactement 1/3 du conteneur (moins les 2 gaps sur 3 cartes) */
-              flex: '0 0 calc(33.333% - 15px)',
-              position: 'relative',
-              overflow: 'hidden',
-              aspectRatio: '7/6',
-              background: '#ddd',
-              display: 'block',
-              textDecoration: 'none',
-              color: 'inherit',
-              scrollSnapAlign: 'start',
-            }}
-          >
-            {ev.img && (
-              <Image
-                src={ev.img}
-                alt={ev.title}
-                fill
-                sizes="33vw"
-                style={{ objectFit: 'cover', display: 'block' }}
-              />
-            )}
-            {/* Badge */}
-            <div style={{
-              position: 'absolute', top: 12, left: 12,
-              background: ev.badgeColor, color: ev.badgeText,
-              padding: '6px 14px 7px',
-              fontFamily: 'var(--font-display)', fontSize: 13,
-              fontStyle: 'italic', textTransform: 'uppercase', letterSpacing: '0.02em',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-            }}>
-              {ev.badge}
-            </div>
-            {/* Info panel bas */}
-            <div style={{
-              position: 'absolute', bottom: 12, left: 12, right: 12,
-              background: '#fff', padding: '12px 14px 14px',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            }}>
+      {/* ── Event cards — scroll horizontal, uniquement les events réels ── */}
+      {dbEvents.length > 0 && (
+        <div style={{
+          display: 'flex',
+          gap: 22,
+          margin: '6px -40px 0',
+          padding: '0 40px',
+          overflowX: 'auto',
+          scrollSnapType: 'x mandatory',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
+        }}>
+          {dbEvents.map(ev => (
+            <Link
+              key={ev.id}
+              href={`/${locale}/agenda/${ev.slug}`}
+              style={{
+                flex: '0 0 calc(33.333% - 15px)',
+                position: 'relative',
+                overflow: 'hidden',
+                aspectRatio: '7/6',
+                background: '#ddd',
+                display: 'block',
+                textDecoration: 'none',
+                color: 'inherit',
+                scrollSnapAlign: 'start',
+              }}
+            >
+              {ev.image_url && (
+                <Image src={ev.image_url} alt={ev.title} fill sizes="33vw" style={{ objectFit: 'cover' }} />
+              )}
+              {/* Badge */}
               <div style={{
-                fontFamily: 'var(--font-display)', fontStyle: 'italic',
-                fontSize: 'clamp(15px, 1.4vw, 22px)',
-                textTransform: 'uppercase', letterSpacing: '-0.01em',
-                textAlign: 'center', color: 'var(--ink)',
+                position: 'absolute', top: 12, left: 12,
+                background: ev.badge_color, color: ev.badge_text_color,
+                padding: '6px 14px 7px',
+                fontFamily: 'var(--font-display)', fontSize: 13,
+                fontStyle: 'italic', textTransform: 'uppercase', letterSpacing: '0.02em',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
               }}>
-                {ev.title}
+                {ev.badge}
               </div>
+              {/* Info panel bas */}
               <div style={{
-                fontSize: 12, display: 'flex', gap: 14,
-                justifyContent: 'center', marginTop: 4,
-                color: 'var(--ink)', opacity: 0.85,
+                position: 'absolute', bottom: 12, left: 12, right: 12,
+                background: '#fff', padding: '12px 14px 14px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
               }}>
-                <span>○ {ev.date}</span>
-                {ev.time && <span>○ {ev.time}</span>}
-                <span>○ {ev.price}</span>
+                <div style={{
+                  fontFamily: 'var(--font-display)', fontStyle: 'italic',
+                  fontSize: 'clamp(15px, 1.4vw, 22px)',
+                  textTransform: 'uppercase', letterSpacing: '-0.01em',
+                  textAlign: 'center', color: 'var(--ink)',
+                }}>
+                  {ev.title}
+                </div>
+                <div style={{
+                  fontSize: 12, display: 'flex', gap: 14,
+                  justifyContent: 'center', marginTop: 4,
+                  color: 'var(--ink)', opacity: 0.85,
+                }}>
+                  <span>○ {format(new Date(ev.event_date), "EEEE d MMM", { locale: fr })}</span>
+                  {ev.event_time && <span>○ {ev.event_time}</span>}
+                  <span>○ {ev.price}</span>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
 
       {/* ── Events footer ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24, marginTop: 22, marginBottom: 60 }}>
