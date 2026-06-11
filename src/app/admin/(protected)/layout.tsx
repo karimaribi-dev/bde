@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <a href="/admin" className="admin-logo" style={{ padding: '18px 20px 14px' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo-black.png"
+              src="/logo.png"
               alt="BDE LISAA DGC"
               style={{ height: 28, width: 'auto', display: 'block' }}
             />
