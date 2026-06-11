@@ -132,6 +132,21 @@ export interface Club {
   updated_at: string
 }
 
+export interface Product {
+  id: string
+  title: string
+  slug: string
+  description: string | null
+  price: number
+  stock_count: number
+  edition: string | null
+  image_url: string | null
+  is_published: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
 export interface Article {
   id: string
   title: string

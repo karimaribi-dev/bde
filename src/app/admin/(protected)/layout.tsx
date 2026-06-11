@@ -28,6 +28,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <AdminNavItem href="/admin/pages" icon="fa-solid fa-file-lines" label="Pages" />
             <AdminNavItem href="/admin/events" icon="fa-solid fa-calendar-days" label="Événements" />
             <AdminNavItem href="/admin/clubs" icon="fa-solid fa-people-group" label="Clubs" />
+            <AdminNavItem href="/admin/products" icon="fa-solid fa-bag-shopping" label="Shop" />
           </nav>
 
           <nav className="admin-nav-section">
