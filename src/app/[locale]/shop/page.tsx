@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import AddToCartButton from '@/components/AddToCartButton'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Product, Category } from '@/lib/types'
@@ -8,18 +9,9 @@ import { Product, Category } from '@/lib/types'
 export const dynamic = 'force-dynamic'
 
 /* Rotations fixes par position dans la grille (modulo 8) */
-const TILTS = [
-  '-3deg',
-  '2deg',
-  '-1deg',
-  '4deg',
-  '-2deg',
-  '3deg',
-  '-3deg',
-  '2deg',
-]
+const TILTS = ['-3deg','2deg','-1deg','4deg','-2deg','3deg','-3deg','2deg']
 
-/* Décalages verticaux (mock-up) */
+/* Décalages verticaux */
 const OFFSETS = [0, 40, 20, 60, 30, 50, 70, 30]
 
 export default async function ShopPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -33,7 +25,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
   ])
 
   const products = (productsRaw ?? []) as Product[]
-  const cats     = (categories ?? []) as Category[]
+  const cats     = (categories  ?? []) as Category[]
 
   return (
     <>
@@ -93,126 +85,119 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
               const tilt   = TILTS[i % 8]
               const offset = OFFSETS[i % 8]
               const sold   = product.stock_count === 0
+
               return (
-                <Link
+                /* Wrapper : gère le positionnement absolu du bouton + */
+                <div
                   key={product.id}
-                  href={`/${locale}/shop/${product.slug}`}
+                  className="prod-card-wrap"
                   style={{
                     position: 'relative',
                     aspectRatio: '1/1',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textDecoration: 'none',
                     transform: `translateY(${offset}px) rotate(${tilt})`,
                     transition: 'transform 0.18s ease',
                   }}
-                  className="prod-card-link"
                 >
-                  {/* Fond blanc avec ombre */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: '#fff',
-                    boxShadow: '0 6px 18px rgba(0,0,0,0.08), 0 1px 0 rgba(0,0,0,0.04)',
-                  }} />
+                  {/* ── Lien cliquable (toute la surface) ── */}
+                  <Link
+                    href={`/${locale}/shop/${product.slug}`}
+                    style={{
+                      position: 'absolute', inset: 0,
+                      display: 'flex', flexDirection: 'column',
+                      alignItems: 'center', justifyContent: 'center',
+                      textDecoration: 'none',
+                      zIndex: 1,
+                    }}
+                    aria-label={product.title}
+                  >
+                    {/* Fond blanc */}
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      background: '#fff',
+                      boxShadow: '0 6px 18px rgba(0,0,0,0.08), 0 1px 0 rgba(0,0,0,0.04)',
+                    }} />
 
-                  {/* Bouton + */}
-                  {!sold && (
-                    <span style={{
-                      position: 'absolute',
-                      top: -14, right: 14,
-                      width: 44, height: 44,
-                      background: '#FF69B4',
-                      borderRadius: '50%',
-                      color: '#fff',
-                      fontFamily: 'var(--font-display)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 26,
-                      zIndex: 3,
-                      boxShadow: '0 4px 10px rgba(0,0,0,0.18)',
-                      lineHeight: 1,
-                    }}>
-                      +
-                    </span>
-                  )}
-
-                  {/* Badge épuisé */}
-                  {sold && (
-                    <span style={{
-                      position: 'absolute',
-                      top: -14, right: 14,
-                      background: '#dc2626',
-                      color: '#fff',
-                      fontFamily: 'var(--font-display)',
-                      fontStyle: 'italic',
-                      fontSize: 11,
-                      padding: '5px 10px',
-                      borderRadius: 99,
-                      zIndex: 3,
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
-                    }}>
-                      ÉPUISÉ
-                    </span>
-                  )}
-
-                  {/* Image produit */}
-                  <div style={{ position: 'relative', zIndex: 1, width: '76%', height: '76%', opacity: sold ? 0.5 : 1 }}>
-                    {product.image_url ? (
-                      <Image
-                        src={product.image_url}
-                        alt={product.title}
-                        fill
-                        sizes="25vw"
-                        style={{ objectFit: 'contain' }}
-                      />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span style={{ fontSize: 36, opacity: 0.3 }}>📦</span>
-                      </div>
+                    {/* Badge épuisé */}
+                    {sold && (
+                      <span style={{
+                        position: 'absolute',
+                        top: -14, right: 14,
+                        background: '#dc2626',
+                        color: '#fff',
+                        fontFamily: 'var(--font-display)',
+                        fontStyle: 'italic',
+                        fontSize: 11,
+                        padding: '5px 10px',
+                        borderRadius: 99,
+                        zIndex: 3,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                      }}>
+                        ÉPUISÉ
+                      </span>
                     )}
-                  </div>
 
-                  {/* Infos : titre + prix en bas */}
-                  <div style={{
-                    position: 'absolute',
-                    bottom: 10, left: 10, right: 10,
-                    zIndex: 2,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--font-display)',
-                      fontStyle: 'italic',
-                      fontSize: 11,
-                      textTransform: 'uppercase',
-                      color: 'var(--ink)',
-                      lineHeight: 1.2,
-                      maxWidth: '60%',
+                    {/* Image produit */}
+                    <div style={{ position: 'relative', zIndex: 1, width: '76%', height: '76%', opacity: sold ? 0.45 : 1 }}>
+                      {product.image_url ? (
+                        <Image
+                          src={product.image_url}
+                          alt={product.title}
+                          fill
+                          sizes="25vw"
+                          style={{ objectFit: 'contain' }}
+                        />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: 36, opacity: 0.3 }}>📦</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Titre + prix en bas */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: 10, left: 10, right: 10,
+                      zIndex: 2,
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-end',
                     }}>
-                      {product.title}
-                    </span>
-                    <span style={{
-                      fontFamily: 'var(--font-display)',
-                      fontStyle: 'italic',
-                      fontWeight: 900,
-                      fontSize: 14,
-                      color: 'var(--ink)',
-                    }}>
-                      {Number(product.price).toFixed(0)} €
-                    </span>
-                  </div>
-                </Link>
+                      <span style={{
+                        fontFamily: 'var(--font-display)', fontStyle: 'italic',
+                        fontSize: 11, textTransform: 'uppercase',
+                        color: 'var(--ink)', lineHeight: 1.2, maxWidth: '60%',
+                      }}>
+                        {product.title}
+                      </span>
+                      <span style={{
+                        fontFamily: 'var(--font-display)', fontStyle: 'italic',
+                        fontWeight: 900, fontSize: 14, color: 'var(--ink)',
+                      }}>
+                        {Number(product.price).toFixed(0)} €
+                      </span>
+                    </div>
+                  </Link>
+
+                  {/* ── Bouton "+" (hors du Link) ── */}
+                  {!sold && (
+                    <AddToCartButton
+                      productId={product.id}
+                      title={product.title}
+                      slug={product.slug}
+                      price={Number(product.price)}
+                      imageUrl={product.image_url}
+                      stockCount={product.stock_count}
+                      variant="circle"
+                    />
+                  )}
+                </div>
               )
             })}
           </section>
         )}
 
-        {/* ═══════════ NOTE DE BAS DE PAGE ═══════════ */}
+        {/* ═══════════ NOTE BAS DE PAGE ═══════════ */}
         <p style={{
           textAlign: 'center',
           maxWidth: 860,
@@ -229,14 +214,11 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
 
       </main>
 
-      {/* Hover effet sur les cartes */}
+      {/* Hover effet */}
       <style>{`
-        .prod-card-link:hover {
+        .prod-card-wrap:hover {
           transform: translateY(-4px) rotate(0deg) !important;
           z-index: 5;
-        }
-        .prod-card-link:hover > span:first-of-type {
-          transform: scale(1.1) rotate(15deg);
         }
       `}</style>
 

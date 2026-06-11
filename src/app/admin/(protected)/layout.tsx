@@ -31,6 +31,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <AdminNavItem href="/admin/club-requests" icon="fa-solid fa-envelope-open-text" label="Adhésions clubs" />
             <AdminNavItem href="/admin/suggestions" icon="fa-solid fa-lightbulb" label="Suggestions" />
             <AdminNavItem href="/admin/products" icon="fa-solid fa-bag-shopping" label="Shop" />
+            <AdminNavItem href="/admin/orders" icon="fa-solid fa-receipt" label="Commandes" />
           </nav>
 
           <nav className="admin-nav-section">

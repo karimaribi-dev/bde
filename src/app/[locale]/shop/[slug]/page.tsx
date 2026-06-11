@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
-import ShopOrderFormClient from '@/components/ShopOrderFormClient'
+import AddToCartButton from '@/components/AddToCartButton'
 import { Product, Category } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -27,8 +27,8 @@ export default async function ProductPage({
   if (!productData) notFound()
 
   const product = productData as Product
-  const cats    = (categories  ?? []) as Category[]
-  const others  = (othersRaw   ?? []) as Product[]
+  const cats    = (categories ?? []) as Category[]
+  const others  = (othersRaw  ?? []) as Product[]
   const sold    = product.stock_count === 0
 
   return (
@@ -48,7 +48,12 @@ export default async function ProductPage({
         <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, margin: '30px 0 60px', alignItems: 'flex-start' }}>
 
           {/* Photo */}
-          <div style={{ position: 'relative', background: '#fff', boxShadow: '0 12px 40px rgba(0,0,0,0.10)', padding: 30, aspectRatio: '1/1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            position: 'relative', background: '#fff',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.10)',
+            padding: 30, aspectRatio: '1/1',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
             {product.image_url ? (
               <div style={{ position: 'relative', width: '80%', height: '80%' }}>
                 <Image
@@ -56,7 +61,7 @@ export default async function ProductPage({
                   alt={product.title}
                   fill
                   sizes="(max-width:900px) 100vw, 50vw"
-                  style={{ objectFit: 'contain', opacity: sold ? 0.5 : 1 }}
+                  style={{ objectFit: 'contain', opacity: sold ? 0.45 : 1 }}
                 />
               </div>
             ) : (
@@ -65,10 +70,7 @@ export default async function ProductPage({
               </div>
             )}
             {sold && (
-              <div style={{
-                position: 'absolute', inset: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span style={{
                   background: '#dc2626', color: '#fff',
                   fontFamily: 'var(--font-display)', fontStyle: 'italic',
@@ -96,30 +98,23 @@ export default async function ProductPage({
             )}
 
             <h1 style={{
-              fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
+              fontFamily: 'var(--font-display)', fontStyle: 'italic',
               fontWeight: 900,
               fontSize: 'clamp(32px, 4vw, 58px)',
-              lineHeight: 0.95,
-              letterSpacing: '-0.02em',
-              textTransform: 'uppercase',
-              color: 'var(--ink)',
-              margin: 0,
+              lineHeight: 0.95, letterSpacing: '-0.02em',
+              textTransform: 'uppercase', color: 'var(--ink)', margin: 0,
             }}>
               {product.title}
             </h1>
 
             <div style={{
-              fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
-              fontWeight: 900,
-              fontSize: 'clamp(28px, 3vw, 46px)',
-              color: 'var(--ink)',
+              fontFamily: 'var(--font-display)', fontStyle: 'italic',
+              fontWeight: 900, fontSize: 'clamp(28px, 3vw, 46px)', color: 'var(--ink)',
             }}>
               {Number(product.price).toFixed(2)} €
             </div>
 
-            {/* Stock indicator */}
+            {/* Stock */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 10, height: 10, borderRadius: '50%',
@@ -143,8 +138,30 @@ export default async function ProductPage({
 
             <hr style={{ border: 'none', borderTop: '1px solid #e5e7eb', margin: '4px 0' }} />
 
-            {/* Formulaire de commande */}
-            <ShopOrderFormClient product={product} />
+            {/* ── Bouton panier ── */}
+            {sold ? (
+              <p style={{
+                fontFamily: 'var(--font-display)', fontStyle: 'italic',
+                fontSize: 14, color: '#dc2626', textTransform: 'uppercase', margin: 0,
+              }}>
+                Ce produit est épuisé. Reviens bientôt !
+              </p>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <AddToCartButton
+                  productId={product.id}
+                  title={product.title}
+                  slug={product.slug}
+                  price={Number(product.price)}
+                  imageUrl={product.image_url}
+                  stockCount={product.stock_count}
+                  variant="full"
+                />
+                <p style={{ fontSize: 12, color: '#9ca3af', fontStyle: 'italic', margin: 0 }}>
+                  Tu pourras ajuster la quantité dans le panier et renseigner tes infos avant de valider.
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -152,28 +169,19 @@ export default async function ProductPage({
         {others.length > 0 && (
           <section style={{ paddingBottom: 60 }}>
             <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
+              fontFamily: 'var(--font-display)', fontStyle: 'italic',
               fontSize: 'clamp(18px, 1.6vw, 26px)',
-              textTransform: 'uppercase',
-              margin: '0 0 30px',
-              color: 'var(--ink)',
+              textTransform: 'uppercase', margin: '0 0 30px', color: 'var(--ink)',
             }}>
               <span style={{ background: '#FFE74A', padding: '4px 10px' }}>VOUS AIMEREZ AUSSI</span>
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
               {others.map(other => (
                 <Link key={other.id} href={`/${locale}/shop/${other.slug}`} style={{
-                  background: '#fff',
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.07)',
-                  padding: 20,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 10,
-                  textDecoration: 'none',
-                  color: 'var(--ink)',
-                  transition: 'transform 0.15s ease',
+                  background: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,0.07)',
+                  padding: 20, display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', gap: 10, textDecoration: 'none',
+                  color: 'var(--ink)', transition: 'transform 0.15s ease',
                 }}>
                   <div style={{ width: '100%', aspectRatio: '1/1', position: 'relative', opacity: other.stock_count === 0 ? 0.4 : 1 }}>
                     {other.image_url ? (
