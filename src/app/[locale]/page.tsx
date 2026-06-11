@@ -45,6 +45,49 @@ function Marquee({ articles }: { articles: { title: string; slug: string }[] }) 
   )
 }
 
+/* ── Placeholder events (à remplacer par la table DB agenda) ── */
+const PLACEHOLDER_EVENTS = [
+  {
+    id: 'e1',
+    slug: 'agenda',
+    badge: 'AFTERWORK',
+    badgeColor: 'var(--yellow)',
+    badgeText: 'var(--ink)',
+    title: 'LA FÉLICITA',
+    date: 'Jeudi 19 mars',
+    time: '19h',
+    price: 'Gratuit',
+    bg: '#1a1a1a',
+    accent: 'var(--yellow)',
+  },
+  {
+    id: 'e2',
+    slug: 'agenda',
+    badge: 'OLYMPIADES',
+    badgeColor: 'var(--blue)',
+    badgeText: 'var(--ink)',
+    title: 'JARDIN DES PLANTES',
+    date: 'Vendredi 2 avril',
+    time: '14h',
+    price: '5€',
+    bg: '#2a4a2a',
+    accent: 'var(--blue)',
+  },
+  {
+    id: 'e3',
+    slug: 'agenda',
+    badge: 'DEJ',
+    badgeColor: 'var(--orange)',
+    badgeText: '#fff',
+    title: 'CAMPUS OLYMPIADES',
+    date: 'Mardi 21 avril',
+    time: '17h',
+    price: 'Gratuit',
+    bg: '#3a1a0a',
+    accent: 'var(--orange)',
+  },
+]
+
 function AdColumn({ adPartnerLabel, locale }: { adPartnerLabel: string; locale: string }) {
   return (
     <aside style={{ display: 'flex', flexDirection: 'column', background: 'var(--paper-2)' }}>
@@ -181,6 +224,90 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
 
       {/* ── Marquee ── */}
       <Marquee articles={allArticles} />
+
+      {/* ── Bande PROCHAINEMENT ── */}
+      <div style={{
+        background: 'var(--paper)',
+        borderBottom: 'var(--hair)',
+        padding: '11px 0',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+      }}>
+        <div style={{
+          display: 'inline-flex',
+          gap: 48,
+          animation: 'marquee 22s linear infinite',
+        }}>
+          {Array.from({ length: 10 }).map((_, i) => (
+            <span key={i} style={{ fontFamily: 'var(--font-display)', fontSize: 12, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ color: 'var(--orange)' }}>↓</span>
+              <span>PROCHAINEMENT</span>
+              <span style={{ color: 'var(--orange)' }}>↓</span>
+              <span>SOON</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Événements à venir ── */}
+      <section style={{ padding: '36px 28px 32px', borderBottom: 'var(--hair)' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 20 }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', margin: 0 }}>AGENDA</h2>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 2, marginBottom: 20 }}>
+          {PLACEHOLDER_EVENTS.map((ev) => (
+            <Link key={ev.id} href={`/${locale}/${ev.slug}`}
+              style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', border: 'var(--hair)', overflow: 'hidden', transition: 'transform .15s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              {/* Photo placeholder */}
+              <div style={{ height: 160, background: ev.bg, position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '14px 14px' }}>
+                <span style={{
+                  display: 'inline-block',
+                  background: ev.badgeColor,
+                  color: ev.badgeText,
+                  padding: '4px 10px',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 10,
+                  fontWeight: 800,
+                  letterSpacing: '.08em',
+                  textTransform: 'uppercase',
+                  borderRadius: 2,
+                }}>
+                  {ev.badge}
+                </span>
+              </div>
+
+              {/* Infos */}
+              <div style={{ padding: '16px 16px 20px', background: 'var(--paper)', display: 'flex', flexDirection: 'column', gap: 6, flex: 1, borderTop: 'var(--hair)' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase', margin: 0 }}>
+                  {ev.title}
+                </h3>
+                <p style={{ margin: 0, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--mute)' }}>
+                  {ev.date} — {ev.time} — {ev.price}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Link href={`/${locale}/agenda`} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            background: 'var(--ink)', color: 'var(--paper)',
+            fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase',
+            padding: '10px 20px', borderRadius: 2, textDecoration: 'none',
+            transition: 'background .15s',
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--orange)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'var(--ink)')}
+          >
+            VOIR TOUS LES ÉVÉNEMENTS →
+          </Link>
+        </div>
+      </section>
 
       {/* ── Articles grid ── */}
       <section style={{ padding: '40px 28px', borderBottom: 'var(--hair)' }}>
