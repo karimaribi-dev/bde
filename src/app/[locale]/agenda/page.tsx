@@ -3,170 +3,385 @@ import Link from 'next/link'
 import Image from 'next/image'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import AgendaCalendarClient from '@/components/AgendaCalendarClient'
+import AgendaProposerForm from '@/components/AgendaProposerForm'
 import { Event, Category } from '@/lib/types'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 export const dynamic = 'force-dynamic'
 
-function formatEventDate(iso: string) {
-  return format(new Date(iso), "EEEE d MMMM", { locale: fr })
-}
-
 export default async function AgendaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const supabase = await createClient()
-
-  const today = new Date().toISOString().slice(0, 10)
+  const supabase   = await createClient()
+  const today      = new Date().toISOString().slice(0, 10)
 
   const [{ data: upcomingRaw }, { data: pastRaw }, { data: categories }] = await Promise.all([
-    supabase.from('events').select('*').eq('is_published', true).gte('event_date', today).order('event_date', { ascending: true }),
-    supabase.from('events').select('*').eq('is_published', true).lt('event_date', today).order('event_date', { ascending: false }).limit(6),
+    supabase.from('events').select('*').eq('is_published', true)
+      .gte('event_date', today).order('event_date', { ascending: true }),
+    supabase.from('events').select('*').eq('is_published', true)
+      .lt('event_date', today).order('event_date', { ascending: false }).limit(4),
     supabase.from('categories').select('*').order('name'),
   ])
 
   const upcoming = (upcomingRaw ?? []) as Event[]
-  const past     = (pastRaw ?? []) as Event[]
+  const past     = (pastRaw    ?? []) as Event[]
+  const cats     = (categories ?? []) as Category[]
+  const allEvents = [...upcoming, ...past]
 
   return (
     <>
-      <NavbarClient categories={(categories ?? []) as Category[]} locale={locale} activeSlug="agenda" />
+      <NavbarClient categories={cats} locale={locale} activeSlug="agenda" />
 
       <main style={{ padding: '0 40px' }}>
 
-        {/* ── Hero titre ── */}
-        <section style={{ padding: '36px 0 40px' }}>
+        {/* ═══════════ HERO ═══════════ */}
+        <section style={{ padding: '30px 0 14px' }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
-            fontSize: 'clamp(56px, 9vw, 130px)',
-            fontWeight: 800,
-            lineHeight: 0.88,
+            fontWeight: 900,
+            fontSize: 'clamp(72px, 13vw, 200px)',
+            lineHeight: 0.86,
             letterSpacing: '-0.02em',
             textTransform: 'uppercase',
+            color: 'var(--ink)',
             margin: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0,
           }}>
-            AGENDA
+            {/* Ligne 1 : AGENDA + flèche diagonale */}
+            <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px,2.4vw,40px)', whiteSpace: 'nowrap' }}>
+              <span>AGENDA</span>
+              <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(80px,10vw,160px)', height: 'clamp(80px,10vw,160px)', flexShrink: 0 }}>
+                <svg viewBox="0 0 100 100" fill="none" stroke="#1a1a1a" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                  <path d="M20 20L80 80M40 80H80V40"/>
+                </svg>
+              </span>
+            </span>
+            {/* Ligne 2 : smiley + & EVENT */}
+            <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px,2.4vw,40px)', whiteSpace: 'nowrap' }}>
+              <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(90px,11vw,170px)', height: 'clamp(60px,8vw,130px)', flexShrink: 0 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              </span>
+              <span>&amp; EVENT</span>
+            </span>
           </h1>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '0 0 48px' }} />
+        {/* ═══════════ EYEBROW ═══════════ */}
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontStyle: 'italic',
+          fontSize: 'clamp(14px,1.3vw,20px)',
+          letterSpacing: '0.01em',
+          textTransform: 'uppercase',
+          margin: '18px 0 30px',
+        }}>
+          <span style={{ background: 'var(--orange-deep)', color: '#fff', padding: '5px 12px 7px' }}>
+            DÉCOUVREZ VOS CAMARADES AVEC DES SUPERS ACTIVITÉS
+          </span>
+        </div>
 
-        {/* ── Événements à venir ── */}
-        {upcoming.length > 0 && (
-          <section style={{ marginBottom: 60 }}>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: '.14em',
-              textTransform: 'uppercase',
-              margin: '0 0 24px',
-              color: '#888',
+        {/* ═══════════ MARQUEE PROCHAINEMENT ═══════════ */}
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontStyle: 'italic',
+          fontWeight: 900,
+          fontSize: 'clamp(36px,5.2vw,80px)',
+          letterSpacing: '-0.02em',
+          textTransform: 'uppercase',
+          color: 'var(--ink)',
+          overflow: 'hidden',
+          margin: '18px -40px 30px',
+          padding: '6px 0',
+          display: 'block',
+        }}>
+          <div style={{ width: '100%', overflow: 'hidden' }}>
+            <div style={{
+              display: 'inline-flex',
+              gap: 'clamp(20px,2.5vw,40px)',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+              animation: 'marquee-scroll 38s linear infinite',
+              willChange: 'transform',
             }}>
-              À VENIR
-            </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
-              {upcoming.map(ev => (
-                <EventCard key={ev.id} ev={ev} locale={locale} />
+              {[0, 1].map(half => (
+                <span key={half} style={{ display: 'inline-flex', gap: 'clamp(20px,2.5vw,40px)', alignItems: 'center' }}>
+                  {['↓','PROCHAINEMENT','↓','SOON','↓','PROCHAINEMENT','↓','SOON'].map((w, i) =>
+                    w === '↓'
+                      ? <span key={i} style={{ color: 'var(--orange-deep)', fontWeight: 900, fontSize: '0.95em', lineHeight: 1, flexShrink: 0 }}>{w}</span>
+                      : <span key={i} style={{ lineHeight: 1 }}>{w}</span>
+                  )}
+                </span>
               ))}
             </div>
-          </section>
-        )}
+          </div>
+        </div>
 
-        {upcoming.length === 0 && (
-          <p style={{ fontFamily: 'var(--font-display)', fontSize: 13, color: '#888', letterSpacing: '.06em', textTransform: 'uppercase', padding: '40px 0 60px' }}>
+        {/* ═══════════ 3 CARDS ÉVÉNEMENTS À VENIR ═══════════ */}
+        {upcoming.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 22 }}>
+            {upcoming.slice(0, 3).map(ev => (
+              <Link key={ev.id} href={`/${locale}/agenda/${ev.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <EventCard ev={ev} />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p style={{
+            fontFamily: 'var(--font-display)',
+            fontStyle: 'italic',
+            fontSize: 16,
+            color: '#888',
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            padding: '40px 0',
+          }}>
             Aucun événement à venir pour le moment.
           </p>
         )}
 
-        {/* ── Événements passés ── */}
-        {past.length > 0 && (
-          <section style={{ marginBottom: 80 }}>
-            <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '0 0 40px' }} />
+        {/* ═══════════ SÉPARATEUR ═══════════ */}
+        <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '40px 0' }} />
+
+        {/* ═══════════ CALENDRIER ═══════════ */}
+        <section style={{
+          display: 'grid',
+          gridTemplateColumns: '0.85fr 1.4fr',
+          gap: 60,
+          alignItems: 'center',
+          padding: '30px 0 50px',
+          position: 'relative',
+        }}>
+          {/* Texte gauche */}
+          <div style={{ position: 'relative', paddingTop: 20, paddingLeft: 80 }}>
+            {/* Étoile bleue */}
+            <span aria-hidden="true" style={{ position: 'absolute', top: -30, left: 0, width: 90, height: 90, display: 'inline-flex' }}>
+              <svg viewBox="0 0 140 140" fill="none" stroke="#5FA0FB" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                <path d="M70 12 C72 26 78 36 84 40 C96 42 110 42 124 38 C112 50 102 60 100 68 C104 80 108 96 116 116 C100 102 84 92 70 90 C56 92 38 100 22 116 C30 100 36 82 38 68 C36 56 24 50 12 38 C26 42 40 42 52 40 C60 36 66 26 70 12 Z"/>
+              </svg>
+            </span>
             <h2 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 11,
+              fontStyle: 'italic',
               fontWeight: 800,
-              letterSpacing: '.14em',
+              fontSize: 'clamp(38px,4.4vw,60px)',
+              lineHeight: 1.05,
               textTransform: 'uppercase',
-              margin: '0 0 24px',
-              color: '#888',
+              letterSpacing: '-0.02em',
+              color: 'var(--ink)',
+              margin: 0,
             }}>
-              ÉVÉNEMENTS PASSÉS
+              L&apos;AGENDA POUR<br/>
+              VOUS<br/>
+              ORGANISER
+              <span aria-hidden="true" style={{ display: 'inline-block', width: 'clamp(50px,5vw,80px)', height: 'clamp(28px,3vw,44px)', verticalAlign: 'middle', marginLeft: 14 }}>
+                <svg viewBox="0 0 24 16" fill="none" stroke="#1a1a1a" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                  <path d="M2 8h19M14 1l7 7-7 7"/>
+                </svg>
+              </span>
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20, opacity: 0.7 }}>
+          </div>
+
+          {/* Calendrier interactif */}
+          <AgendaCalendarClient events={allEvents} locale={locale} />
+        </section>
+
+        {/* ═══════════ SÉPARATEUR ═══════════ */}
+        <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '0 0 40px' }} />
+
+        {/* ═══════════ Y ÉTIEZ VOUS ? / PASSÉS ═══════════ */}
+        {past.length > 0 && (
+          <section style={{ marginBottom: 60 }}>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontWeight: 900,
+              fontSize: 'clamp(20px,1.9vw,26px)',
+              lineHeight: 1.8,
+              textTransform: 'uppercase',
+              margin: '0 0 26px',
+              color: 'var(--ink)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: 6,
+            }}>
+              <span style={{ background: '#FFE74A', padding: '4px 12px' }}>Y ÉTIEZ VOUS ?</span>
+              <span style={{ background: '#4FA3FF', color: 'var(--ink)', padding: '4px 12px', marginLeft: 80 }}>NOS ÉVÉNEMENTS PASSÉS</span>
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
               {past.map(ev => (
-                <EventCard key={ev.id} ev={ev} locale={locale} />
+                <Link key={ev.id} href={`/${locale}/agenda/${ev.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <EventCard ev={ev} mini />
+                </Link>
               ))}
             </div>
           </section>
         )}
 
+        {/* ═══════════ SÉPARATEUR ═══════════ */}
+        <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '0 0 40px' }} />
+
+        {/* ═══════════ PROPOSER FORM ═══════════ */}
+        <AgendaProposerForm />
+
+        {/* ═══════════ SÉPARATEUR ═══════════ */}
+        <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '40px 0' }} />
+
+        {/* ═══════════ BASKET CTA ═══════════ */}
+        <section style={{
+          display: 'grid',
+          gridTemplateColumns: '1.05fr 1fr',
+          alignItems: 'center',
+          gap: 60,
+          padding: '24px 0 60px',
+          position: 'relative',
+        }}>
+          {/* Starburst jaune derrière */}
+          <span aria-hidden="true" style={{
+            position: 'absolute', top: '5%', right: '4%',
+            width: '38%', height: '70%',
+            transform: 'rotate(-12deg)', zIndex: 0, pointerEvents: 'none',
+          }}>
+            <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
+              <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
+            </svg>
+          </span>
+
+          {/* Images produits */}
+          <div style={{ position: 'relative', width: '100%', zIndex: 2 }}>
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/basket.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', position: 'absolute', inset: 0 }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/prod-tshirt.png" alt="" style={{ position: 'absolute', left: '18%', top: '14%', width: '42%', transform: 'rotate(-6deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,.18))' }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/prod-totebag.png" alt="" style={{ position: 'absolute', left: '44%', top: '10%', width: '28%', transform: 'rotate(8deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,.18))' }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/prod-gourde.png" alt="" style={{ position: 'absolute', left: '56%', top: '22%', width: '22%', transform: 'rotate(-4deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,.18))' }} />
+            </div>
+          </div>
+
+          {/* Texte + CTA */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <h3 style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontSize: 'clamp(28px,3vw,42px)',
+              lineHeight: 1.05,
+              textTransform: 'uppercase',
+              letterSpacing: '-0.01em',
+              color: 'var(--ink)',
+              margin: '0 0 14px',
+            }}>
+              INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?
+            </h3>
+            <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: '0 0 18px' }}>
+              *N&apos;hésitez pas à les soutenir en regardant le shop
+            </p>
+            <Link href={`/${locale}/shop`} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              background: '#FFE74A', color: 'var(--ink)',
+              fontFamily: 'var(--font-display)', fontStyle: 'italic',
+              fontSize: 14, fontWeight: 700, letterSpacing: '0.04em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              padding: '12px 22px',
+            }}>
+              VOIR LE SHOP
+              <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
+                <path d="M2 8h19M14 1l7 7-7 7"/>
+              </svg>
+            </Link>
+          </div>
+        </section>
+
       </main>
 
-      <SiteFooter categories={(categories ?? []) as Category[]} />
+      <SiteFooter categories={cats} />
     </>
   )
 }
 
-/* ── Card composant ── */
-function EventCard({ ev, locale }: { ev: Event; locale: string }) {
+/* ════════════════════════════════════════
+   EventCard — utilisé pour upcoming (normal) et past (mini)
+════════════════════════════════════════ */
+function EventCard({ ev, mini = false }: { ev: Event; mini?: boolean }) {
   return (
-    <Link
-      href={`/${locale}/agenda/${ev.slug}`}
-      style={{ display: 'block', textDecoration: 'none', color: 'inherit', position: 'relative', overflow: 'hidden', aspectRatio: '7/6', background: '#ddd' }}
-    >
-      {/* Image */}
-      {ev.image_url && (
+    <div style={{
+      position: 'relative',
+      overflow: 'hidden',
+      aspectRatio: '7/6',
+      background: '#ddd',
+    }}>
+      {/* Image de fond */}
+      {ev.image_url ? (
         <Image
           src={ev.image_url}
           alt={ev.title}
           fill
-          sizes="(max-width: 720px) 100vw, 33vw"
+          sizes={mini ? '25vw' : '33vw'}
           style={{ objectFit: 'cover' }}
         />
+      ) : (
+        <div style={{ position: 'absolute', inset: 0, background: ev.badge_color, opacity: 0.5 }} />
       )}
-      {!ev.image_url && (
-        <div style={{ position: 'absolute', inset: 0, background: ev.badge_color, opacity: 0.4 }} />
-      )}
-
-      {/* Overlay dégradé */}
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.72) 40%, transparent 80%)' }} />
 
       {/* Badge */}
-      <span style={{
-        position: 'absolute', top: 14, left: 14,
+      <div style={{
+        position: 'absolute', top: 12, left: 12,
         background: ev.badge_color,
         color: ev.badge_text_color,
-        padding: '4px 10px',
-        borderRadius: 3,
+        padding: mini ? '5px 10px 6px' : '6px 14px 7px',
         fontFamily: 'var(--font-display)',
-        fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase',
-        zIndex: 2,
+        fontStyle: 'italic',
+        fontSize: mini ? 10 : 13,
+        textTransform: 'uppercase',
+        letterSpacing: '0.02em',
+        boxShadow: '0 2px 8px rgba(0,0,0,.15)',
       }}>
         {ev.badge}
-      </span>
+      </div>
 
-      {/* Infos bas */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '14px 16px', zIndex: 2 }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 2vw, 24px)', fontWeight: 800, lineHeight: 1, textTransform: 'uppercase', color: '#fff', marginBottom: 8 }}>
+      {/* Panel info blanc en bas */}
+      <div style={{
+        position: 'absolute',
+        bottom: 12, left: 12, right: 12,
+        background: '#fff',
+        padding: mini ? '9px 10px 11px' : '12px 14px 14px',
+        boxShadow: '0 4px 12px rgba(0,0,0,.15)',
+      }}>
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontStyle: 'italic',
+          fontSize: mini ? 'clamp(12px,1vw,16px)' : 'clamp(15px,1.4vw,22px)',
+          textTransform: 'uppercase',
+          letterSpacing: '-0.01em',
+          textAlign: 'center',
+          color: 'var(--ink)',
+          lineHeight: 1.1,
+        }}>
           {ev.title}
         </div>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', textTransform: 'capitalize', color: 'rgba(255,255,255,0.8)' }}>
-            {format(new Date(ev.event_date), "EEEE d MMM", { locale: fr })}
-          </span>
-          {ev.event_time && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>
-              {ev.event_time}
-            </span>
-          )}
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>
-            {ev.price}
-          </span>
+        <div style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: mini ? 10 : 11,
+          display: 'flex',
+          gap: mini ? 8 : 12,
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          marginTop: 4,
+          color: 'var(--ink)',
+          opacity: 0.85,
+        }}>
+          <span>○ {format(new Date(ev.event_date + 'T12:00:00'), "EEEE d MMM", { locale: fr })}</span>
+          {ev.event_time && <span>○ {ev.event_time}</span>}
+          <span>○ {ev.price}</span>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
