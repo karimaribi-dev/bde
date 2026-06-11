@@ -47,10 +47,33 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
     }
     rafRef.current = requestAnimationFrame(tick)
 
+    /* Drag via window — évite setPointerCapture qui bloque les clics sur Links */
+    function onWinMove(e: PointerEvent) {
+      if (!dragging.current) return
+      const delta = Math.abs(e.clientX - startX.current)
+      if (delta > 5) didDrag.current = true
+      const t = trackRef.current; if (!t) return
+      let n = startOff.current - (e.clientX - startX.current)
+      const hw = halfRef.current
+      if (hw > 0) { if (n >= hw * 2) n -= hw; if (n < 0) n += hw }
+      offsetRef.current = n
+      t.style.transform = `translate3d(${-n}px,0,0)`
+    }
+    function onWinUp() {
+      dragging.current  = false
+      pausedRef.current = false
+    }
+    window.addEventListener('pointermove', onWinMove)
+    window.addEventListener('pointerup',   onWinUp)
+    window.addEventListener('pointercancel', onWinUp)
+
     return () => {
       clearTimeout(timer)
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       window.removeEventListener('resize', measure)
+      window.removeEventListener('pointermove', onWinMove)
+      window.removeEventListener('pointerup',   onWinUp)
+      window.removeEventListener('pointercancel', onWinUp)
     }
   }, [clubs.length])
 
@@ -60,20 +83,7 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
     startX.current    = e.clientX
     startOff.current  = offsetRef.current
     pausedRef.current = true
-    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
   }
-  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    if (!dragging.current) return
-    const delta = Math.abs(e.clientX - startX.current)
-    if (delta > 5) didDrag.current = true
-    const track = trackRef.current; if (!track) return
-    let n = startOff.current - (e.clientX - startX.current)
-    const hw = halfRef.current
-    if (hw > 0) { if (n >= hw * 2) n -= hw; if (n < 0) n += hw }
-    offsetRef.current = n
-    track.style.transform = `translate3d(${-n}px,0,0)`
-  }
-  function onPointerUp() { dragging.current = false }
 
   /* Bloque la navigation uniquement si c'était un vrai drag */
   function onClickCapture(e: React.MouseEvent) {
@@ -101,11 +111,8 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
         userSelect: 'none',
       }}
       onMouseEnter={() => { pausedRef.current = true }}
-      onMouseLeave={() => { pausedRef.current = false; dragging.current = false }}
+      onMouseLeave={() => { if (!dragging.current) pausedRef.current = false }}
       onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
       onClickCapture={onClickCapture}
     >
       <div
