@@ -147,8 +147,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           .select('*')
           .eq('is_published', true)
           .gte('event_date', today)
-          .order('event_date', { ascending: true })
-          .limit(3),
+          .order('event_date', { ascending: true }),
       ])
       const all = (arts ?? []) as ArticleWithCat[]
       setFeatured(all[0] ?? null)
@@ -285,22 +284,49 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
       </div>
 
-      {/* ── Event cards — grille 3, exacte du dossier
-            Utilise les vrais events DB si disponibles, sinon les placeholders ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 22, marginTop: 6 }}>
+      {/* ── Event cards — scroll horizontal : toujours 3 visibles, slider pour les suivants
+            Chaque nouvel event publié y apparaît automatiquement ── */}
+      <div style={{
+        display: 'flex',
+        gap: 22,
+        marginTop: 6,
+        /* négatif pour déborder du padding main (40px) et afficher le scroll bord à bord */
+        margin: '6px -40px 0',
+        padding: '0 40px',
+        overflowX: 'auto',
+        scrollSnapType: 'x mandatory',
+        WebkitOverflowScrolling: 'touch',
+        /* masque la scrollbar visuellement */
+        scrollbarWidth: 'none',
+      }}>
         {(dbEvents.length > 0 ? dbEvents.map(ev => ({
-          id:        ev.id,
-          badge:     ev.badge,
+          id:         ev.id,
+          badge:      ev.badge,
           badgeColor: ev.badge_color,
           badgeText:  ev.badge_text_color,
-          title:     ev.title,
-          date:      format(new Date(ev.event_date), "EEEE d MMM", { locale: fr }),
-          time:      ev.event_time,
-          price:     ev.price,
-          img:       ev.image_url ?? '',
-          href:      `/${locale}/agenda/${ev.slug}`,
+          title:      ev.title,
+          date:       format(new Date(ev.event_date), "EEEE d MMM", { locale: fr }),
+          time:       ev.event_time,
+          price:      ev.price,
+          img:        ev.image_url ?? '',
+          href:       `/${locale}/agenda/${ev.slug}`,
         })) : PLACEHOLDER_EVENTS.map(ev => ({ ...ev, img: ev.img, href: `/${locale}/agenda` }))).map((ev) => (
-          <Link key={ev.id} href={ev.href} style={{ position: 'relative', overflow: 'hidden', aspectRatio: '7/6', background: '#ddd', display: 'block', textDecoration: 'none', color: 'inherit' }}>
+          <Link
+            key={ev.id}
+            href={ev.href}
+            style={{
+              /* largeur fixe : exactement 1/3 du conteneur (moins les 2 gaps sur 3 cartes) */
+              flex: '0 0 calc(33.333% - 15px)',
+              position: 'relative',
+              overflow: 'hidden',
+              aspectRatio: '7/6',
+              background: '#ddd',
+              display: 'block',
+              textDecoration: 'none',
+              color: 'inherit',
+              scrollSnapAlign: 'start',
+            }}
+          >
             {ev.img && (
               <Image
                 src={ev.img}
@@ -310,47 +336,35 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                 style={{ objectFit: 'cover', display: 'block' }}
               />
             )}
-            {/* Badge — position absolute top-left */}
+            {/* Badge */}
             <div style={{
               position: 'absolute', top: 12, left: 12,
-              background: ev.badgeColor,
-              color: ev.badgeText,
+              background: ev.badgeColor, color: ev.badgeText,
               padding: '6px 14px 7px',
-              fontFamily: 'var(--font-display)',
-              fontSize: 13,
-              fontStyle: 'italic',
-              textTransform: 'uppercase',
-              letterSpacing: '0.02em',
+              fontFamily: 'var(--font-display)', fontSize: 13,
+              fontStyle: 'italic', textTransform: 'uppercase', letterSpacing: '0.02em',
               boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             }}>
               {ev.badge}
             </div>
-            {/* Info panel — position absolute bottom, fond blanc */}
+            {/* Info panel bas */}
             <div style={{
               position: 'absolute', bottom: 12, left: 12, right: 12,
-              background: '#fff',
-              padding: '12px 14px 14px',
+              background: '#fff', padding: '12px 14px 14px',
               boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
             }}>
               <div style={{
-                fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
+                fontFamily: 'var(--font-display)', fontStyle: 'italic',
                 fontSize: 'clamp(15px, 1.4vw, 22px)',
-                textTransform: 'uppercase',
-                letterSpacing: '-0.01em',
-                textAlign: 'center',
-                color: 'var(--ink)',
+                textTransform: 'uppercase', letterSpacing: '-0.01em',
+                textAlign: 'center', color: 'var(--ink)',
               }}>
                 {ev.title}
               </div>
               <div style={{
-                fontSize: 12,
-                display: 'flex',
-                gap: 14,
-                justifyContent: 'center',
-                marginTop: 4,
-                color: 'var(--ink)',
-                opacity: 0.85,
+                fontSize: 12, display: 'flex', gap: 14,
+                justifyContent: 'center', marginTop: 4,
+                color: 'var(--ink)', opacity: 0.85,
               }}>
                 <span>○ {ev.date}</span>
                 {ev.time && <span>○ {ev.time}</span>}
