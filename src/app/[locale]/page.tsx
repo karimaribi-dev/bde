@@ -148,182 +148,84 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
     return () => { if (el) observer.unobserve(el) }
   }, [initialized, hasMore, loadingMore, offset, locale])
 
+  const allArticles = [featured, ...latest, ...grid].filter((a): a is ArticleWithCat => a !== null)
+  const BADGE_COLORS = ['var(--yellow)', 'var(--pink)', 'var(--blue)', 'var(--orange)']
+
   return (
     <>
       <SiteHeader categories={categories} locale={locale} labels={navLabels} />
-      <Marquee articles={[featured, ...latest].filter((a): a is ArticleWithCat => a !== null)} />
 
-      {/* ── Hero ── */}
-      <section className="c-hero" style={{ borderBottom: 'var(--hair)' }}>
+      {/* ── Hero BDE ── */}
+      <section style={{ background: 'var(--paper)', borderBottom: 'var(--hair)', padding: '56px 40px 48px', overflow: 'hidden' }}>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(72px, 12vw, 160px)',
+          fontWeight: 800,
+          lineHeight: 0.9,
+          letterSpacing: '-0.03em',
+          textTransform: 'uppercase',
+          margin: 0,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0 24px',
+        }}>
+          <span>MAKE</span>
+          <span style={{ background: 'var(--yellow)', padding: '0 16px' }}>ALIVE</span>
+          <span>LE</span>
+          <span style={{ background: 'var(--pink)', padding: '0 16px' }}>CAMPUS</span>
+        </h1>
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--mute)', marginTop: 24, marginBottom: 0 }}>
+          BDE LISAA DGC — Actu étudiante, événements & projets
+        </p>
+      </section>
 
-        {/* Col 1 — Featured */}
-        <article style={{ padding: '28px 28px 24px', display: 'flex', flexDirection: 'column', gap: 20, background: 'var(--paper)', borderRight: 'var(--hair)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: 'var(--hair)', paddingBottom: 10 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>{t('featured')}</span>
+      {/* ── Marquee ── */}
+      <Marquee articles={allArticles} />
+
+      {/* ── Articles grid ── */}
+      <section style={{ padding: '40px 28px', borderBottom: 'var(--hair)' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 28, borderBottom: 'var(--hair)', paddingBottom: 14 }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', margin: 0 }}>DERNIÈRES ACTUS</h2>
+        </div>
+
+        {allArticles.length === 0 ? (
+          <div style={{ padding: '64px 0', textAlign: 'center', color: 'var(--mute)', fontFamily: 'var(--font-display)', fontSize: 13, letterSpacing: '.1em', textTransform: 'uppercase' }}>
+            Aucun article publié pour l&apos;instant
           </div>
-          {featured ? (
-            <Link href={`/articles/${featured.slug}`} style={{ display: 'contents' }}>
-              <div style={{ position: 'relative', aspectRatio: '16/9', background: 'var(--ink)', overflow: 'hidden' }} className="photo">
-                {featured.cover_image_url ? (
-                  <Image src={featured.cover_image_url} alt={featured.title} fill sizes="(max-width: 900px) 100vw, (max-width: 1100px) 60vw, 45vw" style={{ objectFit: 'cover' }} priority />
-                ) : null}
-                <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
-                  {getCategoryName(featured.category, locale)}
-                </span>
-                <span style={{ position: 'absolute', top: 14, right: 14, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
-                  {formatDate(featured.published_at)}
-                </span>
-              </div>
-              {featured.category && (
-                <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase', background: 'var(--ink)', color: 'var(--paper)', padding: '6px 10px', width: 'max-content' }}>
-                  {getCategoryName(featured.category, locale)}
-                </span>
-              )}
-              <h1 style={{ fontSize: 54, lineHeight: .96, letterSpacing: '-.02em', fontWeight: 700, margin: 0 }}>
-                {featured.title}
-              </h1>
-              {featured.excerpt && (
-                <p style={{ fontSize: 17, lineHeight: 1.5, color: 'var(--ink-2)', maxWidth: '56ch', margin: 0 }}>{featured.excerpt}</p>
-              )}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: 'var(--hair)', paddingTop: 14, marginTop: 'auto' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase' }}>
-                  {formatDate(featured.published_at)}
-                </span>
-                <span className="lire">{t('read_more')} <span>→</span></span>
-              </div>
-            </Link>
-          ) : (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--mute)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>
-              {t('no_articles')}
-            </div>
-          )}
-        </article>
-
-        {/* Col 2 — Latest */}
-        <aside style={{ display: 'flex', flexDirection: 'column', background: 'var(--paper)', borderRight: 'var(--hair)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px', borderBottom: 'var(--hair)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>{t('latest_articles')}</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{t('today')}</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            {latest.map((art, i) => (
-              <Link key={art.id} href={`/articles/${art.slug}`} style={{ display: 'grid', gridTemplateColumns: '84px 1fr', gap: 18, padding: '18px 24px', borderBottom: i < latest.length - 1 ? 'var(--hair-mute)' : 0, cursor: 'pointer', textDecoration: 'none', flex: 1, alignItems: 'start', transition: 'background .2s' }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'var(--paper-2)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 2 }}>
+            {allArticles.map((art, i) => (
+              <Link key={art.id} href={`/articles/${art.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', gap: 14, padding: '24px', border: 'var(--hair)', background: 'var(--paper)', transition: 'background .15s' }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'var(--yellow)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'var(--paper)')}
               >
-                <div style={{ width: 84, aspectRatio: '1', background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">
-                  {art.cover_image_url && (
-                    <Image src={art.cover_image_url} alt={art.title} fill sizes="84px" style={{ objectFit: 'cover' }} />
-                  )}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase' }}>{getCategoryName(art.category, locale)}</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(art.published_at)}</span>
+                {art.cover_image_url && (
+                  <div style={{ position: 'relative', aspectRatio: '16/10', overflow: 'hidden', background: 'var(--ink)' }}>
+                    <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
                   </div>
-                  <h3 style={{ fontSize: 16, lineHeight: 1.18, fontWeight: 700, margin: '2px 0', letterSpacing: '-.005em' }}>{art.title}</h3>
-                  {art.excerpt && <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.45, color: 'var(--ink-2)' }}>{art.excerpt}</p>}
+                )}
+                {art.category && (
+                  <span style={{ display: 'inline-block', background: BADGE_COLORS[i % 4], padding: '4px 10px', fontFamily: 'var(--font-display)', fontSize: 10, fontWeight: 800, letterSpacing: '.06em', textTransform: 'uppercase', borderRadius: 2, width: 'max-content' }}>
+                    {getCategoryName(art.category, locale)}
+                  </span>
+                )}
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase', margin: 0 }}>{art.title}</h3>
+                {art.excerpt && <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)', fontFamily: 'inherit' }}>{art.excerpt}</p>}
+                <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: 'var(--hair-mute)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--mute)' }}>{formatDate(art.published_at)}</span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 800, letterSpacing: '.06em', textTransform: 'uppercase' }}>LIRE →</span>
                 </div>
               </Link>
             ))}
-          </div>
-        </aside>
-
-        {/* Col 3 — Ad */}
-        <AdColumn adPartnerLabel={t('ad_partner')} locale={locale} />
-      </section>
-
-      {/* ── Ad strip ── */}
-      <div style={{ padding: '20px 28px', borderBottom: 'var(--hair)' }}>
-        <div style={{ border: '1px dashed rgba(12,12,12,.35)', height: 90, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, position: 'relative', background: 'var(--paper-2)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', color: 'var(--ink)', position: 'relative' }}>{t('ad_label')}</span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', position: 'relative' }}>970 × 90 · IAB Leaderboard</span>
-        </div>
-      </div>
-
-      {/* ── Article grid — premiers articles ── */}
-      <section className="c-article-grid">
-        {grid.slice(0, PAGE_SIZE).map((art, i) => (
-          <Link
-            key={art.id}
-            href={`/articles/${art.slug}`}
-            className="hover-card"
-            style={{
-              padding: '24px 24px 22px',
-              borderRight: (i + 1) % 3 === 0 ? 0 : 'var(--hair-mute)',
-              borderBottom: 'var(--hair-mute)',
-              display: 'flex', flexDirection: 'column', gap: 14, cursor: 'pointer',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', textTransform: 'uppercase' }}>{getCategoryName(art.category, locale)}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{formatDate(art.published_at)}</span>
-            </div>
-            <div style={{ aspectRatio: '16/10', background: 'var(--ink)', position: 'relative', overflow: 'hidden' }} className="photo">
-              {art.cover_image_url && (
-                <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover' }} />
-              )}
-              <span style={{ position: 'absolute', top: 10, left: 10, fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '.18em', color: 'rgba(243,239,230,.7)', textTransform: 'uppercase', zIndex: 2 }}>
-                A.{String(i + 1).padStart(2, '0')}
-              </span>
-            </div>
-            <h3 style={{ fontSize: 22, lineHeight: 1.08, letterSpacing: '-.01em', fontWeight: 700, margin: 0 }}>{art.title}</h3>
-            {art.excerpt && <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)' }}>{art.excerpt}</p>}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', paddingTop: 10, borderTop: 'var(--hair-mute)' }}>
-              <span className="lire">{t('read_more')} <span>→</span></span>
-            </div>
-          </Link>
-        ))}
-        {grid.length === 0 && (
-          <div style={{ gridColumn: '1 / -1', padding: '64px 28px', textAlign: 'center', color: 'var(--mute)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase' }}>
-            {t('no_articles')}
           </div>
         )}
       </section>
 
-      {/* ── Newsletter ── */}
-      <section className="c-newsletter" style={{ borderTop: 'var(--hair)', borderBottom: 'var(--hair)' }}>
-        <div style={{ padding: '24px 28px 20px', borderRight: 'var(--hair)' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', marginBottom: 12 }}>{t('newsletter_label')}</div>
-          <h2 style={{ fontSize: 44, lineHeight: .95, letterSpacing: '-.025em', fontWeight: 700, margin: '0 0 12px' }}>{t('newsletter_headline')}</h2>
-          <p style={{ fontSize: 15, lineHeight: 1.4, color: 'var(--ink-2)', maxWidth: '36ch', margin: '0 0 12px' }}>{t('newsletter_sub')}</p>
-          <div style={{ display: 'flex', gap: 18, fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--mute)' }}>
-            <span>{t('newsletter_no_ads')}</span><span>·</span><span>{t('newsletter_unsub')}</span>
-          </div>
-        </div>
-        <div style={{ padding: '24px 28px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 16 }}>
-          <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--ink-2)', margin: 0, maxWidth: '46ch' }}>Recevez chaque matin notre sélection : une analyse de fond, trois signaux à surveiller, un rapport décrypté.</p>
-          <SubscribeForm />
-        </div>
-      </section>
-
-      {/* ── Articles plus anciens + sidebar pub — sous la newsletter ── */}
-      {grid.slice(PAGE_SIZE).length > 0 && (
-        <div className="c-below-newsletter">
-          <section className="c-article-grid-open">
-            {grid.slice(PAGE_SIZE).map((art) => (
-              <Link key={art.id} href={`/articles/${art.slug}`} className="hover-card c-article-card">
-                <div style={{ aspectRatio: '3/2', background: 'var(--ink)', position: 'relative', overflow: 'hidden', marginBottom: 12 }} className="photo">
-                  {art.cover_image_url && (
-                    <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, (max-width: 900px) 50vw, 33vw" style={{ objectFit: 'cover' }} />
-                  )}
-                </div>
-                {art.category && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--mute)', display: 'block', marginBottom: 6 }}>{getCategoryName(art.category, locale)}</span>
-                )}
-                <h3 style={{ fontSize: 19, lineHeight: 1.15, letterSpacing: '-.01em', fontWeight: 700, margin: 0 }}>{art.title}</h3>
-              </Link>
-            ))}
-          </section>
-          <AdColumn adPartnerLabel={t('ad_partner')} locale={locale} />
-        </div>
-      )}
-
       {/* ── Sentinel scroll infini ── */}
       <div ref={sentinelRef}>
         {loadingMore && (
-          <div style={{ padding: '28px', textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--mute)', borderTop: 'var(--hair)' }}>
-            {t('loading')}
+          <div style={{ padding: '28px', textAlign: 'center', fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--mute)' }}>
+            Chargement...
           </div>
         )}
       </div>
@@ -332,3 +234,4 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
     </>
   )
 }
+

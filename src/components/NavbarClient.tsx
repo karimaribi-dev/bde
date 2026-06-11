@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Category } from '@/lib/types'
 import { getCategoryName } from '@/lib/utils'
 import LocaleSwitcher, { buildLocalePath } from './LocaleSwitcher'
@@ -38,7 +37,7 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
     contact: 'Contact',
     search_placeholder: 'Rechercher…',
     no_results: 'Aucun résultat',
-    tagline: 'Veille IA · Quotidienne',
+    tagline: 'LISAA DGC',
   }
   const l = labels ?? defaultLabels
   const [panelOpen, setPanelOpen]       = useState(false)
@@ -139,13 +138,10 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
     <>
       {/* ── Topbar ── */}
       <header className="topbar">
-        <div className="brand">
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Image src="/logo-black.png" alt="AI Trends News" width={36} height={36} style={{ objectFit: 'contain' }} priority unoptimized />
-            <span className="brand-name">AI TRENDS NEWS</span>
-          </Link>
+        <Link href="/" className="brand" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span className="brand-name">BDE</span>
           <span className="brand-sub">{l.tagline}</span>
-        </div>
+        </Link>
         <button className="topbar-hamburger" onClick={() => setPanelOpen(true)} aria-label="Ouvrir le menu">
           <span /><span /><span />
         </button>
@@ -155,11 +151,13 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
       <div className="navbar">
         <nav>
           <div className="nav-links">
-            {categories.slice(0, 5).map((cat) => (
-              <Link key={cat.id} href={`/categorie/${cat.slug}`} className={cat.slug === activeSlug ? 'active' : ''}>
-                {getCategoryName(cat, locale)}
-              </Link>
-            ))}
+            <Link href={`/${locale}`}>ACCUEIL</Link>
+            <Link href={`/${locale}/agenda`}>AGENDA</Link>
+            <Link href={`/${locale}/clubs`}>CLUBS</Link>
+            <Link href={`/${locale}/coup-de-coeur`}>COUP DE CŒUR</Link>
+            <Link href={`/${locale}/la-ramette`}>LA RAMETTE</Link>
+            <Link href={`/${locale}/shop`}>SHOP</Link>
+            <Link href={`/p/a-propos`}>À PROPOS</Link>
           </div>
 
           {withSearch ? (
@@ -221,9 +219,9 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
       <div className={`nav-panel${panelOpen ? ' open' : ''}`} role="dialog" aria-modal="true" aria-label="Menu de navigation">
 
         <div className="nav-panel__head">
-          <Link href="/" onClick={closePanel} className="nav-panel__brand">
-            <Image src="/logo-black.png" alt="AI Trends News" width={28} height={28} style={{ objectFit: 'contain' }} unoptimized />
-            <span className="brand-name" style={{ marginLeft: 8 }}>AI TRENDS NEWS</span>
+          <Link href="/" onClick={closePanel} className="nav-panel__brand" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <span className="brand-name" style={{ fontSize: 18 }}>BDE</span>
+            <span className="brand-sub" style={{ marginLeft: 8 }}>LISAA DGC</span>
           </Link>
           <button className="nav-panel__close" onClick={closePanel} aria-label="Fermer le menu">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -233,18 +231,13 @@ export default function NavbarClient({ categories, activeSlug, withSearch = fals
         </div>
 
         <nav className="nav-panel__links">
-          <Link href="/" onClick={closePanel}>{l.home}</Link>
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/categorie/${cat.slug}`}
-              className={cat.slug === activeSlug ? 'active' : ''}
-              onClick={closePanel}
-            >
-              {getCategoryName(cat, locale)}
-            </Link>
-          ))}
-          <Link href="#" onClick={closePanel}>{l.contact}</Link>
+          <Link href={`/${locale}`} onClick={closePanel}>ACCUEIL</Link>
+          <Link href={`/${locale}/agenda`} onClick={closePanel}>AGENDA</Link>
+          <Link href={`/${locale}/clubs`} onClick={closePanel}>CLUBS</Link>
+          <Link href={`/${locale}/coup-de-coeur`} onClick={closePanel}>COUP DE CŒUR</Link>
+          <Link href={`/${locale}/la-ramette`} onClick={closePanel}>LA RAMETTE</Link>
+          <Link href={`/${locale}/shop`} onClick={closePanel}>SHOP</Link>
+          <Link href={`/p/a-propos`} onClick={closePanel}>À PROPOS</Link>
 
           {/* Langue — rangée horizontale */}
           <div className="nav-panel__locales">

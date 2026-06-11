@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Archivo_Black, Inter } from "next/font/google";
 import "./globals.css";
 import SitePopup from "@/components/SitePopup";
 import CookieConsent from "@/components/CookieConsent";
@@ -12,9 +12,23 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const archivoBlack = Archivo_Black({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "AI Trends News — Veille IA quotidienne",
-  description: "Les dernières tendances en intelligence artificielle",
+  title: "BDE LISAA DGC",
+  description: "Le Bureau des Étudiants de LISAA DGC",
   icons: {
     icon: [
       { url: '/favicon.png', type: 'image/png' },
@@ -25,7 +39,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={jetbrainsMono.variable}>
+    <html lang="fr" className={`${jetbrainsMono.variable} ${archivoBlack.variable} ${inter.variable}`}>
       <body>
         <GtmLoader />
         {children}
