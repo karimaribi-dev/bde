@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 
 export default function AProposProposerClient() {
   const [text,    setText]    = useState('')
+  const [mail,    setMail]    = useState('')
   const [sent,    setSent]    = useState(false)
   const [sending, setSending] = useState(false)
   const [error,   setError]   = useState('')
@@ -18,6 +19,7 @@ export default function AProposProposerClient() {
     const { error: dbErr } = await supabase.from('suggestions').insert({
       source: 'a-propos',
       message: text.trim(),
+      mail: mail.trim() || null,
     })
     setSending(false)
     if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
@@ -104,6 +106,22 @@ export default function AProposProposerClient() {
           <label style={{ fontStyle: 'italic', fontSize: 13, color: '#888', display: 'block', marginBottom: 8, paddingLeft: 4 }}>
             vos idées sont les bienvenues :
           </label>
+          <input
+            type="email"
+            value={mail}
+            onChange={e => setMail(e.target.value)}
+            placeholder="ton adresse e-mail (facultatif)"
+            style={{
+              width: '100%',
+              border: '1px solid var(--ink)',
+              borderRadius: 2,
+              padding: '10px 16px',
+              fontSize: 14,
+              background: '#fff',
+              outline: 'none',
+              boxSizing: 'border-box',
+            }}
+          />
           <textarea
             rows={6}
             value={text}

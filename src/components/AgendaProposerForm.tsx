@@ -7,6 +7,7 @@ interface Props { source?: string }
 
 export default function AgendaProposerForm({ source = 'agenda' }: Props) {
   const [text,    setText]    = useState('')
+  const [mail,    setMail]    = useState('')
   const [sending, setSending] = useState(false)
   const [sent,    setSent]    = useState(false)
   const [error,   setError]   = useState('')
@@ -20,6 +21,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
     const { error: dbErr } = await supabase.from('suggestions').insert({
       source,
       message: text.trim(),
+      mail: mail.trim() || null,
     })
     setSending(false)
     if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
@@ -98,6 +100,23 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
           gap: 12,
         }}>
           {error && <p style={{ fontSize: 13, color: '#dc2626', margin: 0 }}>{error}</p>}
+          <input
+            type="email"
+            value={mail}
+            onChange={e => setMail(e.target.value)}
+            placeholder="ton adresse e-mail (facultatif)"
+            style={{
+              width: '100%',
+              border: '1px solid rgba(0,0,0,0.85)',
+              borderRadius: 2,
+              padding: '10px 16px',
+              fontSize: 14,
+              background: '#fff',
+              outline: 'none',
+              fontFamily: 'inherit',
+              boxSizing: 'border-box',
+            }}
+          />
           <label style={{ fontStyle: 'italic', fontSize: 13, color: '#888', paddingLeft: 4 }}>
             vos idées sont les bienvenues :
           </label>

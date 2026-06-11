@@ -7,6 +7,7 @@ interface Suggestion {
   id: string
   source: string
   message: string
+  mail: string | null
   is_read: boolean
   created_at: string
 }
@@ -85,6 +86,11 @@ export default async function SuggestionsPage() {
                   }}>
                     {SOURCE_LABELS[sg.source] ?? sg.source}
                   </span>
+                  {sg.mail && (
+                    <a href={`mailto:${sg.mail}`} style={{ fontSize: 12, color: '#0369a1', textDecoration: 'none' }}>
+                      {sg.mail}
+                    </a>
+                  )}
                   <span style={{ fontSize: 12, color: '#6b7280' }}>
                     {new Date(sg.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
