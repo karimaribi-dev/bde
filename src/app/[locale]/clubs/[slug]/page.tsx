@@ -229,7 +229,7 @@ export default async function ClubDetailPage({
             )}
 
             {/* Formulaire rejoindre */}
-            <ClubJoinFormClient clubTitle={club.title} accentColor={ac} />
+            <ClubJoinFormClient clubTitle={club.title} clubSlug={club.slug} accentColor={ac} />
 
           </div>
         </section>

@@ -1,19 +1,37 @@
 'use client'
 
 import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
-interface Props { clubTitle: string; accentColor: string }
+interface Props { clubTitle: string; clubSlug: string; accentColor: string }
 
-export default function ClubJoinFormClient({ clubTitle, accentColor }: Props) {
+export default function ClubJoinFormClient({ clubTitle, clubSlug, accentColor }: Props) {
+  void accentColor
   const [fields, setFields] = useState({ prenom: '', nom: '', classe: '', mail: '', presentation: '' })
-  const [sent, setSent]     = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sent,    setSent]    = useState(false)
+  const [error,   setError]   = useState('')
 
   function set(k: keyof typeof fields, v: string) {
     setFields(f => ({ ...f, [k]: v }))
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setError('')
+    setSending(true)
+    const supabase = createClient()
+    const { error: dbErr } = await supabase.from('club_join_requests').insert({
+      club_slug:    clubSlug,
+      club_title:   clubTitle,
+      prenom:       fields.prenom.trim(),
+      nom:          fields.nom.trim(),
+      classe:       fields.classe.trim() || null,
+      mail:         fields.mail.trim(),
+      presentation: fields.presentation.trim() || null,
+    })
+    setSending(false)
+    if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
     setSent(true)
   }
 
@@ -38,10 +56,7 @@ export default function ClubJoinFormClient({ clubTitle, accentColor }: Props) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: 'flex', flexDirection: 'column', gap: 10 }}
-    >
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       <h3 style={{
         fontFamily: 'var(--font-display)',
         fontStyle: 'italic',
@@ -60,6 +75,10 @@ export default function ClubJoinFormClient({ clubTitle, accentColor }: Props) {
         </span>
         REJOIGNEZ {clubTitle} !
       </h3>
+
+      {error && (
+        <p style={{ fontSize: 13, color: '#dc2626', margin: 0 }}>{error}</p>
+      )}
 
       {(['prenom', 'nom', 'classe', 'mail'] as const).map(k => (
         <div key={k} style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
@@ -85,14 +104,15 @@ export default function ClubJoinFormClient({ clubTitle, accentColor }: Props) {
       />
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
-        <button type="submit" style={{
+        <button type="submit" disabled={sending} style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: 'var(--ink)', color: '#fff',
           fontFamily: 'var(--font-display)', fontStyle: 'italic',
           fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase',
-          padding: '10px 18px', border: 'none', cursor: 'pointer',
+          padding: '10px 18px', border: 'none', cursor: sending ? 'wait' : 'pointer',
+          opacity: sending ? 0.7 : 1,
         }}>
-          ENVOYER
+          {sending ? 'Envoi…' : 'ENVOYER'}
           <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 13 }}>
             <path d="M2 8h19M14 1l7 7-7 7"/>
           </svg>

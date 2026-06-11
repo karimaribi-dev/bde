@@ -13,22 +13,29 @@ export default async function AdminDashboard() {
     { count: drafts },
     { count: categories },
     { data: recent },
+    { count: unreadRequests },
+    { count: totalClubs },
+    { count: totalProducts },
   ] = await Promise.all([
     supabase.from('articles').select('*', { count: 'exact', head: true }),
     supabase.from('articles').select('*', { count: 'exact', head: true }).eq('status', 'published'),
     supabase.from('articles').select('*', { count: 'exact', head: true }).eq('status', 'draft'),
     supabase.from('categories').select('*', { count: 'exact', head: true }),
     supabase.from('articles').select('id, title, status, updated_at').order('updated_at', { ascending: false }).limit(5),
+    supabase.from('club_join_requests').select('*', { count: 'exact', head: true }).eq('is_read', false),
+    supabase.from('clubs').select('*', { count: 'exact', head: true }),
+    supabase.from('products').select('*', { count: 'exact', head: true }),
   ])
 
   const stats = [
     { label: 'Total articles', value: totalArticles ?? 0, icon: 'fa-solid fa-newspaper' },
-    { label: 'Publiés', value: published ?? 0, icon: 'fa-solid fa-check' },
-    { label: 'Brouillons', value: drafts ?? 0, icon: 'fa-regular fa-file-lines' },
-    { label: 'Catégories', value: categories ?? 0, icon: 'fa-solid fa-tag' },
+    { label: 'Publiés',        value: published ?? 0,     icon: 'fa-solid fa-check' },
+    { label: 'Brouillons',     value: drafts ?? 0,        icon: 'fa-regular fa-file-lines' },
+    { label: 'Catégories',     value: categories ?? 0,    icon: 'fa-solid fa-tag' },
   ]
 
   const username = user?.email?.split('@')[0] ?? 'Admin'
+  const unread   = unreadRequests ?? 0
 
   return (
     <>
@@ -39,6 +46,50 @@ export default async function AdminDashboard() {
         </Link>
       </header>
 
+      {/* ── Notification demandes d'adhésion ── */}
+      {unread > 0 && (
+        <Link href="/admin/club-requests" style={{ textDecoration: 'none', display: 'block', marginBottom: 20 }}>
+          <div style={{
+            background: '#fffbeb',
+            border: '1.5px solid #fde68a',
+            borderRadius: 10,
+            padding: '16px 22px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 16,
+            transition: 'background 0.15s',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: '50%',
+                background: '#FF4D1F', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 18, flexShrink: 0,
+              }}>
+                <i className="fa-solid fa-bell" />
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 15, color: '#262626' }}>
+                  {unread} nouvelle{unread > 1 ? 's' : ''} demande{unread > 1 ? 's' : ''} d&apos;adhésion
+                </div>
+                <div style={{ fontSize: 13, color: '#92400e', marginTop: 2 }}>
+                  Des étudiants souhaitent rejoindre un club — cliquez pour voir
+                </div>
+              </div>
+            </div>
+            <span style={{
+              background: '#FF4D1F', color: '#fff',
+              fontWeight: 700, fontSize: 13,
+              padding: '4px 12px', borderRadius: 99, flexShrink: 0,
+            }}>
+              {unread} non lu{unread > 1 ? 's' : ''}
+            </span>
+          </div>
+        </Link>
+      )}
+
+      {/* ── Stats articles ── */}
       <div className="admin-stats-grid">
         {stats.map((s) => (
           <div key={s.label} className="admin-stat-card">
@@ -51,6 +102,57 @@ export default async function AdminDashboard() {
         ))}
       </div>
 
+      {/* ── Raccourcis BDE ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+        <Link href="/admin/clubs" style={{ textDecoration: 'none' }}>
+          <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 38, height: 38, background: '#FFB3F0', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+              <i className="fa-solid fa-people-group" style={{ color: '#262626' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14, color: '#262626' }}>{totalClubs ?? 0} club{(totalClubs ?? 0) > 1 ? 's' : ''}</div>
+              <div style={{ fontSize: 12, color: '#6b7280' }}>Gérer les clubs</div>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/admin/products" style={{ textDecoration: 'none' }}>
+          <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 38, height: 38, background: '#FFE74A', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+              <i className="fa-solid fa-bag-shopping" style={{ color: '#262626' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14, color: '#262626' }}>{totalProducts ?? 0} produit{(totalProducts ?? 0) > 1 ? 's' : ''}</div>
+              <div style={{ fontSize: 12, color: '#6b7280' }}>Gérer le shop</div>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/admin/club-requests" style={{ textDecoration: 'none' }}>
+          <div style={{ background: '#fff', border: `1px solid ${unread > 0 ? '#fde68a' : '#e5e7eb'}`, borderRadius: 8, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14, position: 'relative' }}>
+            {unread > 0 && (
+              <span style={{
+                position: 'absolute', top: -6, right: -6,
+                background: '#FF4D1F', color: '#fff',
+                fontSize: 11, fontWeight: 700,
+                width: 22, height: 22, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {unread}
+              </span>
+            )}
+            <div style={{ width: 38, height: 38, background: '#FF4D1F', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+              <i className="fa-solid fa-envelope" style={{ color: '#fff' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14, color: '#262626' }}>Adhésions clubs</div>
+              <div style={{ fontSize: 12, color: '#6b7280' }}>{unread > 0 ? `${unread} non lu${unread > 1 ? 's' : ''}` : 'Voir les demandes'}</div>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* ── Articles récents ── */}
       <div className="admin-card" style={{ padding: 0 }}>
         <div className="admin-card-header" style={{ padding: '20px 25px 0 25px' }}>
           <h3>Articles récents</h3>
