@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { use } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import NavbarClient from '@/components/NavbarClient'
@@ -17,7 +16,7 @@ export default async function EventDetailPage({
 }: {
   params: Promise<{ locale: string; slug: string }>
 }) {
-  const { locale, slug } = use(params)
+  const { locale, slug } = await params
 
   const supabase = await createClient()
   const [{ data: ev }, { data: categories }] = await Promise.all([

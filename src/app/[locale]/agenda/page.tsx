@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { use } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import NavbarClient from '@/components/NavbarClient'
@@ -15,7 +14,7 @@ function formatEventDate(iso: string) {
 }
 
 export default async function AgendaPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = use(params)
+  const { locale } = await params
   const supabase = await createClient()
 
   const today = new Date().toISOString().slice(0, 10)
