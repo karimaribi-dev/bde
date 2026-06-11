@@ -1,13 +1,26 @@
 'use client'
 
 import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 export default function AProposProposerClient() {
-  const [text, setText] = useState('')
-  const [sent, setSent] = useState(false)
+  const [text,    setText]    = useState('')
+  const [sent,    setSent]    = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error,   setError]   = useState('')
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!text.trim()) return
+    setError('')
+    setSending(true)
+    const supabase = createClient()
+    const { error: dbErr } = await supabase.from('suggestions').insert({
+      source: 'a-propos',
+      message: text.trim(),
+    })
+    setSending(false)
+    if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
     setSent(true)
   }
 
@@ -110,7 +123,8 @@ export default function AProposProposerClient() {
             }}
           />
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
-            <button type="submit" style={{
+            {error && <p style={{ fontSize: 13, color: '#dc2626', marginBottom: 6 }}>{error}</p>}
+          <button type="submit" disabled={sending} style={{ opacity: sending ? 0.7 : 1, cursor: sending ? 'wait' : 'pointer',
               display: 'inline-flex', alignItems: 'center', gap: 8,
               background: '#FFE74A', color: 'var(--ink)',
               fontFamily: 'var(--font-display)', fontStyle: 'italic',
@@ -118,7 +132,7 @@ export default function AProposProposerClient() {
               padding: '11px 22px', border: 'none', cursor: 'pointer',
               borderRadius: 999,
             }}>
-              ENVOYER
+              {sending ? 'Envoi…' : 'ENVOYER'}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 13 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>

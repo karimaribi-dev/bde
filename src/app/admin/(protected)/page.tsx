@@ -16,6 +16,7 @@ export default async function AdminDashboard() {
     { count: unreadRequests },
     { count: totalClubs },
     { count: totalProducts },
+    { count: unreadSuggestions },
   ] = await Promise.all([
     supabase.from('articles').select('*', { count: 'exact', head: true }),
     supabase.from('articles').select('*', { count: 'exact', head: true }).eq('status', 'published'),
@@ -25,6 +26,7 @@ export default async function AdminDashboard() {
     supabase.from('club_join_requests').select('*', { count: 'exact', head: true }).eq('is_read', false),
     supabase.from('clubs').select('*', { count: 'exact', head: true }),
     supabase.from('products').select('*', { count: 'exact', head: true }),
+    supabase.from('suggestions').select('*', { count: 'exact', head: true }).eq('is_read', false),
   ])
 
   const stats = [
@@ -34,8 +36,9 @@ export default async function AdminDashboard() {
     { label: 'Catégories',     value: categories ?? 0,    icon: 'fa-solid fa-tag' },
   ]
 
-  const username = user?.email?.split('@')[0] ?? 'Admin'
-  const unread   = unreadRequests ?? 0
+  const username    = user?.email?.split('@')[0] ?? 'Admin'
+  const unread      = unreadRequests ?? 0
+  const unreadSugg  = unreadSuggestions ?? 0
 
   return (
     <>
@@ -89,6 +92,48 @@ export default async function AdminDashboard() {
         </Link>
       )}
 
+      {/* ── Notification suggestions ── */}
+      {unreadSugg > 0 && (
+        <Link href="/admin/suggestions" style={{ textDecoration: 'none', display: 'block', marginBottom: 20 }}>
+          <div style={{
+            background: '#eff6ff',
+            border: '1.5px solid #bfdbfe',
+            borderRadius: 10,
+            padding: '16px 22px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 16,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: '50%',
+                background: '#4FA3FF', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 18, flexShrink: 0,
+              }}>
+                <i className="fa-solid fa-lightbulb" />
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 15, color: '#262626' }}>
+                  {unreadSugg} nouvelle{unreadSugg > 1 ? 's' : ''} suggestion{unreadSugg > 1 ? 's' : ''}
+                </div>
+                <div style={{ fontSize: 13, color: '#1d4ed8', marginTop: 2 }}>
+                  Des idées ont été proposées — cliquez pour voir
+                </div>
+              </div>
+            </div>
+            <span style={{
+              background: '#4FA3FF', color: '#fff',
+              fontWeight: 700, fontSize: 13,
+              padding: '4px 12px', borderRadius: 99, flexShrink: 0,
+            }}>
+              {unreadSugg} non lu{unreadSugg > 1 ? 'es' : 'e'}
+            </span>
+          </div>
+        </Link>
+      )}
+
       {/* ── Stats articles ── */}
       <div className="admin-stats-grid">
         {stats.map((s) => (
@@ -103,7 +148,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* ── Raccourcis BDE ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
         <Link href="/admin/clubs" style={{ textDecoration: 'none' }}>
           <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
             <div style={{ width: 38, height: 38, background: '#FFB3F0', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
@@ -147,6 +192,29 @@ export default async function AdminDashboard() {
             <div>
               <div style={{ fontWeight: 700, fontSize: 14, color: '#262626' }}>Adhésions clubs</div>
               <div style={{ fontSize: 12, color: '#6b7280' }}>{unread > 0 ? `${unread} non lu${unread > 1 ? 's' : ''}` : 'Voir les demandes'}</div>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/admin/suggestions" style={{ textDecoration: 'none' }}>
+          <div style={{ background: '#fff', border: `1px solid ${unreadSugg > 0 ? '#bfdbfe' : '#e5e7eb'}`, borderRadius: 8, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14, position: 'relative' }}>
+            {unreadSugg > 0 && (
+              <span style={{
+                position: 'absolute', top: -6, right: -6,
+                background: '#4FA3FF', color: '#fff',
+                fontSize: 11, fontWeight: 700,
+                width: 22, height: 22, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {unreadSugg}
+              </span>
+            )}
+            <div style={{ width: 38, height: 38, background: '#4FA3FF', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+              <i className="fa-solid fa-lightbulb" style={{ color: '#fff' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14, color: '#262626' }}>Suggestions</div>
+              <div style={{ fontSize: 12, color: '#6b7280' }}>{unreadSugg > 0 ? `${unreadSugg} non lu${unreadSugg > 1 ? 'es' : 'e'}` : 'Voir les idées'}</div>
             </div>
           </div>
         </Link>

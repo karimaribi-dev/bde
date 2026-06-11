@@ -1,14 +1,28 @@
 'use client'
 
 import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
-export default function AgendaProposerForm() {
-  const [text, setText] = useState('')
-  const [sent, setSent] = useState(false)
+interface Props { source?: string }
 
-  function handleSubmit(e: React.FormEvent) {
+export default function AgendaProposerForm({ source = 'agenda' }: Props) {
+  const [text,    setText]    = useState('')
+  const [sending, setSending] = useState(false)
+  const [sent,    setSent]    = useState(false)
+  const [error,   setError]   = useState('')
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!text.trim()) return
+    setError('')
+    setSending(true)
+    const supabase = createClient()
+    const { error: dbErr } = await supabase.from('suggestions').insert({
+      source,
+      message: text.trim(),
+    })
+    setSending(false)
+    if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
     setSent(true)
     setText('')
   }
@@ -26,7 +40,6 @@ export default function AgendaProposerForm() {
         alignItems: 'center',
         gap: 10,
       }}>
-        {/* Flèches curl gauche / droite */}
         <span aria-hidden="true" style={{ position: 'absolute', width: 80, height: 110, pointerEvents: 'none', top: 8, left: '6%' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/fleche-curl.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
@@ -84,12 +97,14 @@ export default function AgendaProposerForm() {
           flexDirection: 'column',
           gap: 12,
         }}>
+          {error && <p style={{ fontSize: 13, color: '#dc2626', margin: 0 }}>{error}</p>}
           <label style={{ fontStyle: 'italic', fontSize: 13, color: '#888', paddingLeft: 4 }}>
             vos idées sont les bienvenues :
           </label>
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
+            required
             rows={6}
             style={{
               width: '100%',
@@ -105,7 +120,7 @@ export default function AgendaProposerForm() {
             }}
           />
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
-            <button type="submit" style={{
+            <button type="submit" disabled={sending} style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
               background: 'var(--ink)', color: '#fff',
               fontFamily: 'var(--font-display)',
@@ -115,9 +130,10 @@ export default function AgendaProposerForm() {
               textTransform: 'uppercase',
               padding: '12px 22px',
               border: 'none',
-              cursor: 'pointer',
+              cursor: sending ? 'wait' : 'pointer',
+              opacity: sending ? 0.7 : 1,
             }}>
-              ENVOYER
+              {sending ? 'Envoi…' : 'ENVOYER'}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>
