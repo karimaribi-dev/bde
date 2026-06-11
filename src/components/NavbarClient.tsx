@@ -35,8 +35,8 @@ const NAV_ITEMS = [
   { key: 'agenda',       label: 'AGENDA',        href: (l: string) => `/${l}/agenda` },
   { key: 'clubs',        label: 'NOS CLUBS',      href: (l: string) => `/${l}/clubs` },
   { key: 'shop',         label: 'SHOP',           href: (l: string) => `/${l}/shop` },
-  { key: 'coup',         label: 'COUP DE CŒUR',   href: (l: string) => `/${l}/coup-de-coeur` },
-  { key: 'propos',       label: 'À PROPOS',       href: (_: string) => `/p/a-propos` },
+  // { key: 'coup',      label: 'COUP DE CŒUR',   href: (l: string) => `/${l}/coup-de-coeur` },
+  { key: 'propos',       label: 'À PROPOS',       href: (l: string) => `/${l}/a-propos` },
 ]
 
 export default function NavbarClient({ categories: _cats, activeSlug, withSearch = false, locale = 'fr', labels }: Props) {

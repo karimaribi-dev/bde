@@ -288,10 +288,11 @@ export default async function ClubDetailPage({
                   )}
                   <span style={{
                     display: 'inline-flex', alignItems: 'center', gap: 6,
-                    background: 'var(--ink)', color: '#fff',
+                    background: '#FFE74A', color: 'var(--ink)',
                     fontFamily: 'var(--font-display)', fontStyle: 'italic',
                     fontSize: 12, letterSpacing: '0.04em', textTransform: 'uppercase',
-                    padding: '8px 14px', alignSelf: 'center', marginTop: 6,
+                    padding: '8px 20px', borderRadius: 999, alignSelf: 'center', marginTop: 6,
+                    fontWeight: 700,
                   }}>
                     DÉCOUVRIR LE CLUB
                     <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 12 }}>

@@ -29,7 +29,7 @@ export default function ClubJoinFormClient({ clubTitle, accentColor }: Props) {
 
   if (sent) {
     return (
-      <div style={{ padding: '18px 20px', border: `1.5px solid ${accentColor}`, background: '#fff', textAlign: 'center' }}>
+      <div style={{ padding: '18px 0', textAlign: 'center' }}>
         <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, textTransform: 'uppercase', color: 'var(--ink)', margin: 0 }}>
           Merci ! On revient vers toi 🙏
         </p>
@@ -40,7 +40,7 @@ export default function ClubJoinFormClient({ clubTitle, accentColor }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      style={{ padding: '20px 22px', border: `1.5px solid ${accentColor}`, background: '#fff', display: 'flex', flexDirection: 'column', gap: 10 }}
+      style={{ display: 'flex', flexDirection: 'column', gap: 10 }}
     >
       <h3 style={{
         fontFamily: 'var(--font-display)',
