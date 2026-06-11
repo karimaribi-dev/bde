@@ -192,8 +192,14 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
     <>
       <SiteHeader categories={categories} locale={locale} labels={navLabels} />
 
+      {/* ── Articles marquee — pleine largeur, hors du padding main ── */}
+      <Marquee articles={allArticles} />
+
+      {/* ── MAIN — padding: 0 40px comme l'original ── */}
+      <main style={{ padding: '0 40px' }}>
+
       {/* ── Hero BDE ── */}
-      <section style={{ background: 'var(--paper)', borderBottom: 'var(--hair)', padding: '56px 40px 48px', overflow: 'hidden' }}>
+      <section style={{ padding: '24px 0 36px' }}>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(72px, 12vw, 160px)',
@@ -215,9 +221,6 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           BDE LISAA DGC — Actu étudiante, événements & projets
         </p>
       </section>
-
-      {/* ── Marquee ── */}
-      <Marquee articles={allArticles} />
 
       {/* ── PROCHAINEMENT bar — exact du dossier ── */}
       {/* font géant italique, margin négatif pour casser le padding parent */}
@@ -344,8 +347,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </Link>
       </div>
 
+      {/* section-divider */}
+      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
+
       {/* ── NOS CLUBS JUSTE POUR VOUS ── */}
-      <section style={{ padding: '6px 40px', borderBottom: 'var(--hair)', background: 'var(--paper)' }}>
+      <section style={{ padding: '6px 0' }}>
 
         {/* Titre */}
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, marginBottom: 30 }}>
@@ -466,8 +472,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
       </section>
 
+      {/* section-divider */}
+      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
+
       {/* ── Articles grid ── */}
-      <section style={{ padding: '40px 28px', borderBottom: 'var(--hair)' }}>
+      <section style={{ padding: '40px 0' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 28, borderBottom: 'var(--hair)', paddingBottom: 14 }}>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', margin: 0 }}>DERNIÈRES ACTUS</h2>
         </div>
@@ -508,11 +517,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* ── Sentinel scroll infini ── */}
       <div ref={sentinelRef}>
         {loadingMore && (
-          <div style={{ padding: '28px', textAlign: 'center', fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--mute)' }}>
+          <div style={{ padding: '28px 0', textAlign: 'center', fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--mute)' }}>
             Chargement...
           </div>
         )}
       </div>
+
+      </main>{/* fin main padding: 0 40px */}
 
       <SiteFooter categories={categories} />
     </>
