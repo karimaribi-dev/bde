@@ -111,6 +111,27 @@ export interface Event {
   updated_at: string
 }
 
+export interface Club {
+  id: string
+  title: string
+  slug: string
+  tagline: string
+  tagline_sub: string | null
+  accent_color: string
+  accent_text_color: string
+  who_we_are: string | null
+  objective: string | null
+  schedule: string | null
+  frequency: string | null
+  location: string | null
+  member_count: string | null
+  image_url: string | null
+  is_published: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
 export interface Article {
   id: string
   title: string
