@@ -14,9 +14,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="admin-bg">
       <div className="admin-app">
         <aside className="admin-sidebar">
-          <a href="/admin" className="admin-logo">
-            <i className="fa-solid fa-layer-group"></i>
-            AI Trends News
+          <a href="/admin" className="admin-logo" style={{ padding: '18px 20px 14px' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-black.png"
+              alt="BDE LISAA DGC"
+              style={{ height: 28, width: 'auto', display: 'block' }}
+            />
           </a>
 
           <nav className="admin-nav-section">
