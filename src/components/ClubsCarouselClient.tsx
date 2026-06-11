@@ -17,6 +17,7 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
   const lastRef    = useRef(0)
   const rafRef     = useRef<number | undefined>(undefined)
   const dragging   = useRef(false)
+  const didDrag    = useRef(false)
   const startX     = useRef(0)
   const startOff   = useRef(0)
 
@@ -54,14 +55,17 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
   }, [clubs.length])
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    dragging.current = true
-    startX.current   = e.clientX
-    startOff.current = offsetRef.current
+    dragging.current  = true
+    didDrag.current   = false
+    startX.current    = e.clientX
+    startOff.current  = offsetRef.current
     pausedRef.current = true
     ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
   }
   function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
     if (!dragging.current) return
+    const delta = Math.abs(e.clientX - startX.current)
+    if (delta > 5) didDrag.current = true
     const track = trackRef.current; if (!track) return
     let n = startOff.current - (e.clientX - startX.current)
     const hw = halfRef.current
@@ -70,6 +74,15 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
     track.style.transform = `translate3d(${-n}px,0,0)`
   }
   function onPointerUp() { dragging.current = false }
+
+  /* Bloque la navigation uniquement si c'était un vrai drag */
+  function onClickCapture(e: React.MouseEvent) {
+    if (didDrag.current) {
+      e.preventDefault()
+      e.stopPropagation()
+      didDrag.current = false
+    }
+  }
 
   if (clubs.length === 0) return null
 
@@ -93,6 +106,7 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
+      onClickCapture={onClickCapture}
     >
       <div
         ref={trackRef}
@@ -237,7 +251,6 @@ function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: st
           padding: '10px 18px', textDecoration: 'none',
           alignSelf: 'center', margin: '4px 0',
         }}
-        onClick={e => e.stopPropagation()}
       >
         EN SAVOIR PLUS
         <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 13 }}>
