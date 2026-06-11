@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { isStudentEmail, STUDENT_EMAIL_ERROR } from '@/lib/validate-email'
 
 interface Props { clubTitle: string; clubSlug: string; accentColor: string }
 
@@ -19,6 +20,7 @@ export default function ClubJoinFormClient({ clubTitle, clubSlug, accentColor }:
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    if (!isStudentEmail(fields.mail)) { setError(STUDENT_EMAIL_ERROR); return }
     setSending(true)
     const supabase = createClient()
     const { error: dbErr } = await supabase.from('club_join_requests').insert({

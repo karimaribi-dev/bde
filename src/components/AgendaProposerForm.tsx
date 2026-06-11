@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { isStudentEmail, STUDENT_EMAIL_ERROR, STUDENT_DOMAIN } from '@/lib/validate-email'
 
 interface Props { source?: string }
 
@@ -16,6 +17,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
     e.preventDefault()
     if (!text.trim()) return
     setError('')
+    if (mail.trim() && !isStudentEmail(mail)) { setError(STUDENT_EMAIL_ERROR); return }
     setSending(true)
     const supabase = createClient()
     const { error: dbErr } = await supabase.from('suggestions').insert({
@@ -104,7 +106,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             type="email"
             value={mail}
             onChange={e => setMail(e.target.value)}
-            placeholder="ton adresse e-mail (facultatif)"
+            placeholder={`ton adresse ${STUDENT_DOMAIN}`}
             style={{
               width: '100%',
               border: '1px solid rgba(0,0,0,0.85)',

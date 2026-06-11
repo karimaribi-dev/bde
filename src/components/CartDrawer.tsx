@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/components/CartContext'
 import { createClient } from '@/lib/supabase/client'
+import { isStudentEmail, STUDENT_EMAIL_ERROR, STUDENT_DOMAIN } from '@/lib/validate-email'
 
 export default function CartDrawer() {
   const { items, remove, setQty, clear, total, count, isOpen, close } = useCart()
@@ -28,6 +29,7 @@ export default function CartDrawer() {
     e.preventDefault()
     if (items.length === 0) return
     setError('')
+    if (!isStudentEmail(fields.mail)) { setError(STUDENT_EMAIL_ERROR); return }
     setSending(true)
     const supabase = createClient()
     const { error: dbErr } = await supabase.from('shop_orders').insert({
@@ -379,7 +381,7 @@ export default function CartDrawer() {
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#aaa', marginBottom: 4 }}>E-mail *</label>
+                    <label style={{ display: 'block', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#aaa', marginBottom: 4 }}>E-mail {STUDENT_DOMAIN} *</label>
                     <input
                       type="email"
                       required
