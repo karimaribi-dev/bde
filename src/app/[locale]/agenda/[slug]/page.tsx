@@ -35,7 +35,7 @@ export default async function EventDetailPage({
     <>
       <NavbarClient categories={cats} locale={locale} activeSlug="agenda" />
 
-      <main style={{ padding: '0 40px' }}>
+      <main style={{ padding: '0 clamp(40px, 8vw, 140px)' }}>
 
         {/* ── Breadcrumb ── */}
         <nav style={{ padding: '18px 0 0', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', color: '#888' }}>
@@ -79,14 +79,14 @@ export default async function EventDetailPage({
           {/* Grille image + infos/description */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: event.image_url ? '1fr 1fr' : '1fr',
+            gridTemplateColumns: event.image_url ? '400px 1fr' : '1fr',
             gap: 52,
             marginBottom: 60,
             alignItems: 'start',
           }}>
             {event.image_url && (
-              <div style={{ position: 'relative', aspectRatio: '7/6', overflow: 'hidden', background: '#f0f0f0' }}>
-                <Image src={event.image_url} alt={event.title} fill sizes="(max-width: 900px) 100vw, 50vw" style={{ objectFit: 'cover' }} />
+              <div style={{ position: 'relative', aspectRatio: '3/4', overflow: 'hidden', background: '#f0f0f0' }}>
+                <Image src={event.image_url} alt={event.title} fill sizes="400px" style={{ objectFit: 'cover' }} />
               </div>
             )}
 
@@ -140,7 +140,7 @@ export default async function EventDetailPage({
                   {event.location_address}
                 </p>
               )}
-              <div style={{ maxWidth: 620 }}>
+              <div style={{ width: 400 }}>
                 <EventMapClient
                   lat={event.location_lat}
                   lng={event.location_lng}
@@ -193,14 +193,17 @@ export default async function EventDetailPage({
 function InfoBlock({ label, value, capitalize }: { label: string; value: string; capitalize?: boolean }) {
   return (
     <div>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: '#888', marginBottom: 4 }}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: '#888', marginBottom: 6 }}>
         {label}
       </div>
       <div style={{
         fontFamily: 'var(--font-display)',
-        fontWeight: 700,
-        fontSize: 15,
-        textTransform: capitalize ? 'capitalize' : 'none',
+        fontStyle: 'italic',
+        fontWeight: 800,
+        fontSize: 'clamp(18px, 2vw, 26px)',
+        textTransform: capitalize ? 'capitalize' : 'uppercase',
+        lineHeight: 1.1,
+        color: 'var(--ink)',
       }}>
         {value}
       </div>
