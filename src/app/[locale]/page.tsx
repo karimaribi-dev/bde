@@ -199,27 +199,42 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       <main style={{ padding: '0 40px' }}>
 
       {/* ── Hero BDE ── */}
-      <section style={{ padding: '24px 0 36px' }}>
+      <section style={{ padding: '24px 0 36px', position: 'relative' }}>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(72px, 12vw, 160px)',
           fontWeight: 800,
-          lineHeight: 0.9,
-          letterSpacing: '-0.03em',
+          lineHeight: 0.86,
+          letterSpacing: '-0.02em',
           textTransform: 'uppercase',
           margin: 0,
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0 24px',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          columnGap: 'clamp(20px, 3vw, 60px)',
         }}>
-          <span>MAKE</span>
-          <span style={{ background: 'var(--yellow)', padding: '0 16px' }}>ALIVE</span>
-          <span>LE</span>
-          <span style={{ background: 'var(--pink)', padding: '0 16px' }}>CAMPUS</span>
+          {/* Colonne gauche : MAKE / smiley / ALIVE */}
+          <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            <span>MAKE</span>
+            <span aria-hidden="true" style={{ display: 'block', height: 'clamp(60px, 9vw, 130px)' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: 'clamp(60px, 9vw, 130px)', height: 'clamp(60px, 9vw, 130px)', display: 'block' }} />
+            </span>
+            <span>ALIVE</span>
+          </span>
+          {/* Colonne droite : THE / CAMPUS (avec starburst) */}
+          <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            <span>THE</span>
+            <span style={{ position: 'relative', display: 'inline-block' }}>
+              {/* Starburst jaune */}
+              <span aria-hidden="true" style={{ position: 'absolute', right: '-5%', top: '-10%', width: '45%', pointerEvents: 'none', zIndex: 0 }}>
+                <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
+                  <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
+                </svg>
+              </span>
+              <span style={{ position: 'relative', zIndex: 1, color: 'var(--orange-deep)' }}>CAMPUS</span>
+            </span>
+          </span>
         </h1>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--mute)', marginTop: 24, marginBottom: 0 }}>
-          BDE LISAA DGC — Actu étudiante, événements & projets
-        </p>
       </section>
 
       {/* ── PROCHAINEMENT bar — exact du dossier ── */}
@@ -346,6 +361,90 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           </span>
         </Link>
       </div>
+
+      {/* section-divider */}
+      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
+
+      {/* ── VOTE POUR TON COUP DE CŒUR DU MOIS ── */}
+      <section style={{ padding: '6px 0 12px' }}>
+
+        {/* Titre centré */}
+        <h2 style={{
+          fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 900,
+          fontSize: 'clamp(38px, 5.2vw, 72px)', lineHeight: 1, letterSpacing: '-0.02em',
+          textTransform: 'uppercase', color: 'var(--ink)',
+          display: 'flex', flexDirection: 'column', gap: 4,
+          margin: '0 0 36px', alignItems: 'center', textAlign: 'center',
+        }}>
+          <span>VOTE POUR TON</span>
+          <span>
+            <span style={{ background: 'var(--pink)', padding: '0 14px 4px', display: 'inline-block', fontStyle: 'italic' }}>coup de coeur</span>
+          </span>
+          <span>DU MOIS</span>
+        </h2>
+
+        {/* Grid 3 cartes */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 22 }}>
+
+          {/* Carte 1 */}
+          <article style={{ background: '#262626', display: 'flex', flexDirection: 'column', padding: '0 0 22px' }}>
+            <div style={{ position: 'relative', aspectRatio: '1/1', overflow: 'hidden', background: '#262626' }}>
+              <Image src="/images/cdc-tombees.jpg" alt="Les Tombées de la Nuit" fill sizes="33vw" style={{ objectFit: 'cover', position: 'absolute', inset: 0 }} />
+              <Image src="/images/cdc-tombees-overlay.png" alt="" fill sizes="33vw" style={{ objectFit: 'cover', position: 'absolute', inset: 0 }} />
+            </div>
+            <div style={{ color: '#fff', padding: '18px 22px 0', display: 'flex', flexDirection: 'column', gap: 8, textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 16, letterSpacing: '0.02em', textTransform: 'uppercase' }}>LES TOMBÉES DE LA NUIT</div>
+              <p style={{ fontSize: 13, lineHeight: 1.4, color: 'rgba(255,255,255,0.85)', margin: 0 }}>Affiche pour un festival d&apos;arts vivants qui transforme la ville en scène à ciel ouvert.</p>
+              <div style={{ fontStyle: 'italic', fontSize: 13, textDecoration: 'underline', textUnderlineOffset: 3 }}>Leïla Bekhti</div>
+            </div>
+          </article>
+
+          {/* Carte 2 */}
+          <article style={{ background: '#262626', display: 'flex', flexDirection: 'column', padding: '0 0 22px' }}>
+            <div style={{ position: 'relative', aspectRatio: '1/1', overflow: 'hidden', background: '#262626' }}>
+              <Image src="/images/cdc-typo.jpg" alt="Typo expérimentale" fill sizes="33vw" style={{ objectFit: 'cover', position: 'absolute', inset: 0 }} />
+            </div>
+            <div style={{ color: '#fff', padding: '18px 22px 0', display: 'flex', flexDirection: 'column', gap: 8, textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 16, letterSpacing: '0.02em', textTransform: 'uppercase' }}>TYPO EXPERIMENTALE</div>
+              <p style={{ fontSize: 13, lineHeight: 1.4, color: 'rgba(255,255,255,0.85)', margin: 0 }}>Exploration typographique inspirée de la technique point de croix en broderie.</p>
+              <div style={{ fontStyle: 'italic', fontSize: 13, textDecoration: 'underline', textUnderlineOffset: 3 }}>Agathe Millet</div>
+            </div>
+          </article>
+
+          {/* Carte 3 */}
+          <article style={{ background: '#262626', display: 'flex', flexDirection: 'column', padding: '0 0 22px' }}>
+            <div style={{ position: 'relative', aspectRatio: '1/1', overflow: 'hidden', background: '#262626' }}>
+              <Image src="/images/cdc-tombees.jpg" alt="Flux Urbains" fill sizes="33vw" style={{ objectFit: 'cover', position: 'absolute', inset: 0, objectPosition: '60% 0' }} />
+            </div>
+            <div style={{ color: '#fff', padding: '18px 22px 0', display: 'flex', flexDirection: 'column', gap: 8, textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 16, letterSpacing: '0.02em', textTransform: 'uppercase' }}>FLUX URBAINS</div>
+              <p style={{ fontSize: 13, lineHeight: 1.4, color: 'rgba(255,255,255,0.85)', margin: 0 }}>Typographie expérimentale et formes géométriques, qui joue avec les superpositions.</p>
+              <div style={{ fontStyle: 'italic', fontSize: 13, textDecoration: 'underline', textUnderlineOffset: 3 }}>Camille Durand</div>
+            </div>
+          </article>
+        </div>
+
+        {/* CTA */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 24 }}>
+          <Link href={`/${locale}/coup-de-coeur`} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 12,
+            background: 'var(--yellow)', color: 'var(--ink)',
+            padding: '11px 24px', borderRadius: 999,
+            fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+            whiteSpace: 'nowrap', textDecoration: 'none', transition: 'transform .12s, background .15s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--yellow-deep)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--yellow)'; e.currentTarget.style.transform = 'translateY(0)' }}
+          >
+            JE VOTE
+            <span style={{ display: 'inline-flex', width: 18, height: 14 }}>
+              <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                <path d="M2 8h19M14 1l7 7-7 7"/>
+              </svg>
+            </span>
+          </Link>
+        </div>
+      </section>
 
       {/* section-divider */}
       <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />

@@ -109,7 +109,12 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
             <span style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 800, fontStyle: 'italic', letterSpacing: '.04em', textTransform: 'uppercase' }}>
               MENU
             </span>
-            <span style={{ fontSize: 18, lineHeight: 1 }}>☺</span>
+            <svg viewBox="0 0 32 32" width="20" height="20" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="16" cy="16" r="12"/>
+              <circle cx="12" cy="14" r="1" fill="#111"/>
+              <circle cx="20" cy="14" r="1" fill="#111"/>
+              <path d="M11 19c2 3 4 4 7 3 2-1 3-2 4-3"/>
+            </svg>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px' }}>
