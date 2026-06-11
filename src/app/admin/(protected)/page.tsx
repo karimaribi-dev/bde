@@ -8,22 +8,12 @@ export default async function AdminDashboard() {
   const { data: { user } } = await supabase.auth.getUser()
 
   const [
-    { count: totalArticles },
-    { count: published },
-    { count: drafts },
-    { count: categories },
-    { data: recent },
     { count: unreadRequests },
     { count: totalClubs },
     { count: totalProducts },
     { count: unreadSuggestions },
     { count: pendingOrders },
   ] = await Promise.all([
-    supabase.from('articles').select('*', { count: 'exact', head: true }),
-    supabase.from('articles').select('*', { count: 'exact', head: true }).eq('status', 'published'),
-    supabase.from('articles').select('*', { count: 'exact', head: true }).eq('status', 'draft'),
-    supabase.from('categories').select('*', { count: 'exact', head: true }),
-    supabase.from('articles').select('id, title, status, updated_at').order('updated_at', { ascending: false }).limit(5),
     supabase.from('club_join_requests').select('*', { count: 'exact', head: true }).eq('is_read', false),
     supabase.from('clubs').select('*', { count: 'exact', head: true }),
     supabase.from('products').select('*', { count: 'exact', head: true }),
@@ -31,17 +21,10 @@ export default async function AdminDashboard() {
     supabase.from('shop_orders').select('*', { count: 'exact', head: true }).eq('is_processed', false),
   ])
 
-  const stats = [
-    { label: 'Total articles', value: totalArticles ?? 0, icon: 'fa-solid fa-newspaper' },
-    { label: 'Publiés',        value: published ?? 0,     icon: 'fa-solid fa-check' },
-    { label: 'Brouillons',     value: drafts ?? 0,        icon: 'fa-regular fa-file-lines' },
-    { label: 'Catégories',     value: categories ?? 0,    icon: 'fa-solid fa-tag' },
-  ]
-
-  const username    = user?.email?.split('@')[0] ?? 'Admin'
-  const unread      = unreadRequests ?? 0
-  const unreadSugg  = unreadSuggestions ?? 0
-  const pending     = pendingOrders ?? 0
+  const username   = user?.email?.split('@')[0] ?? 'Admin'
+  const unread     = unreadRequests ?? 0
+  const unreadSugg = unreadSuggestions ?? 0
+  const pending    = pendingOrders ?? 0
 
   return (
     <>
@@ -137,18 +120,6 @@ export default async function AdminDashboard() {
         </Link>
       )}
 
-      {/* ── Stats articles ── */}
-      <div className="admin-stats-grid">
-        {stats.map((s) => (
-          <div key={s.label} className="admin-stat-card">
-            <div className="admin-stat-top">
-              <span className="admin-stat-label">{s.label}</span>
-              <i className={`${s.icon} admin-stat-icon`}></i>
-            </div>
-            <div className="admin-stat-value">{s.value}</div>
-          </div>
-        ))}
-      </div>
 
       {/* ── Notification commandes ── */}
       {pending > 0 && (
@@ -267,28 +238,6 @@ export default async function AdminDashboard() {
         </Link>
       </div>
 
-      {/* ── Articles récents ── */}
-      <div className="admin-card" style={{ padding: 0 }}>
-        <div className="admin-card-header" style={{ padding: '20px 25px 0 25px' }}>
-          <h3>Articles récents</h3>
-          <Link href="/admin/articles" className="admin-card-link">Voir tous</Link>
-        </div>
-        <div style={{ padding: '0 25px 10px 25px' }}>
-          {recent?.map((article) => (
-            <div key={article.id} className="admin-article-row">
-              <Link href={`/admin/articles/${article.id}`} className="admin-article-title">
-                {article.title}
-              </Link>
-              <span className={`admin-badge${article.status !== 'published' ? ' admin-badge-draft' : ''}`}>
-                {article.status === 'published' ? 'Publié' : 'Brouillon'}
-              </span>
-            </div>
-          ))}
-          {!recent?.length && (
-            <p className="admin-empty">Aucun article pour le moment.</p>
-          )}
-        </div>
-      </div>
     </>
   )
 }
