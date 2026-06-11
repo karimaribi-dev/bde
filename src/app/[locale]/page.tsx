@@ -475,6 +475,68 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* section-divider */}
       <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
 
+      {/* ── INTERRÉSSÉ PAR LEURS PRODUCTIONS ? — exact du dossier ── */}
+      <section style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', alignItems: 'center', gap: 60, padding: '24px 0', position: 'relative' }}>
+
+        {/* Étoile burst — position absolute haut-droite */}
+        <span aria-hidden="true" style={{ position: 'absolute', top: '5%', right: '4%', width: '38%', height: '70%', transform: 'rotate(-12deg)', zIndex: 0, pointerEvents: 'none', display: 'inline-flex' }}>
+          <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
+            <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
+          </svg>
+        </span>
+
+        {/* Colonne gauche — basket-stage */}
+        <div style={{ position: 'relative', width: '100%', zIndex: 2 }}>
+          <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
+            {/* Fond panier */}
+            <Image src="/images/basket.png" alt="" fill style={{ objectFit: 'contain' }} sizes="50vw" />
+            {/* Produits flottants */}
+            <Image src="/images/prod-tshirt.png" alt="T-shirt" width={200} height={200}
+              style={{ position: 'absolute', left: '18%', top: '14%', width: '42%', height: 'auto', transform: 'rotate(-6deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.18))' }} />
+            <Image src="/images/prod-totebag.png" alt="Tote bag" width={160} height={160}
+              style={{ position: 'absolute', left: '44%', top: '10%', width: '28%', height: 'auto', transform: 'rotate(8deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.18))' }} />
+            <Image src="/images/prod-gourde.png" alt="Gourde" width={120} height={120}
+              style={{ position: 'absolute', left: '56%', top: '22%', width: '22%', height: 'auto', transform: 'rotate(-4deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.18))' }} />
+          </div>
+        </div>
+
+        {/* Colonne droite — basket-copy */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h3 style={{
+            fontFamily: 'var(--font-display)', fontStyle: 'italic',
+            fontSize: 'clamp(28px, 3vw, 42px)', lineHeight: 1.05,
+            textTransform: 'uppercase', letterSpacing: '-0.01em',
+            color: 'var(--ink)', margin: '0 0 14px',
+          }}>
+            INTERRÉSSÉ PAR LEURS<br />PRODUCTIONS ?
+          </h3>
+          <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: '0 0 18px' }}>
+            *N&apos;hésitez pas à les soutenir en regardant le shop
+          </p>
+          <Link href={`/${locale}/shop`} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 12,
+            background: 'var(--yellow)', color: 'var(--ink)',
+            padding: '11px 24px', borderRadius: 999,
+            fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+            whiteSpace: 'nowrap', textDecoration: 'none',
+            transition: 'transform .12s, background .15s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--yellow-deep)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--yellow)'; e.currentTarget.style.transform = 'translateY(0)' }}
+          >
+            VOIR LE SHOP
+            <span style={{ display: 'inline-flex', width: 18, height: 14 }}>
+              <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                <path d="M2 8h19M14 1l7 7-7 7"/>
+              </svg>
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* section-divider */}
+      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
+
       {/* ── Articles grid ── */}
       <section style={{ padding: '40px 0' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 28, borderBottom: 'var(--hair)', paddingBottom: 14 }}>
