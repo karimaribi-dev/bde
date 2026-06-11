@@ -636,53 +636,70 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* section-divider */}
       <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
 
-      {/* ── Articles grid ── */}
-      <section style={{ padding: '40px 0' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 28, borderBottom: 'var(--hair)', paddingBottom: 14 }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', margin: 0 }}>DERNIÈRES ACTUS</h2>
+      {/* ── MEET THE TEAM — exact du dossier BDE_site ── */}
+      <section style={{ textAlign: 'center', padding: '30px 0 60px' }}>
+        <h2 style={{
+          fontFamily: 'var(--font-display)',
+          fontStyle: 'italic',
+          fontSize: 'clamp(36px, 4.2vw, 56px)',
+          letterSpacing: '-0.02em',
+          textTransform: 'uppercase',
+          color: 'var(--ink)',
+          margin: '0 0 36px',
+          textAlign: 'left',
+        }}>
+          MEET THE TEAM
+        </h2>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 80, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+
+          {/* Louison */}
+          <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            <div style={{ width: 150, height: 170, overflow: 'visible', background: 'transparent', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/team-louison.png" alt="Louison" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            </div>
+            <div style={{
+              fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22,
+              textTransform: 'uppercase', padding: '8px 14px 10px', letterSpacing: '0.02em',
+              color: 'var(--ink)', marginTop: -12,
+              background: 'var(--blue-strong)', transform: 'rotate(-4deg)',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+            }}>LOUISON</div>
+          </div>
+
+          {/* Benji */}
+          <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            <div style={{ width: 150, height: 170, overflow: 'visible', background: 'transparent', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/team-benji.png" alt="Benji" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            </div>
+            <div style={{
+              fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22,
+              textTransform: 'uppercase', padding: '8px 14px 10px', letterSpacing: '0.02em',
+              color: 'var(--ink)', marginTop: -12,
+              background: 'var(--pink)', transform: 'rotate(3deg)',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+            }}>BENJI</div>
+          </div>
+
+          {/* Achille */}
+          <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            <div style={{ width: 150, height: 170, overflow: 'visible', background: 'transparent', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/team-achille.png" alt="Achille" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            </div>
+            <div style={{
+              fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22,
+              textTransform: 'uppercase', padding: '8px 14px 10px', letterSpacing: '0.02em',
+              color: 'var(--ink)', marginTop: -12,
+              background: 'var(--yellow)', transform: 'rotate(-2deg)',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+            }}>ACHILLE</div>
+          </div>
+
         </div>
-
-        {allArticles.length === 0 ? (
-          <div style={{ padding: '64px 0', textAlign: 'center', color: 'var(--mute)', fontFamily: 'var(--font-display)', fontSize: 13, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Aucun article publié pour l&apos;instant
-          </div>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 2 }}>
-            {allArticles.map((art, i) => (
-              <Link key={art.id} href={`/articles/${art.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', gap: 14, padding: '24px', border: 'var(--hair)', background: 'var(--paper)', transition: 'background .15s' }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'var(--yellow)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'var(--paper)')}
-              >
-                {art.cover_image_url && (
-                  <div style={{ position: 'relative', aspectRatio: '16/10', overflow: 'hidden', background: 'var(--ink)' }}>
-                    <Image src={art.cover_image_url} alt={art.title} fill sizes="(max-width: 720px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
-                  </div>
-                )}
-                {art.category && (
-                  <span style={{ display: 'inline-block', background: BADGE_COLORS[i % 4], padding: '4px 10px', fontFamily: 'var(--font-display)', fontSize: 10, fontWeight: 800, letterSpacing: '.06em', textTransform: 'uppercase', borderRadius: 2, width: 'max-content' }}>
-                    {getCategoryName(art.category, locale)}
-                  </span>
-                )}
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase', margin: 0 }}>{art.title}</h3>
-                {art.excerpt && <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, color: 'var(--ink-2)', fontFamily: 'inherit' }}>{art.excerpt}</p>}
-                <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: 'var(--hair-mute)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--mute)' }}>{formatDate(art.published_at)}</span>
-                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 800, letterSpacing: '.06em', textTransform: 'uppercase' }}>LIRE →</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
       </section>
-
-      {/* ── Sentinel scroll infini ── */}
-      <div ref={sentinelRef}>
-        {loadingMore && (
-          <div style={{ padding: '28px 0', textAlign: 'center', fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--mute)' }}>
-            Chargement...
-          </div>
-        )}
-      </div>
 
       </main>{/* fin main padding: 0 40px */}
 
