@@ -4,13 +4,28 @@ import SiteFooter from '@/components/SiteFooter'
 import AProposProposerClient from '@/components/AProposProposerClient'
 import { Category } from '@/lib/types'
 
+interface TeamMember {
+  id: string
+  name: string
+  role: string | null
+  badge_color: string
+  photo_url: string | null
+  sort_order: number
+}
+
 export const dynamic = 'force-dynamic'
 
 export default async function AProposPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const supabase   = await createClient()
-  const { data: categories } = await supabase.from('categories').select('*').order('name')
-  const cats = (categories ?? []) as Category[]
+
+  const [{ data: categories }, { data: teamData }] = await Promise.all([
+    supabase.from('categories').select('*').order('name'),
+    supabase.from('team_members').select('*').order('sort_order', { ascending: true }),
+  ])
+
+  const cats    = (categories ?? []) as Category[]
+  const members = (teamData   ?? []) as TeamMember[]
 
   return (
     <>
@@ -61,7 +76,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             </span>
           </h1>
 
-          {/* Membres de l'équipe */}
+          {/* Membres de l'équipe — données depuis la DB */}
           <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -69,12 +84,8 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             alignItems: 'flex-end',
             flexWrap: 'wrap',
           }}>
-            {[
-              { name: 'LOUISON', color: '#4FA3FF', img: '/images/team-louison.png' },
-              { name: 'BENJI',   color: '#FFB3F0', img: '/images/team-benji.png' },
-              { name: 'ACHILLE', color: '#FFE74A', img: '/images/team-achille.png' },
-            ].map(member => (
-              <div key={member.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+            {members.map(member => (
+              <div key={member.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
                 {/* Photo circulaire */}
                 <div style={{
                   width: 'clamp(130px, 13vw, 190px)',
@@ -84,17 +95,22 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
                   background: '#f0f0f0',
                   position: 'relative',
                 }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={member.img}
-                    alt={member.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                  />
+                  {member.photo_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={member.photo_url}
+                      alt={member.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+                    />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: 48, opacity: 0.2 }}>👤</span>
+                    </div>
+                  )}
                 </div>
                 {/* Badge nom */}
                 <div style={{
-                  background: member.color,
+                  background: member.badge_color,
                   color: 'var(--ink)',
                   fontFamily: 'var(--font-display)',
                   fontStyle: 'italic',
