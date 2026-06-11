@@ -194,25 +194,26 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '0 0 40px' }} />
 
         {/* ═══════════ Y ÉTIEZ VOUS ? / PASSÉS ═══════════ */}
-        {past.length > 0 && (
-          <section style={{ marginBottom: 60 }}>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
-              fontWeight: 900,
-              fontSize: 'clamp(20px,1.9vw,26px)',
-              lineHeight: 1.8,
-              textTransform: 'uppercase',
-              margin: '0 0 26px',
-              color: 'var(--ink)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: 6,
-            }}>
-              <span style={{ background: '#FFE74A', padding: '4px 12px' }}>Y ÉTIEZ VOUS ?</span>
-              <span style={{ background: '#4FA3FF', color: 'var(--ink)', padding: '4px 12px', marginLeft: 80 }}>NOS ÉVÉNEMENTS PASSÉS</span>
-            </h2>
+        <section style={{ marginBottom: 60 }}>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontStyle: 'italic',
+            fontWeight: 900,
+            fontSize: 'clamp(20px,1.9vw,26px)',
+            lineHeight: 1.8,
+            textTransform: 'uppercase',
+            margin: '0 0 26px',
+            color: 'var(--ink)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: 6,
+          }}>
+            <span style={{ background: '#FFE74A', padding: '4px 12px' }}>Y ÉTIEZ VOUS ?</span>
+            <span style={{ background: '#4FA3FF', color: 'var(--ink)', padding: '4px 12px', marginLeft: 80 }}>NOS ÉVÉNEMENTS PASSÉS</span>
+          </h2>
+
+          {past.length > 0 ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
               {past.map(ev => (
                 <Link key={ev.id} href={`/${locale}/agenda/${ev.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -220,8 +221,20 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
                 </Link>
               ))}
             </div>
-          </section>
-        )}
+          ) : (
+            <p style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontSize: 15,
+              color: '#aaa',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              padding: '30px 0',
+            }}>
+              Les événements passés apparaîtront ici.
+            </p>
+          )}
+        </section>
 
         {/* ═══════════ SÉPARATEUR ═══════════ */}
         <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '0 0 40px' }} />
