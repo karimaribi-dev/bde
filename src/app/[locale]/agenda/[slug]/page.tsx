@@ -76,38 +76,46 @@ export default async function EventDetailPage({
             {event.title}
           </h1>
 
-          {/* Bande infos */}
-          <div style={{
-            display: 'flex', gap: 36, flexWrap: 'wrap',
-            borderTop: '1px solid #e6e6e6', borderBottom: '1px solid #e6e6e6',
-            padding: '20px 0',
-            marginBottom: 44,
-          }}>
-            <InfoBlock label="Date" value={eventDateFull} capitalize />
-            {event.event_time && <InfoBlock label="Heure" value={event.event_time} />}
-            <InfoBlock label="Prix" value={event.price} />
-            {event.location_name && <InfoBlock label="Lieu" value={event.location_name} />}
-          </div>
-
-          {/* Grille image + description */}
+          {/* Grille image + infos/description */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: event.image_url && event.description ? '1fr 1fr' : '1fr',
+            gridTemplateColumns: event.image_url ? '1fr 1fr' : '1fr',
             gap: 52,
             marginBottom: 60,
+            alignItems: 'start',
           }}>
             {event.image_url && (
               <div style={{ position: 'relative', aspectRatio: '7/6', overflow: 'hidden', background: '#f0f0f0' }}>
                 <Image src={event.image_url} alt={event.title} fill sizes="(max-width: 900px) 100vw, 50vw" style={{ objectFit: 'cover' }} />
               </div>
             )}
-            {event.description && (
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--ink)', margin: 0, whiteSpace: 'pre-wrap' }}>
+
+            {/* Colonne droite : blocs infos + description */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+
+              {/* Infos empilées */}
+              <div style={{
+                display: 'flex', flexDirection: 'column', gap: 20,
+                borderTop: '1px solid #e6e6e6',
+                paddingTop: 24,
+              }}>
+                <InfoBlock label="Date" value={eventDateFull} capitalize />
+                {event.event_time && <InfoBlock label="Heure" value={event.event_time} />}
+                <InfoBlock label="Prix" value={event.price} />
+                {event.location_name && <InfoBlock label="Lieu" value={event.location_name} />}
+              </div>
+
+              {/* Description */}
+              {event.description && (
+                <p style={{
+                  fontSize: 15, lineHeight: 1.75, color: 'var(--ink)',
+                  margin: 0, whiteSpace: 'pre-wrap',
+                  borderTop: '1px solid #e6e6e6', paddingTop: 24,
+                }}>
                   {event.description}
                 </p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
         </section>
@@ -132,11 +140,13 @@ export default async function EventDetailPage({
                   {event.location_address}
                 </p>
               )}
-              <EventMapClient
-                lat={event.location_lat}
-                lng={event.location_lng}
-                locationName={event.location_name ?? undefined}
-              />
+              <div style={{ maxWidth: 620 }}>
+                <EventMapClient
+                  lat={event.location_lat}
+                  lng={event.location_lng}
+                  locationName={event.location_name ?? undefined}
+                />
+              </div>
               {event.location_address && (
                 <div style={{ marginTop: 12 }}>
                   <a
