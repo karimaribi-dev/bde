@@ -96,8 +96,16 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
 
   if (clubs.length === 0) return null
 
-  /* Triple pour boucle infinie */
-  const tripled = [...clubs, ...clubs, ...clubs]
+  /*
+   * On répète les clubs assez de fois pour que chaque "section" (1/3 du track)
+   * soit plus large que le viewport. Minimum 10 cartes par section.
+   * Puis on triple pour la boucle infinie.
+   * Ex. 2 clubs → reps=5 → base=10 → tripled=30 cartes → très large
+   */
+  const MIN_PER_SECTION = 10
+  const reps   = Math.max(3, Math.ceil(MIN_PER_SECTION / clubs.length))
+  const base   = Array.from({ length: reps }, () => clubs).flat()
+  const tripled = [...base, ...base, ...base]
 
   return (
     <div
