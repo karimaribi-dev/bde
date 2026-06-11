@@ -10,6 +10,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   if (!user) redirect('/admin/login')
 
+  const [{ count: unreadRequests }, { count: unreadSuggestions }] = await Promise.all([
+    supabase.from('club_join_requests').select('*', { count: 'exact', head: true }).eq('is_read', false),
+    supabase.from('suggestions').select('*', { count: 'exact', head: true }).eq('is_read', false),
+  ])
+  const totalUnread = (unreadRequests ?? 0) + (unreadSuggestions ?? 0)
+
   return (
     <div className="admin-bg">
       <div className="admin-app">
@@ -25,7 +31,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
           <nav className="admin-nav-section">
             <div className="admin-nav-title">Contenu</div>
-            <AdminNavItem href="/admin" icon="fa-solid fa-border-all" label="Tableau de bord" exact />
+            <AdminNavItem href="/admin" icon="fa-solid fa-border-all" label="Tableau de bord" exact badge={totalUnread} />
             <AdminNavItem href="/admin/events" icon="fa-solid fa-calendar-days" label="Événements" />
             <AdminNavItem href="/admin/team" icon="fa-solid fa-users" label="Équipe" />
             <AdminNavItem href="/admin/clubs" icon="fa-solid fa-people-group" label="Clubs" />
