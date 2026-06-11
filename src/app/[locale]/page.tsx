@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Article, Category } from '@/lib/types'
+import { Article, Category, Event } from '@/lib/types'
 import { getCategoryName } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -108,6 +108,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const [latest, setLatest] = useState<ArticleWithCat[]>([])
   const [grid, setGrid] = useState<ArticleWithCat[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [dbEvents, setDbEvents] = useState<Event[]>([])
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -130,7 +131,8 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       const supabase = createClient()
       supabaseRef.current = supabase
 
-      const [{ data: arts }, { data: cats }] = await Promise.all([
+      const today = new Date().toISOString().slice(0, 10)
+      const [{ data: arts }, { data: cats }, { data: evts }] = await Promise.all([
         supabase
           .from('articles')
           .select('*, category:categories!category_id(id, name, slug)')
@@ -140,6 +142,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           .order('published_at', { ascending: false })
           .range(0, 6 + PAGE_SIZE),
         supabase.from('categories').select('*').order('name'),
+        supabase
+          .from('events')
+          .select('*')
+          .eq('is_published', true)
+          .gte('event_date', today)
+          .order('event_date', { ascending: true })
+          .limit(3),
       ])
       const all = (arts ?? []) as ArticleWithCat[]
       setFeatured(all[0] ?? null)
@@ -150,6 +159,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       setOffset(6 + PAGE_SIZE)
       setHasMore(all.length > 6 + PAGE_SIZE)
       setCategories(cats ?? [])
+      setDbEvents((evts ?? []) as Event[])
       setInitialized(true)
     }
     load()
@@ -275,17 +285,31 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
       </div>
 
-      {/* ── Event cards — grid-3, cartes exactes du dossier ── */}
+      {/* ── Event cards — grille 3, exacte du dossier
+            Utilise les vrais events DB si disponibles, sinon les placeholders ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 22, marginTop: 6 }}>
-        {PLACEHOLDER_EVENTS.map((ev) => (
-          <Link key={ev.id} href={`/${locale}/agenda`} style={{ position: 'relative', overflow: 'hidden', aspectRatio: '7/6', background: '#ddd', display: 'block', textDecoration: 'none', color: 'inherit' }}>
-            <Image
-              src={ev.img}
-              alt={ev.title}
-              fill
-              sizes="33vw"
-              style={{ objectFit: 'cover', display: 'block' }}
-            />
+        {(dbEvents.length > 0 ? dbEvents.map(ev => ({
+          id:        ev.id,
+          badge:     ev.badge,
+          badgeColor: ev.badge_color,
+          badgeText:  ev.badge_text_color,
+          title:     ev.title,
+          date:      format(new Date(ev.event_date), "EEEE d MMM", { locale: fr }),
+          time:      ev.event_time,
+          price:     ev.price,
+          img:       ev.image_url ?? '',
+          href:      `/${locale}/agenda/${ev.slug}`,
+        })) : PLACEHOLDER_EVENTS.map(ev => ({ ...ev, img: ev.img, href: `/${locale}/agenda` }))).map((ev) => (
+          <Link key={ev.id} href={ev.href} style={{ position: 'relative', overflow: 'hidden', aspectRatio: '7/6', background: '#ddd', display: 'block', textDecoration: 'none', color: 'inherit' }}>
+            {ev.img && (
+              <Image
+                src={ev.img}
+                alt={ev.title}
+                fill
+                sizes="33vw"
+                style={{ objectFit: 'cover', display: 'block' }}
+              />
+            )}
             {/* Badge — position absolute top-left */}
             <div style={{
               position: 'absolute', top: 12, left: 12,
@@ -329,7 +353,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                 opacity: 0.85,
               }}>
                 <span>○ {ev.date}</span>
-                <span>○ {ev.time}</span>
+                {ev.time && <span>○ {ev.time}</span>}
                 <span>○ {ev.price}</span>
               </div>
             </div>

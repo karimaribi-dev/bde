@@ -90,6 +90,27 @@ export interface Category {
   created_at: string
 }
 
+export interface Event {
+  id: string
+  badge: string
+  badge_color: string
+  badge_text_color: string
+  title: string
+  slug: string
+  description: string | null
+  event_date: string          // YYYY-MM-DD
+  event_time: string
+  price: string
+  image_url: string | null
+  location_name: string | null
+  location_address: string | null
+  location_lat: number | null
+  location_lng: number | null
+  is_published: boolean
+  created_at: string
+  updated_at: string
+}
+
 export interface Article {
   id: string
   title: string
