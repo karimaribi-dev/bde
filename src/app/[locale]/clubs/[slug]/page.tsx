@@ -291,7 +291,7 @@ export default async function ClubDetailPage({
                     background: '#FFE74A', color: 'var(--ink)',
                     fontFamily: 'var(--font-display)', fontStyle: 'italic',
                     fontSize: 12, letterSpacing: '0.04em', textTransform: 'uppercase',
-                    padding: '8px 20px', borderRadius: 999, alignSelf: 'center', marginTop: 6,
+                    padding: '8px 20px', borderRadius: 999, alignSelf: 'flex-end', marginTop: 'auto',
                     fontWeight: 700,
                   }}>
                     DÉCOUVRIR LE CLUB
