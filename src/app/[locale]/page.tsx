@@ -310,92 +310,123 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       </section>
 
       {/* ── NOS CLUBS JUSTE POUR VOUS ── */}
-      <section style={{ padding: '56px 40px 48px', borderBottom: 'var(--hair)', background: 'var(--paper)', overflow: 'hidden' }}>
+      <section style={{ padding: '6px 40px', borderBottom: 'var(--hair)', background: 'var(--paper)' }}>
 
         {/* Titre */}
-        <h2 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(32px, 5vw, 58px)',
-          fontWeight: 800,
-          fontStyle: 'italic',
-          lineHeight: 0.95,
-          letterSpacing: '-0.03em',
-          textTransform: 'uppercase',
-          margin: '0 0 36px',
-        }}>
-          NOS CLUBS JUSTE<br />POUR VOUS{' '}
-          <span style={{ color: 'var(--yellow)', fontStyle: 'normal', display: 'inline-block' }}>↘</span>
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, marginBottom: 30 }}>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontStyle: 'italic',
+            fontSize: 'clamp(36px, 4.6vw, 60px)',
+            lineHeight: 0.95,
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
+            margin: 0,
+          }}>
+            NOS CLUBS JUSTE<br />POUR VOUS
+          </h2>
+          {/* Flèche bouclée jaune — exactement celle du dossier */}
+          <span style={{ display: 'inline-flex', width: 60, height: 80, marginBottom: -6, flexShrink: 0 }}>
+            <svg viewBox="0 0 60 80" fill="none" stroke="#FEEF4C" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+              <path d="M10 8 C 30 30, 35 50, 30 70"/>
+              <path d="M20 60 L 30 72 L 42 58"/>
+            </svg>
+          </span>
+        </div>
 
-        {/* Blocs clubs */}
-        <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
+        {/* Blocs clubs — layout exact du dossier */}
+        <div style={{ position: 'relative', width: '100%' }}>
 
-          {/* Rangée du haut : Orange + Bleu */}
-          <div style={{ display: 'flex', height: 160 }}>
-            {/* Orange — Club Typo */}
-            <div style={{
-              background: 'var(--orange)',
-              flex: '0 0 52%',
-              padding: '22px 28px',
-              clipPath: 'polygon(0 0, calc(100% - 52px) 0, 100% 50%, calc(100% - 52px) 100%, 0 100%)',
-              zIndex: 2,
-              position: 'relative',
-            }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 800, fontStyle: 'italic', letterSpacing: '-0.02em', textTransform: 'uppercase', margin: '0 0 6px', color: 'var(--ink)' }}>CLUB TYPO</h3>
-              <p style={{ margin: 0, fontSize: 15, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', lineHeight: 1.4 }}>tous les jeudis — 18H</p>
-            </div>
-
-            {/* Bleu — Club Photo */}
-            <div style={{
-              background: '#6BBFFF',
-              flex: 1,
-              padding: '22px 28px 22px 64px',
-              clipPath: 'polygon(52px 0, 100% 0, 100% 100%, 0 100%, 52px 50%)',
-              marginLeft: -4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              textAlign: 'right',
-            }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 800, fontStyle: 'italic', letterSpacing: '-0.02em', textTransform: 'uppercase', margin: '0 0 6px', color: 'var(--ink)' }}>CLUB PHOTO</h3>
-              <p style={{ margin: 0, fontSize: 15, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', lineHeight: 1.4 }}>tous les mercredis — 18H</p>
-            </div>
+          {/* Orange — Club Typo (position: relative, 53%, 180px, clip-path arrow droite) */}
+          <div style={{
+            position: 'relative',
+            background: 'var(--orange-deep)',
+            width: '53%',
+            height: 180,
+            clipPath: 'polygon(0 0, calc(100% - 100px) 0, 100% 50%, calc(100% - 100px) 100%, 0 100%)',
+            paddingRight: 110,
+            padding: '28px 110px 28px 40px',
+            zIndex: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            gap: 4,
+          }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>CLUB TYPO</div>
+            <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les jeudis — 18H</div>
           </div>
 
-          {/* Rose — Club Print */}
+          {/* Bleu — Club Photo (position: absolute, top: 90px, right: 0) */}
           <div style={{
-            background: 'var(--pink)',
-            padding: '22px 28px 28px',
+            position: 'absolute',
+            top: 90,
+            right: 0,
+            background: 'var(--blue-strong)',
+            width: 'calc(47% + 100px)',
+            height: 180,
+            clipPath: 'polygon(100px 0, 100% 0, 100% 100%, 100px 100%, 0 50%)',
+            padding: '28px 40px 28px 130px',
+            textAlign: 'right',
             display: 'flex',
-            justifyContent: 'space-between',
+            flexDirection: 'column',
             alignItems: 'flex-end',
-            minHeight: 160,
+            justifyContent: 'center',
+            gap: 4,
+            zIndex: 4,
           }}>
-            <div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 800, fontStyle: 'italic', letterSpacing: '-0.02em', textTransform: 'uppercase', margin: '0 0 6px', color: 'var(--ink)' }}>CLUB PRINT</h3>
-              <p style={{ margin: '0 0 24px', fontSize: 15, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', lineHeight: 1.4 }}>tous les mardi — 18H</p>
-              <p style={{ margin: 0, fontSize: 14, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', opacity: 0.75, lineHeight: 1.5 }}>
-                Passionés de print ?<br />Vous êtes les bienvenu·es
-              </p>
+            <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>CLUB PHOTO</div>
+            <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les mercredis — 18H</div>
+          </div>
+
+          {/* Rose — Club Print (position: relative, full width, min-height: 290px) */}
+          <div style={{
+            position: 'relative',
+            background: 'var(--pink)',
+            width: '100%',
+            minHeight: 290,
+            padding: '30px 40px 60px',
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            gap: 4,
+          }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>CLUB PRINT</div>
+            <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les mardi — 18H</div>
+            {/* Blurb — position absolute bas gauche */}
+            <div style={{ position: 'absolute', bottom: 18, left: 36, fontSize: 14, lineHeight: 1.3, color: 'var(--ink)' }}>
+              <div>Passionés de print ?</div>
+              <div>Vous êtes les bienvenues</div>
             </div>
-            <Link href={`/${locale}/clubs`} style={{ fontSize: 28, fontWeight: 800, color: 'var(--ink)', textDecoration: 'none', flexShrink: 0, lineHeight: 1 }}>→</Link>
+            {/* Flèche — position absolute bas droite */}
+            <Link href={`/${locale}/clubs`} aria-label="Découvrir les clubs"
+              style={{ position: 'absolute', bottom: 22, right: 36, width: 40, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)', textDecoration: 'none' }}>
+              <svg viewBox="0 0 24 16" fill="none" stroke="#262626" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                <path d="M2 8h19M14 1l7 7-7 7"/>
+              </svg>
+            </Link>
           </div>
         </div>
 
-        {/* CTA */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
+        {/* CTA — btn pill exact du dossier */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 22 }}>
           <Link href={`/${locale}/clubs`} style={{
-            display: 'inline-flex', alignItems: 'center', gap: 10,
+            display: 'inline-flex', alignItems: 'center', gap: 12,
             background: 'var(--yellow)', color: 'var(--ink)',
-            fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase',
-            padding: '10px 20px', borderRadius: 40, border: 'var(--hair)', textDecoration: 'none',
-            transition: 'background .15s',
+            padding: '11px 24px', borderRadius: 999,
+            fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+            whiteSpace: 'nowrap', textDecoration: 'none',
+            transition: 'transform .12s, background .15s',
           }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--yellow-deep)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'var(--yellow)')}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--yellow-deep)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--yellow)'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            EN SAVOIR PLUS →
+            EN SAVOIR PLUS
+            <span style={{ display: 'inline-flex', width: 18, height: 14 }}>
+              <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                <path d="M2 8h19M14 1l7 7-7 7"/>
+              </svg>
+            </span>
           </Link>
         </div>
       </section>
