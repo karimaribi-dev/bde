@@ -1,13 +1,16 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { use } from 'react'
 import EventEditor from '@/components/EventEditor'
 import { Event } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
-export default async function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
+interface Props {
+  params: Promise<{ id: string }>
+}
+
+export default async function EditEventPage({ params }: Props) {
+  const { id } = await params
   const supabase = await createClient()
   const { data: event } = await supabase
     .from('events')
@@ -17,9 +20,5 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
 
   if (!event) notFound()
 
-  return (
-    <div className="admin-content">
-      <EventEditor event={event as Event} />
-    </div>
-  )
+  return <EventEditor event={event as Event} />
 }
