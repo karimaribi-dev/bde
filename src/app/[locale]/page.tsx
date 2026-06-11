@@ -49,42 +49,36 @@ function Marquee({ articles }: { articles: { title: string; slug: string }[] }) 
 const PLACEHOLDER_EVENTS = [
   {
     id: 'e1',
-    slug: 'agenda',
     badge: 'AFTERWORK',
-    badgeColor: 'var(--yellow)',
+    badgeColor: 'var(--pink)',
     badgeText: 'var(--ink)',
     title: 'LA FÉLICITA',
-    date: 'Jeudi 19 mars',
+    date: 'jeudi 19 mars',
     time: '19h',
-    price: 'Gratuit',
-    bg: '#1a1a1a',
-    accent: 'var(--yellow)',
+    price: 'gratuit',
+    img: '/images/event-felicita.jpg',
   },
   {
     id: 'e2',
-    slug: 'agenda',
     badge: 'OLYMPIADES',
-    badgeColor: 'var(--blue)',
-    badgeText: 'var(--ink)',
+    badgeColor: 'var(--orange-deep)',
+    badgeText: '#fff',
     title: 'JARDIN DES PLANTES',
-    date: 'Vendredi 2 avril',
-    time: '14h',
+    date: 'vendredi 3 avril',
+    time: '16h',
     price: '5€',
-    bg: '#2a4a2a',
-    accent: 'var(--blue)',
+    img: '/images/event-olympiades.jpg',
   },
   {
     id: 'e3',
-    slug: 'agenda',
-    badge: 'DEJ',
-    badgeColor: 'var(--orange)',
-    badgeText: '#fff',
+    badge: 'DEJ DES CHAMPION(NE)S',
+    badgeColor: 'var(--yellow)',
+    badgeText: 'var(--ink)',
     title: 'CAMPUS OLYMPIADES',
-    date: 'Mardi 21 avril',
-    time: '17h',
-    price: 'Gratuit',
-    bg: '#3a1a0a',
-    accent: 'var(--orange)',
+    date: 'mardi 21 avril',
+    time: '10h',
+    price: 'gratuit',
+    img: '/images/event-dej.jpg',
   },
 ]
 
@@ -225,89 +219,130 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* ── Marquee ── */}
       <Marquee articles={allArticles} />
 
-      {/* ── Bande PROCHAINEMENT ── */}
+      {/* ── PROCHAINEMENT bar — exact du dossier ── */}
+      {/* font géant italique, margin négatif pour casser le padding parent */}
       <div style={{
-        background: 'var(--paper)',
-        borderBottom: 'var(--hair)',
-        padding: '11px 0',
+        fontFamily: 'var(--font-display)',
+        fontStyle: 'italic',
+        fontWeight: 900,
+        fontSize: 'clamp(36px, 5.2vw, 80px)',
+        letterSpacing: '-0.02em',
+        textTransform: 'uppercase',
+        color: 'var(--ink)',
         overflow: 'hidden',
-        whiteSpace: 'nowrap',
+        margin: '30px -40px 36px',
+        padding: '6px 0',
+        display: 'block',
       }}>
-        <div style={{
-          display: 'inline-flex',
-          gap: 48,
-          animation: 'marquee 22s linear infinite',
-        }}>
-          {Array.from({ length: 10 }).map((_, i) => (
-            <span key={i} style={{ fontFamily: 'var(--font-display)', fontSize: 12, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ color: 'var(--orange)' }}>↓</span>
-              <span>PROCHAINEMENT</span>
-              <span style={{ color: 'var(--orange)' }}>↓</span>
-              <span>SOON</span>
-            </span>
-          ))}
+        <div style={{ width: '100%', overflow: 'hidden' }}>
+          <div style={{
+            display: 'inline-flex',
+            gap: 'clamp(20px, 2.5vw, 40px)',
+            alignItems: 'center',
+            whiteSpace: 'nowrap',
+            animation: 'marquee-scroll 38s linear infinite',
+            willChange: 'transform',
+          }}>
+            {/* contenu doublé pour boucle parfaite (-50%) */}
+            {[...Array(2)].map((_, half) => (
+              <span key={half} style={{ display: 'inline-flex', gap: 'clamp(20px, 2.5vw, 40px)', alignItems: 'center' }}>
+                {['PROCHAINEMENT','SOON','PROCHAINEMENT','SOON','PROCHAINEMENT','SOON','PROCHAINEMENT','SOON'].map((word, i) => (
+                  i % 2 === 0
+                    ? <span key={i} style={{ color: 'var(--orange-deep)', fontWeight: 900, fontSize: '0.95em', lineHeight: 1, display: 'inline-flex', flexShrink: 0 }}>↓</span>
+                    : <span key={i} style={{ lineHeight: 1 }}>{word === 'SOON' && i % 4 === 1 ? 'SOON' : 'PROCHAINEMENT'}</span>
+                ))}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* ── Événements à venir ── */}
-      <section style={{ padding: '36px 28px 32px', borderBottom: 'var(--hair)' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 20 }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', margin: 0 }}>AGENDA</h2>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 2, marginBottom: 20 }}>
-          {PLACEHOLDER_EVENTS.map((ev) => (
-            <Link key={ev.id} href={`/${locale}/${ev.slug}`}
-              style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', border: 'var(--hair)', overflow: 'hidden', transition: 'transform .15s' }}
-              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
-              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
-            >
-              {/* Photo placeholder */}
-              <div style={{ height: 160, background: ev.bg, position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '14px 14px' }}>
-                <span style={{
-                  display: 'inline-block',
-                  background: ev.badgeColor,
-                  color: ev.badgeText,
-                  padding: '4px 10px',
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 10,
-                  fontWeight: 800,
-                  letterSpacing: '.08em',
-                  textTransform: 'uppercase',
-                  borderRadius: 2,
-                }}>
-                  {ev.badge}
-                </span>
+      {/* ── Event cards — grid-3, cartes exactes du dossier ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 22, marginTop: 6 }}>
+        {PLACEHOLDER_EVENTS.map((ev) => (
+          <Link key={ev.id} href={`/${locale}/agenda`} style={{ position: 'relative', overflow: 'hidden', aspectRatio: '7/6', background: '#ddd', display: 'block', textDecoration: 'none', color: 'inherit' }}>
+            <Image
+              src={ev.img}
+              alt={ev.title}
+              fill
+              sizes="33vw"
+              style={{ objectFit: 'cover', display: 'block' }}
+            />
+            {/* Badge — position absolute top-left */}
+            <div style={{
+              position: 'absolute', top: 12, left: 12,
+              background: ev.badgeColor,
+              color: ev.badgeText,
+              padding: '6px 14px 7px',
+              fontFamily: 'var(--font-display)',
+              fontSize: 13,
+              fontStyle: 'italic',
+              textTransform: 'uppercase',
+              letterSpacing: '0.02em',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            }}>
+              {ev.badge}
+            </div>
+            {/* Info panel — position absolute bottom, fond blanc */}
+            <div style={{
+              position: 'absolute', bottom: 12, left: 12, right: 12,
+              background: '#fff',
+              padding: '12px 14px 14px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            }}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(15px, 1.4vw, 22px)',
+                textTransform: 'uppercase',
+                letterSpacing: '-0.01em',
+                textAlign: 'center',
+                color: 'var(--ink)',
+              }}>
+                {ev.title}
               </div>
-
-              {/* Infos */}
-              <div style={{ padding: '16px 16px 20px', background: 'var(--paper)', display: 'flex', flexDirection: 'column', gap: 6, flex: 1, borderTop: 'var(--hair)' }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase', margin: 0 }}>
-                  {ev.title}
-                </h3>
-                <p style={{ margin: 0, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--mute)' }}>
-                  {ev.date} — {ev.time} — {ev.price}
-                </p>
+              <div style={{
+                fontSize: 12,
+                display: 'flex',
+                gap: 14,
+                justifyContent: 'center',
+                marginTop: 4,
+                color: 'var(--ink)',
+                opacity: 0.85,
+              }}>
+                <span>○ {ev.date}</span>
+                <span>○ {ev.time}</span>
+                <span>○ {ev.price}</span>
               </div>
-            </Link>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Link href={`/${locale}/agenda`} style={{
-            display: 'inline-flex', alignItems: 'center', gap: 10,
-            background: 'var(--ink)', color: 'var(--paper)',
-            fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase',
-            padding: '10px 20px', borderRadius: 2, textDecoration: 'none',
-            transition: 'background .15s',
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--orange)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'var(--ink)')}
-          >
-            VOIR TOUS LES ÉVÉNEMENTS →
+            </div>
           </Link>
-        </div>
-      </section>
+        ))}
+      </div>
+
+      {/* ── Events footer ── */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24, marginTop: 22, marginBottom: 60 }}>
+        <span style={{ fontStyle: 'italic', fontSize: 14, color: 'var(--ink)', opacity: 0.7 }}>
+          *N&apos;hésitez pas à slider pour plus d&apos;event
+        </span>
+        <Link href={`/${locale}/agenda`} style={{
+          display: 'inline-flex', alignItems: 'center', gap: 12,
+          background: 'var(--yellow)', color: 'var(--ink)',
+          padding: '11px 24px', borderRadius: 999,
+          fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+          whiteSpace: 'nowrap', textDecoration: 'none',
+          transition: 'transform .12s, background .15s',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--yellow-deep)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'var(--yellow)'; e.currentTarget.style.transform = 'translateY(0)' }}
+        >
+          VOIR TOUS LES ÉVENEMENTS
+          <span style={{ display: 'inline-flex', width: 18, height: 14 }}>
+            <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+              <path d="M2 8h19M14 1l7 7-7 7"/>
+            </svg>
+          </span>
+        </Link>
+      </div>
 
       {/* ── NOS CLUBS JUSTE POUR VOUS ── */}
       <section style={{ padding: '6px 40px', borderBottom: 'var(--hair)', background: 'var(--paper)' }}>
