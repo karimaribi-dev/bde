@@ -15,7 +15,7 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
   const offsetRef  = useRef(0)
   const halfRef    = useRef(0)
   const lastRef    = useRef(0)
-  const rafRef     = useRef<number>()
+  const rafRef     = useRef<number | undefined>(undefined)
   const dragging   = useRef(false)
   const startX     = useRef(0)
   const startOff   = useRef(0)
