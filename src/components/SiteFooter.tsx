@@ -177,16 +177,25 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
           </div>
         </div>
 
-        {/* Col 3 — MAKE THE CAMPUS ALIVE oval */}
+        {/* Col 3 — MAKE THE CAMPUS ALIVE + entoure SVG */}
         <div style={{ padding: '28px 36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{
-            border: '2.5px solid var(--ink)',
-            borderRadius: '50%',
-            padding: '28px 40px',
-            textAlign: 'center',
-            maxWidth: 260,
-          }}>
+          <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '36px 52px' }}>
+            {/* SVG contour dessiné à la main */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/entoure.svg"
+              alt=""
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+              }}
+            />
             <span style={{
+              position: 'relative',
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(18px, 2.2vw, 26px)',
               fontWeight: 800,
@@ -194,6 +203,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
               letterSpacing: '-0.02em',
               textTransform: 'uppercase',
               display: 'block',
+              textAlign: 'center',
             }}>
               MAKE THE<br />CAMPUS ALIVE
             </span>

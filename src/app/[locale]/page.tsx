@@ -362,11 +362,9 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </Link>
       </div>
 
-      {/* section-divider */}
-      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
-
-      {/* ── VOTE POUR TON COUP DE CŒUR DU MOIS ── */}
-      <section style={{ padding: '6px 0 12px' }}>
+      {/* section-divider — CDC masquée temporairement */}
+      {/* ── VOTE POUR TON COUP DE CŒUR DU MOIS — masqué, à produire plus tard ── */}
+      {false && <section style={{ padding: '6px 0 12px' }}>
 
         {/* Titre centré */}
         <h2 style={{
@@ -444,10 +442,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             </span>
           </Link>
         </div>
-      </section>
-
-      {/* section-divider */}
-      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
+      </section>}
 
       {/* ── NOS CLUBS JUSTE POUR VOUS ── */}
       <section style={{ padding: '6px 0' }}>
@@ -574,7 +569,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* section-divider */}
       <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
 
-      {/* ── INTERRÉSSÉ PAR LEURS PRODUCTIONS ? — exact du dossier ── */}
+      {/* ── INTÉRESSÉ PAR LEURS PRODUCTIONS ? — exact du dossier ── */}
       <section style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', alignItems: 'center', gap: 60, padding: '24px 0', position: 'relative' }}>
 
         {/* Étoile burst — position absolute haut-droite */}
@@ -607,7 +602,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             textTransform: 'uppercase', letterSpacing: '-0.01em',
             color: 'var(--ink)', margin: '0 0 14px',
           }}>
-            INTERRÉSSÉ PAR LEURS<br />PRODUCTIONS ?
+            INTÉRESSÉ PAR LEURS<br />PRODUCTIONS ?
           </h3>
           <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: '0 0 18px' }}>
             *N&apos;hésitez pas à les soutenir en regardant le shop
