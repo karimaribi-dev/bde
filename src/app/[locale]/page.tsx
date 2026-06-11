@@ -309,6 +309,97 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
       </section>
 
+      {/* ── NOS CLUBS JUSTE POUR VOUS ── */}
+      <section style={{ padding: '56px 40px 48px', borderBottom: 'var(--hair)', background: 'var(--paper)', overflow: 'hidden' }}>
+
+        {/* Titre */}
+        <h2 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(32px, 5vw, 58px)',
+          fontWeight: 800,
+          fontStyle: 'italic',
+          lineHeight: 0.95,
+          letterSpacing: '-0.03em',
+          textTransform: 'uppercase',
+          margin: '0 0 36px',
+        }}>
+          NOS CLUBS JUSTE<br />POUR VOUS{' '}
+          <span style={{ color: 'var(--yellow)', fontStyle: 'normal', display: 'inline-block' }}>↘</span>
+        </h2>
+
+        {/* Blocs clubs */}
+        <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
+
+          {/* Rangée du haut : Orange + Bleu */}
+          <div style={{ display: 'flex', height: 160 }}>
+            {/* Orange — Club Typo */}
+            <div style={{
+              background: 'var(--orange)',
+              flex: '0 0 52%',
+              padding: '22px 28px',
+              clipPath: 'polygon(0 0, calc(100% - 52px) 0, 100% 50%, calc(100% - 52px) 100%, 0 100%)',
+              zIndex: 2,
+              position: 'relative',
+            }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 800, fontStyle: 'italic', letterSpacing: '-0.02em', textTransform: 'uppercase', margin: '0 0 6px', color: 'var(--ink)' }}>CLUB TYPO</h3>
+              <p style={{ margin: 0, fontSize: 15, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', lineHeight: 1.4 }}>tous les jeudis — 18H</p>
+            </div>
+
+            {/* Bleu — Club Photo */}
+            <div style={{
+              background: '#6BBFFF',
+              flex: 1,
+              padding: '22px 28px 22px 64px',
+              clipPath: 'polygon(52px 0, 100% 0, 100% 100%, 0 100%, 52px 50%)',
+              marginLeft: -4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              textAlign: 'right',
+            }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 800, fontStyle: 'italic', letterSpacing: '-0.02em', textTransform: 'uppercase', margin: '0 0 6px', color: 'var(--ink)' }}>CLUB PHOTO</h3>
+              <p style={{ margin: 0, fontSize: 15, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', lineHeight: 1.4 }}>tous les mercredis — 18H</p>
+            </div>
+          </div>
+
+          {/* Rose — Club Print */}
+          <div style={{
+            background: 'var(--pink)',
+            padding: '22px 28px 28px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            minHeight: 160,
+          }}>
+            <div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 800, fontStyle: 'italic', letterSpacing: '-0.02em', textTransform: 'uppercase', margin: '0 0 6px', color: 'var(--ink)' }}>CLUB PRINT</h3>
+              <p style={{ margin: '0 0 24px', fontSize: 15, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', lineHeight: 1.4 }}>tous les mardi — 18H</p>
+              <p style={{ margin: 0, fontSize: 14, fontFamily: 'var(--font-inter, inherit)', color: 'var(--ink)', opacity: 0.75, lineHeight: 1.5 }}>
+                Passionés de print ?<br />Vous êtes les bienvenu·es
+              </p>
+            </div>
+            <Link href={`/${locale}/clubs`} style={{ fontSize: 28, fontWeight: 800, color: 'var(--ink)', textDecoration: 'none', flexShrink: 0, lineHeight: 1 }}>→</Link>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
+          <Link href={`/${locale}/clubs`} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            background: 'var(--yellow)', color: 'var(--ink)',
+            fontFamily: 'var(--font-display)', fontSize: 11, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase',
+            padding: '10px 20px', borderRadius: 40, border: 'var(--hair)', textDecoration: 'none',
+            transition: 'background .15s',
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--yellow-deep)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'var(--yellow)')}
+          >
+            EN SAVOIR PLUS →
+          </Link>
+        </div>
+      </section>
+
       {/* ── Articles grid ── */}
       <section style={{ padding: '40px 28px', borderBottom: 'var(--hair)' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 28, borderBottom: 'var(--hair)', paddingBottom: 14 }}>
