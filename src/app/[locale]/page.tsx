@@ -85,6 +85,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const [hasMore, setHasMore] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
   const [initialized, setInitialized] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const supabaseRef = useRef<ReturnType<typeof import('@/lib/supabase/client').createClient> | null>(null)
 
@@ -95,6 +96,14 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
     no_results: tNav('no_results'),
     tagline: tNav('tagline'),
   }
+
+  // Detect mobile
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 720)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   // Initial load
   useEffect(() => {
@@ -178,51 +187,91 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* ── Articles marquee — pleine largeur, hors du padding main ── */}
       <Marquee articles={allArticles} />
 
-      {/* ── MAIN — padding: 0 40px comme l'original ── */}
-      <main style={{ padding: '0 40px' }}>
+      {/* ── MAIN ── */}
+      <main className="home-main" style={{ padding: '0 40px' }}>
 
       {/* ── Hero BDE ── */}
       <section style={{ padding: '24px 0 36px', position: 'relative' }}>
-        <h1 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(72px, 12vw, 160px)',
-          fontWeight: 800,
-          lineHeight: 0.86,
-          letterSpacing: '-0.02em',
-          textTransform: 'uppercase',
-          margin: 0,
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          columnGap: 'clamp(20px, 3vw, 60px)',
-        }}>
-          {/* Colonne gauche : MAKE / smiley / ALIVE */}
-          <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            <span>MAKE</span>
-            <span aria-hidden="true" style={{ display: 'block', height: 'clamp(60px, 9vw, 130px)' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: 'clamp(60px, 9vw, 130px)', height: 'clamp(60px, 9vw, 130px)', display: 'block' }} />
-            </span>
-            <span>ALIVE</span>
-          </span>
-          {/* Colonne droite : THE / CAMPUS (avec starburst) */}
-          <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            <span>THE</span>
-            <span style={{ position: 'relative', display: 'inline-block' }}>
-              {/* Starburst jaune */}
-              <span aria-hidden="true" style={{ position: 'absolute', right: '-5%', top: '-10%', width: '45%', pointerEvents: 'none', zIndex: 0 }}>
-                <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
-                  <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
-                </svg>
+
+        {/* ── Hero Desktop ── */}
+        {!isMobile && (
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(72px, 12vw, 160px)',
+            fontWeight: 800,
+            lineHeight: 0.86,
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
+            margin: 0,
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            columnGap: 'clamp(20px, 3vw, 60px)',
+          }}>
+            <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              <span>MAKE</span>
+              <span aria-hidden="true" style={{ display: 'block', height: 'clamp(60px, 9vw, 130px)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: 'clamp(60px, 9vw, 130px)', height: 'clamp(60px, 9vw, 130px)', display: 'block' }} />
               </span>
-              <span style={{ position: 'relative', zIndex: 1, color: 'var(--orange-deep)' }}>CAMPUS</span>
+              <span>ALIVE</span>
             </span>
-          </span>
-        </h1>
+            <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              <span>THE</span>
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <span aria-hidden="true" style={{ position: 'absolute', right: '-5%', top: '-10%', width: '45%', pointerEvents: 'none', zIndex: 0 }}>
+                  <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
+                    <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
+                  </svg>
+                </span>
+                <span style={{ position: 'relative', zIndex: 1, color: 'var(--orange-deep)' }}>CAMPUS</span>
+              </span>
+            </span>
+          </h1>
+        )}
+
+        {/* ── Hero Mobile ── */}
+        {isMobile && (
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(60px, 17vw, 80px)',
+            fontWeight: 800,
+            lineHeight: 0.88,
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
+            margin: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.06em',
+          }}>
+            {/* Row 1 : MAKE   THE */}
+            <span style={{ display: 'flex', gap: '0.22em' }}>
+              <span>MAKE</span>
+              <span>THE</span>
+            </span>
+            {/* Row 2 : smiley + CAMPUS */}
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.08em' }}>
+              <span aria-hidden="true" style={{ display: 'inline-flex', width: '0.75em', height: '0.75em', flexShrink: 0 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%' }} />
+              </span>
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <span aria-hidden="true" style={{ position: 'absolute', right: '-8%', top: '-15%', width: '42%', pointerEvents: 'none', zIndex: 0 }}>
+                  <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
+                    <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
+                  </svg>
+                </span>
+                <span style={{ position: 'relative', zIndex: 1, color: 'var(--orange-deep)' }}>CAMPUS</span>
+              </span>
+            </span>
+            {/* Row 3 : ALIVE */}
+            <span>ALIVE</span>
+          </h1>
+        )}
+
       </section>
 
-      {/* ── PROCHAINEMENT bar — exact du dossier ── */}
-      {/* font géant italique, margin négatif pour casser le padding parent */}
-      <div style={{
+      {/* ── PROCHAINEMENT bar ── */}
+      <div className="home-soon" style={{
         fontFamily: 'var(--font-display)',
         fontStyle: 'italic',
         fontWeight: 900,
@@ -258,9 +307,9 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
       </div>
 
-      {/* ── Event cards — scroll horizontal, uniquement les events réels ── */}
+      {/* ── Event cards — scroll horizontal ── */}
       {dbEvents.length > 0 && (
-        <div style={{
+        <div className="home-events" style={{
           display: 'flex',
           gap: 22,
           margin: '6px -40px 0',
@@ -274,8 +323,9 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             <Link
               key={ev.id}
               href={`/${locale}/agenda/${ev.slug}`}
+              className="home-event-card"
               style={{
-                flex: '0 0 calc(33.333% - 15px)',
+                flex: isMobile ? '0 0 82vw' : '0 0 calc(33.333% - 15px)',
                 position: 'relative',
                 overflow: 'hidden',
                 aspectRatio: '7/6',
@@ -330,7 +380,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       )}
 
       {/* ── Events footer ── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24, marginTop: 22, marginBottom: 60 }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'center', gap: isMobile ? 14 : 24, marginTop: 22, marginBottom: isMobile ? 40 : 60 }}>
         <span style={{ fontStyle: 'italic', fontSize: 14, color: 'var(--ink)', opacity: 0.7 }}>
           *N&apos;hésitez pas à slider pour plus d&apos;event
         </span>
@@ -461,73 +511,71 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           </span>
         </div>
 
-        {/* Blocs clubs — layout exact du dossier */}
-        <div style={{ position: 'relative', width: '100%' }}>
+        {/* Blocs clubs */}
+        <div className="home-clubs-wrap" style={{ position: 'relative', width: '100%' }}>
 
-          {/* Orange — Club Typo (position: relative, 53%, 180px, clip-path arrow droite) */}
-          <div style={{
+          {/* Orange — Club Typo */}
+          <div className="home-club home-club--typo" style={{
             position: 'relative',
             background: 'var(--orange-deep)',
-            width: '53%',
-            height: 180,
-            clipPath: 'polygon(0 0, calc(100% - 100px) 0, 100% 50%, calc(100% - 100px) 100%, 0 100%)',
-            paddingRight: 110,
-            padding: '28px 110px 28px 40px',
+            width: isMobile ? '100%' : '53%',
+            height: isMobile ? 'auto' : 180,
+            clipPath: isMobile ? 'none' : 'polygon(0 0, calc(100% - 100px) 0, 100% 50%, calc(100% - 100px) 100%, 0 100%)',
+            padding: isMobile ? '22px 20px 26px' : '28px 110px 28px 40px',
             zIndex: 3,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             gap: 4,
           }}>
-            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB TYPO</div>
-            <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 36, letterSpacing: '0em', opacity: 0.9 }}>tous les jeudis — 18H</div>
+            <div className="club-title" style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: isMobile ? 'clamp(44px, 14vw, 60px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB TYPO</div>
+            <div className="club-sched" style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: isMobile ? 22 : 36, letterSpacing: '0em', opacity: 0.9 }}>tous les jeudis — 18H</div>
           </div>
 
-          {/* Bleu — Club Photo (position: absolute, top: 90px, right: 0) */}
-          <div style={{
-            position: 'absolute',
-            top: 90,
-            right: 0,
+          {/* Bleu — Club Photo */}
+          <div className="home-club home-club--photo" style={{
+            position: isMobile ? 'relative' : 'absolute',
+            top: isMobile ? 'auto' : 90,
+            right: isMobile ? 'auto' : 0,
             background: 'var(--blue-strong)',
-            width: 'calc(47% + 100px)',
-            height: 180,
-            clipPath: 'polygon(100px 0, 100% 0, 100% 100%, 100px 100%, 0 50%)',
-            padding: '28px 40px 28px 130px',
-            textAlign: 'right',
+            width: isMobile ? '100%' : 'calc(47% + 100px)',
+            height: isMobile ? 'auto' : 180,
+            clipPath: isMobile ? 'none' : 'polygon(100px 0, 100% 0, 100% 100%, 100px 100%, 0 50%)',
+            padding: isMobile ? '22px 20px 26px' : '28px 40px 28px 130px',
+            textAlign: isMobile ? 'left' : 'right',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-end',
+            alignItems: isMobile ? 'flex-start' : 'flex-end',
             justifyContent: 'center',
             gap: 4,
             zIndex: 4,
           }}>
-            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PHOTO</div>
-            <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 36, letterSpacing: '0em', opacity: 0.9 }}>tous les mercredis — 18H</div>
+            <div className="club-title" style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: isMobile ? 'clamp(44px, 14vw, 60px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PHOTO</div>
+            <div className="club-sched" style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: isMobile ? 22 : 36, letterSpacing: '0em', opacity: 0.9 }}>tous les mercredis — 18H</div>
           </div>
 
-          {/* Rose — Club Print (position: relative, full width, min-height: 290px) */}
-          <div style={{
+          {/* Rose — Club Print */}
+          <div className="home-club home-club--print" style={{
             position: 'relative',
             background: 'var(--pink)',
             width: '100%',
-            minHeight: 290,
-            padding: '30px 40px 60px',
+            minHeight: isMobile ? 0 : 290,
+            marginTop: isMobile ? 0 : 270,
+            padding: isMobile ? '22px 20px 80px' : '30px 40px 60px',
             zIndex: 1,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
             gap: 4,
           }}>
-            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PRINT</div>
-            <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 36, letterSpacing: '0em', opacity: 0.9 }}>tous les mardi — 18H</div>
-            {/* Blurb — position absolute bas gauche */}
-            <div style={{ position: 'absolute', bottom: 18, left: 36, fontSize: 24, lineHeight: 1.3, color: 'var(--ink)' }}>
+            <div className="club-title" style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: isMobile ? 'clamp(44px, 14vw, 60px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PRINT</div>
+            <div className="club-sched" style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: isMobile ? 22 : 36, letterSpacing: '0em', opacity: 0.9 }}>tous les mardi — 18H</div>
+            <div style={{ position: 'absolute', bottom: 18, left: isMobile ? 20 : 36, fontSize: isMobile ? 18 : 24, lineHeight: 1.3, color: 'var(--ink)' }}>
               <div>Passionné·e·s de print ?</div>
               <div>Vous êtes les bienvenu·e·s</div>
             </div>
-            {/* Flèche — position absolute bas droite */}
             <Link href={`/${locale}/clubs`} aria-label="Découvrir les clubs"
-              style={{ position: 'absolute', bottom: 22, right: 36, width: 40, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)', textDecoration: 'none' }}>
+              style={{ position: 'absolute', bottom: 22, right: isMobile ? 20 : 36, width: 40, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)', textDecoration: 'none' }}>
               <svg viewBox="0 0 24 16" fill="none" stroke="#262626" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>
@@ -559,13 +607,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       </section>
 
       {/* section-divider */}
-      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: isMobile ? '40px 0' : '60px 0' }} />
 
-      {/* ── INTÉRESSÉ PAR LEURS PRODUCTIONS ? — exact du dossier ── */}
-      <section style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', alignItems: 'center', gap: 60, padding: '24px 0', position: 'relative' }}>
+      {/* ── INTÉRESSÉ PAR LEURS PRODUCTIONS ? ── */}
+      <section className="home-shop" style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', alignItems: 'center', gap: isMobile ? 24 : 60, padding: '24px 0', position: 'relative' }}>
 
-        {/* Étoile burst — position absolute haut-droite */}
-        <span aria-hidden="true" style={{ position: 'absolute', top: '5%', right: '4%', width: '38%', height: '70%', transform: 'rotate(-12deg)', zIndex: 0, pointerEvents: 'none', display: 'inline-flex' }}>
+        {/* Étoile burst — cachée sur mobile */}
+        <span aria-hidden="true" style={{ position: 'absolute', top: '5%', right: '4%', width: '38%', height: '70%', transform: 'rotate(-12deg)', zIndex: 0, pointerEvents: 'none', display: isMobile ? 'none' : 'inline-flex' }}>
           <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
             <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
           </svg>
@@ -621,10 +669,10 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       </section>
 
       {/* section-divider */}
-      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: isMobile ? '40px 0' : '60px 0' }} />
 
-      {/* ── MEET THE TEAM — données depuis la DB, même rendu que la page à-propos ── */}
-      <section style={{ textAlign: 'center', padding: '30px 0 60px' }}>
+      {/* ── MEET THE TEAM ── */}
+      <section style={{ textAlign: 'center', padding: isMobile ? '20px 0 40px' : '30px 0 60px' }}>
         <h2 style={{
           fontFamily: 'var(--font-display)',
           fontStyle: 'italic',

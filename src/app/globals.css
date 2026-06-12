@@ -503,6 +503,11 @@ footer { padding: 64px 28px 24px; }
   .brand-sub { display: none; }
   .marquee-track { font-size: 10px; padding: 9px 16px; gap: 36px; }
   footer { padding: 0; }
+
+  /* ── Homepage responsive ── */
+  .home-main { padding: 0 20px !important; }
+  .home-soon { margin: 24px -20px 28px !important; font-size: clamp(28px, 9vw, 44px) !important; }
+  .home-events { margin: 6px -20px 0 !important; padding: 0 20px !important; }
   .foot-grid {
     grid-template-columns: 1fr 1fr;
     gap: 0;
@@ -526,7 +531,9 @@ footer { padding: 64px 28px 24px; }
 
   /* Navbar: hidden on mobile, hamburger in topbar */
   .navbar { display: none; }
+  .main-nav { display: none; }
   .topbar-hamburger { display: flex; }
+  .site-header { padding: 14px 18px; }
 
   /* Panel covers full page on mobile */
   .nav-panel { width: 100%; max-width: 100%; border-left: none; }
