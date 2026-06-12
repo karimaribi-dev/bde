@@ -480,7 +480,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             gap: 4,
           }}>
             <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB TYPO</div>
-            <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les jeudis — 18H</div>
+            <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 26, letterSpacing: '0em', opacity: 0.9 }}>tous les jeudis — 18H</div>
           </div>
 
           {/* Bleu — Club Photo (position: absolute, top: 90px, right: 0) */}
@@ -502,7 +502,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             zIndex: 4,
           }}>
             <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PHOTO</div>
-            <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les mercredis — 18H</div>
+            <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 26, letterSpacing: '0em', opacity: 0.9 }}>tous les mercredis — 18H</div>
           </div>
 
           {/* Rose — Club Print (position: relative, full width, min-height: 290px) */}
@@ -519,7 +519,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             gap: 4,
           }}>
             <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PRINT</div>
-            <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les mardi — 18H</div>
+            <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 26, letterSpacing: '0em', opacity: 0.9 }}>tous les mardi — 18H</div>
             {/* Blurb — position absolute bas gauche */}
             <div style={{ position: 'absolute', bottom: 18, left: 36, fontSize: 14, lineHeight: 1.3, color: 'var(--ink)' }}>
               <div>Passionés de print ?</div>
