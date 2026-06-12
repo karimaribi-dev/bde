@@ -13,13 +13,39 @@ function slugify(s: string) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
+function LangTabs({ lang, setLang }: { lang: 'fr' | 'en'; setLang: (l: 'fr' | 'en') => void }) {
+  return (
+    <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
+      {(['fr', 'en'] as const).map(l => (
+        <button
+          key={l}
+          type="button"
+          onClick={() => setLang(l)}
+          style={{
+            padding: '4px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700,
+            letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer', border: 'none',
+            background: lang === l ? '#262626' : '#f3f4f6',
+            color: lang === l ? '#fff' : '#6b7280',
+            transition: 'background 0.15s',
+          }}
+        >
+          {l === 'fr' ? '🇫🇷 FR' : '🇬🇧 EN'}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export default function ProductEditor({ product }: Props) {
   const router  = useRouter()
   const isNew   = !product
 
-  const [title,       setTitle]       = useState(product?.title       ?? '')
-  const [slug,        setSlug]        = useState(product?.slug        ?? '')
-  const [description, setDescription] = useState(product?.description ?? '')
+  const [lang,          setLang]          = useState<'fr' | 'en'>('fr')
+  const [title,         setTitle]         = useState(product?.title         ?? '')
+  const [titleEn,       setTitleEn]       = useState(product?.title_en      ?? '')
+  const [slug,          setSlug]          = useState(product?.slug          ?? '')
+  const [description,   setDescription]   = useState(product?.description   ?? '')
+  const [descriptionEn, setDescriptionEn] = useState(product?.description_en ?? '')
   const [price,       setPrice]       = useState(product?.price       ?? 0)
   const [stockCount,  setStockCount]  = useState(product?.stock_count ?? 0)
   const [edition,     setEdition]     = useState(product?.edition     ?? '')
@@ -67,6 +93,8 @@ export default function ProductEditor({ product }: Props) {
       title: title.trim(),
       slug: slug.trim(),
       description: description.trim() || null,
+      description_en: descriptionEn.trim() || null,
+      title_en: titleEn.trim() || null,
       price: Number(price),
       stock_count: Number(stockCount),
       edition: edition.trim() || null,
@@ -99,8 +127,18 @@ export default function ProductEditor({ product }: Props) {
 
         {/* Titre */}
         <div>
-          <label style={labelStyle}>Titre *</label>
-          <input style={inputStyle} value={title} onChange={e => handleTitleChange(e.target.value)} placeholder="Ex: Le T-shirt BDE LISAA" />
+          <LangTabs lang={lang} setLang={setLang} />
+          {lang === 'fr' ? (
+            <>
+              <label style={labelStyle}>Titre * <span style={{ fontWeight: 400, color: '#aaa' }}>(français)</span></label>
+              <input style={inputStyle} value={title} onChange={e => handleTitleChange(e.target.value)} placeholder="Ex: Le T-shirt BDE LISAA" />
+            </>
+          ) : (
+            <>
+              <label style={labelStyle}>Title <span style={{ fontWeight: 400, color: '#aaa' }}>(English — optional)</span></label>
+              <input style={inputStyle} value={titleEn} onChange={e => setTitleEn(e.target.value)} placeholder="Ex: The BDE LISAA T-shirt" />
+            </>
+          )}
         </div>
 
         {/* Slug */}
@@ -133,14 +171,18 @@ export default function ProductEditor({ product }: Props) {
 
         {/* Description */}
         <div>
-          <label style={labelStyle}>Description</label>
-          <textarea
-            rows={4}
-            style={{ ...inputStyle, resize: 'vertical', minHeight: 80 }}
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Décris le produit…"
-          />
+          <LangTabs lang={lang} setLang={setLang} />
+          {lang === 'fr' ? (
+            <>
+              <label style={labelStyle}>Description <span style={{ fontWeight: 400, color: '#aaa' }}>(français)</span></label>
+              <textarea rows={4} style={{ ...inputStyle, resize: 'vertical', minHeight: 80 }} value={description} onChange={e => setDescription(e.target.value)} placeholder="Décris le produit…" />
+            </>
+          ) : (
+            <>
+              <label style={labelStyle}>Description <span style={{ fontWeight: 400, color: '#aaa' }}>(English — optional)</span></label>
+              <textarea rows={4} style={{ ...inputStyle, resize: 'vertical', minHeight: 80 }} value={descriptionEn} onChange={e => setDescriptionEn(e.target.value)} placeholder="Describe the product…" />
+            </>
+          )}
         </div>
 
         {/* Image */}

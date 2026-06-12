@@ -31,6 +31,10 @@ export default async function ProductPage({
   const others  = (othersRaw  ?? []) as Product[]
   const sold    = product.stock_count === 0
 
+  // Traduction : utilise la version anglaise si dispo et locale === 'en'
+  const displayTitle       = (locale === 'en' && product.title_en)       ? product.title_en       : product.title
+  const displayDescription = (locale === 'en' && product.description_en) ? product.description_en : product.description
+
   return (
     <>
       <NavbarClient categories={cats} locale={locale} activeSlug="shop" />
@@ -41,7 +45,7 @@ export default async function ProductPage({
         <nav style={{ padding: '14px 0 0', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9ca3af' }}>
           <Link href={`/${locale}/shop`} style={{ color: '#9ca3af', textDecoration: 'none' }}>Le Shop</Link>
           <span style={{ margin: '0 8px' }}>/</span>
-          <span style={{ color: 'var(--ink)' }}>{product.title}</span>
+          <span style={{ color: 'var(--ink)' }}>{displayTitle}</span>
         </nav>
 
         {/* ═══════════ HERO ═══════════ */}
@@ -104,7 +108,7 @@ export default async function ProductPage({
               lineHeight: 0.95, letterSpacing: '-0.02em',
               textTransform: 'uppercase', color: 'var(--ink)', margin: 0,
             }}>
-              {product.title}
+              {displayTitle}
             </h1>
 
             <div style={{
@@ -130,9 +134,9 @@ export default async function ProductPage({
             </div>
 
             {/* Description */}
-            {product.description && (
+            {displayDescription && (
               <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.8 }}>
-                {product.description}
+                {displayDescription}
               </p>
             )}
 

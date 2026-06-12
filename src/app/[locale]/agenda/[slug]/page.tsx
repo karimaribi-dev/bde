@@ -29,6 +29,10 @@ export default async function EventDetailPage({
   const event = ev as Event
   const cats  = (categories ?? []) as Category[]
 
+  // Traduction : utilise la version anglaise si dispo et locale === 'en'
+  const displayTitle       = (locale === 'en' && event.title_en)       ? event.title_en       : event.title
+  const displayDescription = (locale === 'en' && event.description_en) ? event.description_en : event.description
+
   const eventDateFull = format(new Date(event.event_date), "EEEE d MMMM yyyy", { locale: fr })
 
   return (
@@ -44,7 +48,7 @@ export default async function EventDetailPage({
           <nav style={{ padding: '18px 0 0', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', color: '#888' }}>
             <Link href={`/${locale}/agenda`} style={{ color: '#888', textDecoration: 'none' }}>Agenda</Link>
             <span style={{ margin: '0 8px' }}>›</span>
-            <span style={{ color: 'var(--ink)' }}>{event.title}</span>
+            <span style={{ color: 'var(--ink)' }}>{displayTitle}</span>
           </nav>
 
           {/* ── Hero ── */}
@@ -76,7 +80,7 @@ export default async function EventDetailPage({
               textTransform: 'uppercase',
               margin: '0 0 32px',
             }}>
-              {event.title}
+              {displayTitle}
             </h1>
 
             {/* Grille image + infos/description */}
@@ -109,13 +113,13 @@ export default async function EventDetailPage({
                 </div>
 
                 {/* Description */}
-                {event.description && (
+                {displayDescription && (
                   <p style={{
                     fontSize: 15, lineHeight: 1.75, color: 'var(--ink)',
                     margin: 0, whiteSpace: 'pre-wrap',
                     borderTop: '1px solid #e6e6e6', paddingTop: 24,
                   }}>
-                    {event.description}
+                    {displayDescription}
                   </p>
                 )}
               </div>

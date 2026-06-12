@@ -50,6 +50,30 @@ function Toggle({ on, onToggle, label, sub }: { on: boolean; onToggle: () => voi
   )
 }
 
+/* ── Onglets FR / EN ── */
+function LangTabs({ lang, setLang }: { lang: 'fr' | 'en'; setLang: (l: 'fr' | 'en') => void }) {
+  return (
+    <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
+      {(['fr', 'en'] as const).map(l => (
+        <button
+          key={l}
+          type="button"
+          onClick={() => setLang(l)}
+          style={{
+            padding: '4px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700,
+            letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer', border: 'none',
+            background: lang === l ? '#262626' : '#f3f4f6',
+            color: lang === l ? '#fff' : '#6b7280',
+            transition: 'background 0.15s',
+          }}
+        >
+          {l === 'fr' ? '🇫🇷 FR' : '🇬🇧 EN'}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 interface Props { event?: Event }
 
 export default function EventEditor({ event }: Props) {
@@ -57,13 +81,16 @@ export default function EventEditor({ event }: Props) {
   const supabase = createClient()
 
   /* ── État du formulaire ── */
+  const [lang, setLang]                     = useState<'fr' | 'en'>('fr')
   const [badge, setBadge]                   = useState(event?.badge ?? '')
   const [badgeColor, setBadgeColor]         = useState(event?.badge_color ?? '#FFB3F0')
   const [badgeTextColor, setBadgeTextColor] = useState(event?.badge_text_color ?? '#111111')
   const [title, setTitle]                   = useState(event?.title ?? '')
+  const [titleEn, setTitleEn]               = useState(event?.title_en ?? '')
   const [slug, setSlug]                     = useState(event?.slug ?? '')
   const [slugManual, setSlugManual]         = useState(!!event?.slug)
   const [description, setDescription]       = useState(event?.description ?? '')
+  const [descriptionEn, setDescriptionEn]   = useState(event?.description_en ?? '')
   const [eventDate, setEventDate]           = useState(event?.event_date ?? '')
   const [eventTime, setEventTime]           = useState(event?.event_time ?? '')
   const [price, setPrice]                   = useState(event?.price ?? 'gratuit')
@@ -148,6 +175,8 @@ export default function EventEditor({ event }: Props) {
       title:            title.trim(),
       slug:             slug.trim(),
       description:      description.trim() || null,
+      description_en:   descriptionEn.trim() || null,
+      title_en:         titleEn.trim() || null,
       event_date:       eventDate,
       event_time:       eventTime.trim(),
       price:            price.trim() || 'gratuit',
@@ -295,15 +324,28 @@ export default function EventEditor({ event }: Props) {
 
         {/* Titre & Slug */}
         <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
-            <input
-              value={title}
-              onChange={e => handleTitleChange(e.target.value)}
-              placeholder="Ex : LA FÉLICITA, JARDIN DES PLANTES…"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
-          </div>
+          <LangTabs lang={lang} setLang={setLang} />
+          {lang === 'fr' ? (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Titre * <span className="text-xs text-gray-400 font-normal">(français)</span></label>
+              <input
+                value={title}
+                onChange={e => handleTitleChange(e.target.value)}
+                placeholder="Ex : LA FÉLICITA, JARDIN DES PLANTES…"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+          ) : (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Title <span className="text-xs text-gray-400 font-normal">(English — optional)</span></label>
+              <input
+                value={titleEn}
+                onChange={e => setTitleEn(e.target.value)}
+                placeholder="Ex: THE PARTY, GARDENS OF PARIS…"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+          )}
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">
               Slug URL * <span className="text-gray-400 font-normal">(/agenda/<strong>slug</strong>)</span>
@@ -353,14 +395,30 @@ export default function EventEditor({ event }: Props) {
 
         {/* Description */}
         <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <textarea
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Décris l'événement, le programme, les infos pratiques…"
-            rows={6}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
-          />
+          <LangTabs lang={lang} setLang={setLang} />
+          {lang === 'fr' ? (
+            <>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description <span className="text-xs text-gray-400 font-normal">(français)</span></label>
+              <textarea
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                placeholder="Décris l'événement, le programme, les infos pratiques…"
+                rows={6}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </>
+          ) : (
+            <>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description <span className="text-xs text-gray-400 font-normal">(English — optional)</span></label>
+              <textarea
+                value={descriptionEn}
+                onChange={e => setDescriptionEn(e.target.value)}
+                placeholder="Describe the event, the program, practical information…"
+                rows={6}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </>
+          )}
         </div>
 
         {/* Image */}

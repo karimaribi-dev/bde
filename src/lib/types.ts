@@ -96,8 +96,10 @@ export interface Event {
   badge_color: string
   badge_text_color: string
   title: string
+  title_en: string | null
   slug: string
   description: string | null
+  description_en: string | null
   event_date: string          // YYYY-MM-DD
   event_time: string
   price: string
@@ -135,8 +137,10 @@ export interface Club {
 export interface Product {
   id: string
   title: string
+  title_en: string | null
   slug: string
   description: string | null
+  description_en: string | null
   price: number
   stock_count: number
   edition: string | null
