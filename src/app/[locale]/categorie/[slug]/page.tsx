@@ -72,7 +72,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
   return (
     <>
       {/* Navbar */}
-      <NavbarClient categories={cats} activeSlug={slug} withSearch locale={locale} labels={navLabels} />
+      <NavbarClient categories={cats} activeSlug={slug} locale={locale} labels={navLabels} />
 
       {/* Marquee */}
       <div className="marquee">

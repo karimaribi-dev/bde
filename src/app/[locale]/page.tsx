@@ -24,7 +24,7 @@ function PhotoDiv({ className, style, children }: { className?: string; style?: 
 }
 
 function SiteHeader({ categories, locale, labels }: { categories: Category[], locale: string, labels: { home: string; contact: string; search_placeholder: string; no_results: string; tagline: string } }) {
-  return <NavbarClient categories={categories} withSearch locale={locale} labels={labels} />
+  return <NavbarClient categories={categories} locale={locale} labels={labels} />
 }
 
 function Marquee({ articles }: { articles: { title: string; slug: string }[] }) {

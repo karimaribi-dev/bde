@@ -22,7 +22,7 @@ function PhotoDiv({ className, style, children }: { className?: string; style?: 
 }
 
 function SiteHeader({ categories }: { categories: Category[] }) {
-  return <NavbarClient categories={categories} withSearch />
+  return <NavbarClient categories={categories}/>
 }
 
 function Marquee({ articles }: { articles: { title: string; slug: string }[] }) {

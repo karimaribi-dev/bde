@@ -65,7 +65,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <>
       {/* ── Navbar ── */}
-      <NavbarClient categories={cats} activeSlug={categorySlug} withSearch />
+      <NavbarClient categories={cats} activeSlug={categorySlug}/>
 
       {/* ── Marquee ── */}
       <div className="marquee">
