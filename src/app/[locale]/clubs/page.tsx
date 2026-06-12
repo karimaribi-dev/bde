@@ -59,7 +59,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
                 fontFamily: '"altesse-std-24pt", serif',
                 fontWeight: 400,
                 fontStyle: 'normal',
-                fontSize: '0.7em',
+                fontSize: '0.5em',
                 lineHeight: 1.05,
                 textTransform: 'none',
                 letterSpacing: 0,
