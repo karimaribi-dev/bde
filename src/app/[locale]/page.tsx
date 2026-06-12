@@ -68,11 +68,19 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const tNav = useTranslations('nav')
   type ArticleWithCat = Article & { category: Category | null }
 
+  interface TeamMember { id: string; name: string; badge_color: string; photo_url: string | null; sort_order: number }
+  const FALLBACK_MEMBERS: TeamMember[] = [
+    { id: '1', name: 'LOUISON', badge_color: '#4FA3FF', photo_url: null, sort_order: 1 },
+    { id: '2', name: 'BENJI',   badge_color: '#FFB3F0', photo_url: null, sort_order: 2 },
+    { id: '3', name: 'ACHILLE', badge_color: '#FFE74A', photo_url: null, sort_order: 3 },
+  ]
+
   const [featured, setFeatured] = useState<ArticleWithCat | null>(null)
   const [latest, setLatest] = useState<ArticleWithCat[]>([])
   const [grid, setGrid] = useState<ArticleWithCat[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [dbEvents, setDbEvents] = useState<Event[]>([])
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(FALLBACK_MEMBERS)
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -96,7 +104,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       supabaseRef.current = supabase
 
       const today = new Date().toISOString().slice(0, 10)
-      const [{ data: arts }, { data: cats }, { data: evts }] = await Promise.all([
+      const [{ data: arts }, { data: cats }, { data: evts }, { data: team }] = await Promise.all([
         supabase
           .from('articles')
           .select('*, category:categories!category_id(id, name, slug)')
@@ -112,6 +120,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           .eq('is_published', true)
           .gte('event_date', today)
           .order('event_date', { ascending: true }),
+        supabase.from('team_members').select('*').order('sort_order', { ascending: true }),
       ])
       const all = (arts ?? []) as ArticleWithCat[]
       setFeatured(all[0] ?? null)
@@ -123,6 +132,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       setHasMore(all.length > 6 + PAGE_SIZE)
       setCategories(cats ?? [])
       setDbEvents((evts ?? []) as Event[])
+      if (team && team.length > 0) setTeamMembers(team as TeamMember[])
       setInitialized(true)
     }
     load()
@@ -613,7 +623,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* section-divider */}
       <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '60px 0' }} />
 
-      {/* ── MEET THE TEAM — exact du dossier BDE_site ── */}
+      {/* ── MEET THE TEAM — données depuis la DB, même rendu que la page à-propos ── */}
       <section style={{ textAlign: 'center', padding: '30px 0 60px' }}>
         <h2 style={{
           fontFamily: 'var(--font-display)',
@@ -628,53 +638,56 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           MEET THE TEAM
         </h2>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 80, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-
-          {/* Louison */}
-          <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-            <div style={{ width: 150, height: 170, overflow: 'visible', background: 'transparent', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/team-louison.png" alt="Louison" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 'clamp(40px, 8vw, 110px)',
+          alignItems: 'flex-end',
+          flexWrap: 'wrap',
+        }}>
+          {teamMembers.map(member => (
+            <div key={member.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+              {/* Photo circulaire — identique à la page à-propos */}
+              <div style={{
+                width: 'clamp(130px, 13vw, 190px)',
+                height: 'clamp(150px, 15vw, 210px)',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                background: '#f0f0f0',
+                position: 'relative',
+              }}>
+                {member.photo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={member.photo_url}
+                    alt={member.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+                  />
+                ) : (
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontSize: 48, opacity: 0.2 }}>👤</span>
+                  </div>
+                )}
+              </div>
+              {/* Badge nom — identique à la page à-propos */}
+              <div style={{
+                background: member.badge_color,
+                color: 'var(--ink)',
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontWeight: 900,
+                fontSize: 'clamp(12px, 1.1vw, 16px)',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                padding: '5px 14px 6px',
+                marginTop: -4,
+                zIndex: 1,
+                position: 'relative',
+              }}>
+                {member.name}
+              </div>
             </div>
-            <div style={{
-              fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22,
-              textTransform: 'uppercase', padding: '8px 14px 10px', letterSpacing: '0.02em',
-              color: 'var(--ink)', marginTop: -12,
-              background: 'var(--blue-strong)', transform: 'rotate(-4deg)',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-            }}>LOUISON</div>
-          </div>
-
-          {/* Benji */}
-          <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-            <div style={{ width: 150, height: 170, overflow: 'visible', background: 'transparent', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/team-benji.png" alt="Benji" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
-            </div>
-            <div style={{
-              fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22,
-              textTransform: 'uppercase', padding: '8px 14px 10px', letterSpacing: '0.02em',
-              color: 'var(--ink)', marginTop: -12,
-              background: 'var(--pink)', transform: 'rotate(3deg)',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-            }}>BENJI</div>
-          </div>
-
-          {/* Achille */}
-          <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-            <div style={{ width: 150, height: 170, overflow: 'visible', background: 'transparent', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/team-achille.png" alt="Achille" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
-            </div>
-            <div style={{
-              fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22,
-              textTransform: 'uppercase', padding: '8px 14px 10px', letterSpacing: '0.02em',
-              color: 'var(--ink)', marginTop: -12,
-              background: 'var(--yellow)', transform: 'rotate(-2deg)',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-            }}>ACHILLE</div>
-          </div>
-
+          ))}
         </div>
       </section>
 
