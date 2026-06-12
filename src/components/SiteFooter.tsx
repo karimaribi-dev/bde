@@ -143,7 +143,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       </a>
       {/* Crédit designers — visible uniquement sur desktop, juste sous l'handle */}
       {!isMobile && (
-        <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 13, letterSpacing: '.02em', color: 'var(--ink)', opacity: 0.55, fontStyle: 'italic', margin: '18px 0 0' }}>
+        <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '18px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px' }}>
           Designé par Célestine Goussard,<br />Liselotte Lecoq &amp; Marie Desbois
         </p>
       )}
@@ -153,7 +153,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
   /* ─────────── Crédit designers (mobile uniquement) ─────────── */
   const DesignerCredit = () => (
     <div style={{ padding: '14px 20px' }}>
-      <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 15, letterSpacing: '.02em', color: 'var(--ink)', opacity: 0.6, fontStyle: 'italic', margin: 0 }}>
+      <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: 0, border: '1px solid #262626', display: 'inline-block', padding: '8px 14px' }}>
         Designé par Célestine Goussard, Liselotte Lecoq &amp; Marie Desbois
       </p>
     </div>
