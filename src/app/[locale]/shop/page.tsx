@@ -31,7 +31,14 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
     <>
       <NavbarClient categories={cats} locale={locale} activeSlug="shop" />
 
-      <main style={{ padding: '0 40px' }}>
+      <main className="shop-main" style={{ padding: '0 40px' }}>
+
+        {/* ── Breadcrumb ── */}
+        <nav style={{ padding: '14px 0 0', fontSize: 11, fontFamily: 'var(--font-display)', fontStyle: 'italic', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.6 }}>
+          <a href={`/${locale}`} style={{ color: 'inherit', textDecoration: 'none' }}>ACCUEIL</a>
+          <span style={{ margin: '0 6px' }}>›</span>
+          <span>LE SHOP</span>
+        </nav>
 
         {/* ═══════════ HERO ═══════════ */}
         <section style={{ textAlign: 'center', padding: '30px 0 40px' }}>
@@ -75,7 +82,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
             </p>
           </div>
         ) : (
-          <section style={{
+          <section className="shop-products-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: '50px 30px',
@@ -198,7 +205,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
         )}
 
         {/* ═══════════ NOTE BAS DE PAGE ═══════════ */}
-        <p style={{
+        <p className="shop-note" style={{
           textAlign: 'center',
           maxWidth: 860,
           margin: '0 auto 60px',

@@ -664,4 +664,19 @@ html.dark .cart-drawer-bg { background: rgba(0,0,0,0.6) !important; }
   .club-detail-shop-image { order: 2 !important; }
   .club-detail-shop-btn { order: 3 !important; grid-column: 1 !important; margin-top: 16px !important; }
   .club-detail-shop span[aria-hidden] { display: none !important; }
+
+  /* ── SHOP PAGE ── */
+  .shop-main { padding: 0 16px !important; }
+  .shop-products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 28px 14px !important;
+    padding: 20px 0 60px !important;
+  }
+  /* supprime le translateY (chevauchement en 2 colonnes) ; garde une légère rotation */
+  .prod-card-wrap { transform: none !important; }
+  .prod-card-wrap:hover { transform: none !important; }
+  .shop-note {
+    font-size: 13px !important;
+    margin-bottom: 40px !important;
+  }
 }
