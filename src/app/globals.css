@@ -28,7 +28,7 @@
   --hair-mute: 1px solid rgba(17,17,17,0.14);
 
   /* Fonts */
-  --font-display: "Archivo Black", "Anton", sans-serif;
+  --font-display: "neue-haas-grotesk-display", "Archivo Black", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 

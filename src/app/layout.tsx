@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Archivo_Black, Inter } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import SitePopup from "@/components/SitePopup";
 import CookieConsent from "@/components/CookieConsent";
@@ -9,13 +9,6 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-mono",
-  display: "swap",
-});
-
-const archivoBlack = Archivo_Black({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-display",
   display: "swap",
 });
 
@@ -39,7 +32,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${jetbrainsMono.variable} ${archivoBlack.variable} ${inter.variable}`}>
+    <html lang="fr" className={`${jetbrainsMono.variable} ${inter.variable}`}>
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/zof5bsa.css" />
+      </head>
       <body>
         <GtmLoader />
         {children}
