@@ -110,6 +110,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             style={{
               width: '100%',
               border: '1.5px dotted rgba(0,0,0,0.55)',
+              marginBottom: 12,
               borderRadius: 4,
               padding: '10px 16px',
               fontSize: 14,
@@ -131,6 +132,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             style={{
               width: '100%',
               border: '1.5px dotted rgba(0,0,0,0.55)',
+              marginBottom: 12,
               borderRadius: 4,
               padding: '14px 16px',
               fontSize: 14,

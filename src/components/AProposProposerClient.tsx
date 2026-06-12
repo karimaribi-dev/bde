@@ -116,6 +116,7 @@ export default function AProposProposerClient() {
             style={{
               width: '100%',
               border: '1.5px dotted var(--ink)',
+              marginBottom: 12,
               borderRadius: 4,
               padding: '10px 16px',
               fontSize: 14,
@@ -133,6 +134,7 @@ export default function AProposProposerClient() {
             style={{
               width: '100%',
               border: '1.5px dotted var(--ink)',
+              marginBottom: 12,
               borderRadius: 4,
               padding: '14px 16px',
               minHeight: 140,
