@@ -3,7 +3,7 @@ export default function NotFound() {
     <div style={{
       position: 'fixed',
       inset: 0,
-      background: '#F5F0E8',
+      background: '#FF88E8',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
