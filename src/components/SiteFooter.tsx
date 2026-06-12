@@ -108,7 +108,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
           top: 3, left: dark ? 31 : 3,
           width: 24, height: 24,
           borderRadius: '50%',
-          background: dark ? '#fff' : 'var(--ink)',
+          background: '#262626',
           transition: 'left .2s',
           display: 'block',
         }} />
