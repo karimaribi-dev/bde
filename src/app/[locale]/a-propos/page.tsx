@@ -218,11 +218,11 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
         {partners.length > 0 && (
           <section style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            flexDirection: 'column',
             alignItems: 'center',
-            gap: 40,
-            padding: '36px 0 64px',
-            flexWrap: 'wrap',
+            gap: 32,
+            padding: '48px 0 72px',
+            textAlign: 'center',
           }}>
             <div>
               <h2 style={{
@@ -241,20 +241,22 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 28, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
               {partners.map(p => {
                 const logo = (
                   <div style={{
-                    width: 70, height: 70, borderRadius: 12,
-                    background: '#fff', border: '1px solid #eee',
+                    width: 120, height: 120, borderRadius: 16,
+                    background: '#fff', border: '1px solid #e8e8e8',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     overflow: 'hidden',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+                    transition: 'box-shadow 0.15s',
                   }}>
                     {p.logo_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={p.logo_url} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 8 }} />
+                      <img src={p.logo_url} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 14 }} />
                     ) : (
-                      <span style={{ fontSize: 11, fontWeight: 700, color: '#888', textAlign: 'center', padding: 4 }}>{p.name}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#aaa', textAlign: 'center', padding: 8 }}>{p.name}</span>
                     )}
                   </div>
                 )

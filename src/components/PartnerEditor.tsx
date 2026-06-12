@@ -19,6 +19,7 @@ interface Props { partner: Partner }
 export default function PartnerEditor({ partner }: Props) {
   const router = useRouter()
 
+  const DEFAULT_NAME = 'Nouveau partenaire'
   const [name,       setName]       = useState(partner.name)
   const [websiteUrl, setWebsiteUrl] = useState(partner.website_url ?? '')
   const [logoUrl,    setLogoUrl]    = useState(partner.logo_url ?? '')
@@ -153,11 +154,14 @@ export default function PartnerEditor({ partner }: Props) {
           type="text"
           value={name}
           onChange={e => { setName(e.target.value); mark() }}
+          onFocus={e => { if (e.target.value === DEFAULT_NAME) { setName(''); mark() } }}
+          onBlur={e => { if (!e.target.value.trim()) { setName(DEFAULT_NAME); setDirty(false) } }}
           style={{
             width: '100%', boxSizing: 'border-box',
             border: '1px solid #e5e7eb', borderRadius: 6,
             padding: '8px 12px', fontSize: 14,
             outline: 'none', background: '#fafafa',
+            color: name === DEFAULT_NAME ? '#9ca3af' : '#262626',
           }}
         />
       </div>
