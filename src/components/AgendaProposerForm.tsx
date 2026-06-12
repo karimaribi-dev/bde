@@ -52,11 +52,11 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
         alignItems: 'center',
         gap: 10,
       }}>
-        <span aria-hidden="true" style={{ position: 'absolute', width: 80, height: 110, pointerEvents: 'none', top: isMobile ? 80 : 8, left: '6%' }}>
+        <span aria-hidden="true" style={{ position: 'absolute', width: isMobile ? 44 : 80, height: isMobile ? 60 : 110, pointerEvents: 'none', top: isMobile ? 80 : 8, left: '6%' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/fleche-curl.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
         </span>
-        <span aria-hidden="true" style={{ position: 'absolute', width: 80, height: 110, pointerEvents: 'none', top: isMobile ? 80 : 8, right: '6%', transform: 'scaleX(-1)' }}>
+        <span aria-hidden="true" style={{ position: 'absolute', width: isMobile ? 44 : 80, height: isMobile ? 60 : 110, pointerEvents: 'none', top: isMobile ? 80 : 8, right: '6%', transform: 'scaleX(-1)' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/fleche-curl.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
         </span>
