@@ -13,6 +13,15 @@ interface TeamMember {
   sort_order: number
 }
 
+interface Partner {
+  id: string
+  name: string
+  logo_url: string | null
+  website_url: string | null
+  is_visible: boolean
+  sort_order: number
+}
+
 export const dynamic = 'force-dynamic'
 
 export default async function AProposPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -25,15 +34,17 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
     { id: '3', name: 'ACHILLE', role: null, badge_color: '#FFE74A', photo_url: null, sort_order: 3 },
   ]
 
-  const [{ data: categories }, teamResult] = await Promise.all([
+  const [{ data: categories }, teamResult, { data: partnersData }] = await Promise.all([
     supabase.from('categories').select('*').order('name'),
     supabase.from('team_members').select('*').order('sort_order', { ascending: true }),
+    supabase.from('partners').select('*').eq('is_visible', true).order('sort_order', { ascending: true }),
   ])
 
-  const cats    = (categories ?? []) as Category[]
-  const members = (teamResult.error || !teamResult.data?.length)
+  const cats     = (categories ?? []) as Category[]
+  const members  = (teamResult.error || !teamResult.data?.length)
     ? FALLBACK_MEMBERS
     : teamResult.data as TeamMember[]
+  const partners = (partnersData ?? []) as Partner[]
 
   return (
     <>
@@ -203,57 +214,61 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0 0 0' }} />
 
-        {/* ══════════════ PARTENAIRES ══════════════ */}
-        <section style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 40,
-          padding: '36px 0 64px',
-          flexWrap: 'wrap',
-        }}>
-          <div>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
-              fontWeight: 900,
-              fontSize: 'clamp(18px, 1.6vw, 26px)',
-              textTransform: 'uppercase',
-              color: 'var(--ink)',
-              margin: '0 0 6px',
-            }}>
-              NOS PARTENAIRES
-            </h2>
-            <p style={{ fontSize: 14, color: 'var(--ink)', opacity: 0.7, margin: 0 }}>
-              Les partenaires qui nous accompagnent tout au long de l&apos;année.
-            </p>
-          </div>
+        {/* ══════════════ PARTENAIRES — masqué si aucun visible ══════════════ */}
+        {partners.length > 0 && (
+          <section style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 40,
+            padding: '36px 0 64px',
+            flexWrap: 'wrap',
+          }}>
+            <div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontWeight: 900,
+                fontSize: 'clamp(18px, 1.6vw, 26px)',
+                textTransform: 'uppercase',
+                color: 'var(--ink)',
+                margin: '0 0 6px',
+              }}>
+                NOS PARTENAIRES
+              </h2>
+              <p style={{ fontSize: 14, color: 'var(--ink)', opacity: 0.7, margin: 0 }}>
+                Les partenaires qui nous accompagnent tout au long de l&apos;année.
+              </p>
+            </div>
 
-          <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
-            {/* R */}
-            <span style={{ width: 60, height: 60, borderRadius: 12, background: '#fff', border: '1px solid #eee', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-              <svg viewBox="0 0 40 40" fill="none" style={{ width: '100%', height: '100%' }}>
-                <rect width="40" height="40" rx="6" fill="#fff" stroke="#ddd"/>
-                <path d="M14 28V12h7c3 0 5 2 5 5s-2 5-5 5l5 6h-3l-5-6h-2v6h-2zm2-8h5c2 0 3-1 3-3s-1-3-3-3h-5v6z" fill="#111"/>
-              </svg>
-            </span>
-            {/* Jow */}
-            <span style={{ width: 60, height: 60, borderRadius: 12, overflow: 'hidden', display: 'inline-flex' }}>
-              <svg viewBox="0 0 40 40" style={{ width: '100%', height: '100%' }}>
-                <rect width="40" height="40" rx="6" fill="#FF553D"/>
-                <text x="20" y="27" textAnchor="middle" fontFamily="Archivo Black, sans-serif" fontSize="17" fontStyle="italic" fill="#fff">jow</text>
-              </svg>
-            </span>
-            {/* UN */}
-            <span style={{ width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', display: 'inline-flex' }}>
-              <svg viewBox="0 0 40 40" style={{ width: '100%', height: '100%' }}>
-                <circle cx="20" cy="20" r="20" fill="#1B97DA"/>
-                <circle cx="20" cy="20" r="14" fill="none" stroke="#fff" strokeWidth="1.4"/>
-                <path d="M20 6v28M6 20h28M10 12c4 4 16 4 20 0M10 28c4-4 16-4 20 0" stroke="#fff" strokeWidth="1" fill="none"/>
-              </svg>
-            </span>
-          </div>
-        </section>
+            <div style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap' }}>
+              {partners.map(p => {
+                const logo = (
+                  <div style={{
+                    width: 70, height: 70, borderRadius: 12,
+                    background: '#fff', border: '1px solid #eee',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    overflow: 'hidden',
+                  }}>
+                    {p.logo_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.logo_url} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 8 }} />
+                    ) : (
+                      <span style={{ fontSize: 11, fontWeight: 700, color: '#888', textAlign: 'center', padding: 4 }}>{p.name}</span>
+                    )}
+                  </div>
+                )
+                return p.website_url ? (
+                  <a key={p.id} href={p.website_url} target="_blank" rel="noreferrer" title={p.name} style={{ textDecoration: 'none' }}>
+                    {logo}
+                  </a>
+                ) : (
+                  <span key={p.id} title={p.name}>{logo}</span>
+                )
+              })}
+            </div>
+          </section>
+        )}
 
       </main>
 
