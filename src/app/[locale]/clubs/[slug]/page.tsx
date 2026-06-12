@@ -88,9 +88,8 @@ export default async function ClubDetailPage({
             }}>
               {club.title}
               <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(44px, 5vw, 80px)', height: 'clamp(44px, 5vw, 80px)', flexShrink: 0 }}>
-                <svg viewBox="0 0 100 100" fill="none" stroke="#262626" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                  <path d="M20 20L80 80M40 80H80V40"/>
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/fleche-bas.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </span>
             </h1>
 
