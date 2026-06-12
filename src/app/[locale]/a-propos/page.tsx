@@ -34,17 +34,19 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
     { id: '3', name: 'ACHILLE', role: null, badge_color: '#FFE74A', photo_url: null, sort_order: 3 },
   ]
 
-  const [{ data: categories }, teamResult, { data: partnersData }] = await Promise.all([
+  const [{ data: categories }, teamResult, { data: partnersData }, { data: settingData }] = await Promise.all([
     supabase.from('categories').select('*').order('name'),
     supabase.from('team_members').select('*').order('sort_order', { ascending: true }),
     supabase.from('partners').select('*').eq('is_visible', true).order('sort_order', { ascending: true }),
+    supabase.from('site_settings').select('value').eq('key', 'partners_section_visible').single(),
   ])
 
-  const cats     = (categories ?? []) as Category[]
-  const members  = (teamResult.error || !teamResult.data?.length)
+  const cats              = (categories ?? []) as Category[]
+  const members           = (teamResult.error || !teamResult.data?.length)
     ? FALLBACK_MEMBERS
     : teamResult.data as TeamMember[]
-  const partners = (partnersData ?? []) as Partner[]
+  const partners          = (partnersData ?? []) as Partner[]
+  const partnersSectionOn = settingData?.value !== 'false'
 
   return (
     <>
@@ -215,7 +217,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0 0 0' }} />
 
         {/* ══════════════ PARTENAIRES — masqué si aucun visible ══════════════ */}
-        {partners.length > 0 && (
+        {partnersSectionOn && partners.length > 0 && (
           <section style={{
             display: 'flex',
             flexDirection: 'column',

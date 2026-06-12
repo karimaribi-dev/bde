@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import PartnerEditor from '@/components/PartnerEditor'
 import PartnerAdder from '@/components/PartnerAdder'
+import PartnersSectionToggle from '@/components/PartnersSectionToggle'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,24 +16,24 @@ interface Partner {
 
 export default async function PartnersPage() {
   const supabase = await createClient()
-  const { data } = await supabase
-    .from('partners')
-    .select('*')
-    .order('sort_order', { ascending: true })
+  const [{ data }, { data: settingData }] = await Promise.all([
+    supabase.from('partners').select('*').order('sort_order', { ascending: true }),
+    supabase.from('site_settings').select('value').eq('key', 'partners_section_visible').single(),
+  ])
 
   const partners = (data ?? []) as Partner[]
+  const sectionVisible = settingData?.value !== 'false'
 
   return (
     <div className="admin-content">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>Partenaires</h1>
-          <p style={{ margin: '6px 0 0', fontSize: 13, color: '#6b7280' }}>
-            Les logos affichés dans la section partenaires de la page À propos.
-            La section est masquée automatiquement si aucun partenaire n&apos;est visible.
-          </p>
-        </div>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ margin: '0 0 4px', fontSize: 24, fontWeight: 700 }}>Partenaires</h1>
+        <p style={{ margin: 0, fontSize: 13, color: '#6b7280' }}>
+          Les logos affichés dans la section partenaires de la page À propos.
+        </p>
       </div>
+
+      <PartnersSectionToggle initialValue={sectionVisible} />
 
       <div style={{
         display: 'grid',
