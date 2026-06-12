@@ -33,7 +33,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
     <>
       <NavbarClient categories={cats} locale={locale} activeSlug="agenda" />
 
-      <main style={{ padding: '0 40px' }}>
+      <main className="agenda-main" style={{ padding: '0 40px' }}>
 
         {/* ═══════════ HERO ═══════════ */}
         <section style={{ padding: '30px 0 14px' }}>
@@ -86,7 +86,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         </div>
 
         {/* ═══════════ MARQUEE PROCHAINEMENT ═══════════ */}
-        <div style={{
+        <div className="agenda-prochainement" style={{
           fontFamily: 'var(--font-display)',
           fontStyle: 'italic',
           fontWeight: 900,
@@ -123,7 +123,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
 
         {/* ═══════════ 3 CARDS ÉVÉNEMENTS À VENIR ═══════════ */}
         {upcoming.length > 0 ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 22 }}>
+          <div className="agenda-upcoming-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 22 }}>
             {upcoming.slice(0, 3).map(ev => (
               <Link key={ev.id} href={`/${locale}/agenda/${ev.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <EventCard ev={ev} />
@@ -148,7 +148,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '40px 0' }} />
 
         {/* ═══════════ CALENDRIER ═══════════ */}
-        <section style={{
+        <section className="agenda-calendar-section" style={{
           display: 'grid',
           gridTemplateColumns: '0.85fr 1.4fr',
           gap: 60,
@@ -157,7 +157,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
           position: 'relative',
         }}>
           {/* Texte gauche */}
-          <div style={{ position: 'relative', paddingTop: 20, paddingLeft: 80 }}>
+          <div className="agenda-calendar-text" style={{ position: 'relative', paddingTop: 20, paddingLeft: 80 }}>
             {/* Étoile bleue */}
             <span aria-hidden="true" style={{ position: 'absolute', top: -30, left: 0, width: 90, height: 90, display: 'inline-flex' }}>
               <svg viewBox="0 0 140 140" fill="none" stroke="#5FA0FB" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
@@ -214,7 +214,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
           </h2>
 
           {past.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
+            <div className="agenda-past-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
               {past.map(ev => (
                 <Link key={ev.id} href={`/${locale}/agenda/${ev.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <EventCard ev={ev} mini />
@@ -246,7 +246,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '40px 0' }} />
 
         {/* ═══════════ BASKET CTA ═══════════ */}
-        <section style={{
+        <section className="agenda-shop-section" style={{
           display: 'grid',
           gridTemplateColumns: '1.05fr 1fr',
           alignItems: 'center',
@@ -266,7 +266,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
           </span>
 
           {/* Images produits */}
-          <div style={{ position: 'relative', width: '100%', zIndex: 2 }}>
+          <div className="agenda-shop-image" style={{ position: 'relative', width: '100%', zIndex: 2 }}>
             <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/images/basket.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', position: 'absolute', inset: 0 }} />
@@ -280,7 +280,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
           </div>
 
           {/* Texte + CTA */}
-          <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="agenda-shop-text" style={{ position: 'relative', zIndex: 1 }}>
             <h3 style={{
               fontFamily: 'var(--font-display)',
               fontStyle: 'italic',

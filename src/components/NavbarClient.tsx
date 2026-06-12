@@ -193,8 +193,8 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
             </svg>
           </button>
           <Link href={`/${locale}`} onClick={closePanel} className="nav-panel__brand">
-            <span style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: 30, lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>BDE</span>
-            <span style={{ background: 'var(--pink)', padding: '3px 9px 4px', fontFamily: '"new-atten", sans-serif', fontWeight: 500, fontStyle: 'italic', fontSize: 22, lineHeight: 1, textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'inline-block' }}>LISAA DGC</span>
+            <span style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: 64, lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>BDE</span>
+            <span style={{ background: 'var(--pink)', padding: '4px 14px 6px', fontFamily: '"new-atten", sans-serif', fontWeight: 500, fontStyle: 'italic', fontSize: 32, lineHeight: 1, textTransform: 'uppercase', display: 'inline-block' }}>LISAA DGC</span>
           </Link>
         </div>
 
