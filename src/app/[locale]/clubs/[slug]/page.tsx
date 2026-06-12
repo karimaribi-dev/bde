@@ -97,12 +97,12 @@ export default async function ClubDetailPage({
             {/* Taglines — mobile uniquement, sous le titre */}
             <div className="club-taglines-mobile" style={{ display: 'none', flexDirection: 'column', gap: 4, marginBottom: 20, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
               {club.tagline && (
-                <span style={{ display: 'inline-block', fontSize: 12, textTransform: 'uppercase', color: 'var(--ink)', letterSpacing: '0.02em' }}>
+                <span style={{ display: 'inline-block', background: ac, color: at, padding: '3px 10px 5px', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.02em', fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
                   {club.tagline}
                 </span>
               )}
               {club.tagline_sub && (
-                <span style={{ display: 'inline-block', background: ac, color: at, padding: '5px 12px 7px', fontSize: 22, letterSpacing: '-0.01em', textTransform: 'uppercase', width: 'fit-content', marginLeft: 20 }}>
+                <span style={{ display: 'inline-block', background: ac, color: at, padding: '5px 12px 7px', fontSize: 22, letterSpacing: '-0.01em', textTransform: 'uppercase', width: 'fit-content', marginLeft: 20, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
                   {club.tagline_sub}
                 </span>
               )}
@@ -141,10 +141,14 @@ export default async function ClubDetailPage({
                 {club.tagline && (
                   <span style={{
                     display: 'inline-block',
-                    fontSize: 'clamp(12px, 1vw, 15px)',
+                    background: ac,
+                    color: at,
+                    padding: '3px 10px 5px',
+                    fontSize: 'clamp(11px, 0.9vw, 14px)',
                     letterSpacing: '0.02em',
                     textTransform: 'uppercase',
-                    color: 'var(--ink)',
+                    width: 'fit-content',
+                    fontStyle: 'italic',
                   }}>
                     {club.tagline}
                   </span>
@@ -185,7 +189,7 @@ export default async function ClubDetailPage({
                 }}>
                   QUI SOMMES NOUS ?
                 </h3>
-                <p style={{ fontSize: 13, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
+                <p style={{ fontSize: 16, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
                   {club.who_we_are}
                 </p>
                 {hr}
@@ -207,7 +211,7 @@ export default async function ClubDetailPage({
                 }}>
                   NOTRE OBJECTIF :
                 </h3>
-                <p style={{ fontSize: 13, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
+                <p style={{ fontSize: 16, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
                   {club.objective}
                 </p>
                 {hr}
