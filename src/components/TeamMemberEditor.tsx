@@ -83,8 +83,10 @@ export default function TeamMemberEditor({ member }: Props) {
     setSaving(false)
     if (dbErr) { setError(dbErr.message); return }
     setSaved(true)
-    router.refresh()
-    setTimeout(() => setSaved(false), 2500)
+    setTimeout(() => {
+      setSaved(false)
+      router.refresh()
+    }, 2500)
   }
 
   return (
