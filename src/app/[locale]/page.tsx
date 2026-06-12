@@ -522,8 +522,8 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 36, letterSpacing: '0em', opacity: 0.9 }}>tous les mardi — 18H</div>
             {/* Blurb — position absolute bas gauche */}
             <div style={{ position: 'absolute', bottom: 18, left: 36, fontSize: 24, lineHeight: 1.3, color: 'var(--ink)' }}>
-              <div>Passionés de print ?</div>
-              <div>Vous êtes les bienvenues</div>
+              <div>Passionné·e·s de print ?</div>
+              <div>Vous êtes les bienvenu·e·s</div>
             </div>
             {/* Flèche — position absolute bas droite */}
             <Link href={`/${locale}/clubs`} aria-label="Découvrir les clubs"
