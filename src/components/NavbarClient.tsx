@@ -162,7 +162,21 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
             </div>
           )}
 
-          <LocaleSwitcher currentLocale={locale} />
+          {/* Toggle langue desktop — même switch que le panel mobile */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', flexShrink: 0 }}>
+            <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 12, color: 'var(--ink)', opacity: locale === 'fr' ? 1 : 0.4, textTransform: 'lowercase' }}>fr</span>
+            <button
+              className={`nav-panel__locale-toggle${locale === 'en' ? ' en' : ''}`}
+              aria-label="Changer de langue"
+              style={{ width: 52, height: 26, borderRadius: 13 }}
+              onClick={() => {
+                const next = locale === 'fr' ? 'en' : 'fr'
+                document.cookie = `locale_choice=${next};path=/;max-age=31536000;samesite=lax`
+                window.location.href = buildLocalePath(pathname, next)
+              }}
+            />
+            <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 12, color: 'var(--ink)', opacity: locale === 'en' ? 1 : 0.4, textTransform: 'lowercase' }}>en</span>
+          </div>
 
           {/* Panier */}
           <Link href={`/${locale}/shop`} className="cart-link" aria-label="Panier">
