@@ -57,9 +57,9 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       padding: isMobile ? '18px 20px' : '24px 36px',
       borderBottom: '1px solid rgba(0,0,0,0.18)',
     }}>
-      <Link href="/" style={{ display: 'inline-flex', alignItems: 'baseline', gap: 10, textDecoration: 'none', color: 'inherit' }}>
+      <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
         <span style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 36 : 48, lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>BDE</span>
-        <span style={{ background: 'var(--pink)', padding: isMobile ? '3px 10px 4px' : '4px 12px 6px', fontFamily: '"new-atten", sans-serif', fontWeight: 500, fontStyle: 'italic', fontSize: isMobile ? 22 : 30, lineHeight: 1, textTransform: 'uppercase' }}>LISAA DGC</span>
+        <span style={{ background: 'var(--pink)', padding: isMobile ? '3px 10px 4px' : '4px 12px 6px', fontFamily: '"new-atten", sans-serif', fontWeight: 500, fontStyle: 'italic', fontSize: isMobile ? 22 : 30, lineHeight: 1, textTransform: 'uppercase', display: 'inline-block' }}>LISAA DGC</span>
       </Link>
       <button onClick={scrollTop} aria-label="Haut de page" style={{ width: isMobile ? 44 : 52, height: isMobile ? 44 : 52, border: '2px solid var(--ink)', borderRadius: '50%', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
