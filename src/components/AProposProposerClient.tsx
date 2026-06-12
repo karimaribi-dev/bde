@@ -119,7 +119,7 @@ export default function AProposProposerClient() {
               borderBottom: '1.5px dashed var(--ink)',
               padding: '10px 16px',
               fontSize: 14,
-              background: '#fff',
+              background: '#f5f5f5',
               outline: 'none',
               boxSizing: 'border-box',
             }}
@@ -136,7 +136,7 @@ export default function AProposProposerClient() {
               padding: '14px 16px',
               minHeight: 140,
               fontSize: 14,
-              background: '#fff',
+              background: '#f5f5f5',
               resize: 'vertical',
               outline: 'none',
               boxSizing: 'border-box',
