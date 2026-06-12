@@ -128,38 +128,30 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
     </div>
   )
 
-  /* ─────────── Insta + apps ─────────── */
+  /* ─────────── Insta ─────────── */
   const InstaBlock = () => (
     <div style={{ padding: isMobile ? '18px 20px' : '28px 36px' }}>
-      <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 800, fontSize: isMobile ? 20 : 15, letterSpacing: '-0.01em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+      <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 800, fontSize: isMobile ? 20 : 15, letterSpacing: '-0.01em', textTransform: 'uppercase', margin: '0 0 14px' }}>
         SUIVEZ NOUS SUR INSTA !
       </p>
       <a href="https://instagram.com/bde_lisaa_dgc" target="_blank" rel="noreferrer"
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'var(--ink)', marginBottom: 16 }}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 12, textDecoration: 'none', color: 'var(--ink)' }}>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
         </svg>
-        <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 15, letterSpacing: '.03em' }}>bde_lisaa_dgc</span>
+        <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 20, letterSpacing: '.02em' }}>bde_lisaa_dgc</span>
       </a>
-      <div style={{ display: 'flex', gap: 10 }}>
-        {[
-          { label: 'R',   bg: '#1a1a1a', color: '#fff', size: 16 },
-          { label: 'jow', bg: '#FF6B47', color: '#fff', size: 12 },
-          { label: '🌐',  bg: '#BFDBFE', color: '#111', size: 18 },
-        ].map(app => (
-          <div key={app.label} style={{ width: 48, height: 48, background: app.bg, color: app.color, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: app.size, fontWeight: 800, border: '1px solid rgba(0,0,0,0.1)' }}>
-            {app.label}
-          </div>
-        ))}
-      </div>
     </div>
   )
 
   /* ─────────── Legal ─────────── */
   const Legal = () => (
-    <div style={{ padding: isMobile ? '12px 20px' : '12px 36px', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.18)' }}>
+    <div style={{ padding: isMobile ? '12px 20px' : '12px 36px', borderTop: '1px solid rgba(0,0,0,0.18)', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
       <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.55 }}>
         © {new Date().getFullYear()} BDE LISAA PARIS – TOUS DROITS RÉSERVÉS
+      </span>
+      <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 10, letterSpacing: '.04em', color: 'var(--ink)', opacity: 0.45, fontStyle: 'italic' }}>
+        Designé par Célestine Goussard, Liselotte Lecoq &amp; Marie Desbois
       </span>
     </div>
   )
