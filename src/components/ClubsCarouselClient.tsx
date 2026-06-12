@@ -358,10 +358,10 @@ function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: st
         href={`/${locale}/clubs/${club.slug}`}
         style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
-          background: 'var(--ink)', color: '#fff',
+          background: 'var(--yellow)', color: 'var(--ink)',
           fontFamily: 'var(--font-display)', fontStyle: 'italic',
           fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase',
-          padding: '10px 18px', textDecoration: 'none',
+          padding: '10px 18px', textDecoration: 'none', borderRadius: 999,
           alignSelf: 'center', margin: '4px 0',
         }}
       >
