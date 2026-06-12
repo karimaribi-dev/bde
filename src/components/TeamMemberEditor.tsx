@@ -35,8 +35,14 @@ export default function TeamMemberEditor({ member }: Props) {
   const [uploading, setUploading] = useState(false)
   const [saving,    setSaving]    = useState(false)
   const [saved,     setSaved]     = useState(false)
+  const [dirty,     setDirty]     = useState(false)
   const [error,     setError]     = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
+
+  function changeName(v: string)       { setName(v);       setDirty(true) }
+  function changeRole(v: string)       { setRole(v);       setDirty(true) }
+  function changeColor(v: string)      { setBadgeColor(v); setDirty(true) }
+  function changePhoto(v: string)      { setPhotoUrl(v);   setDirty(true) }
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -57,7 +63,7 @@ export default function TeamMemberEditor({ member }: Props) {
         .upload(name, compressed, { contentType: 'image/webp', upsert: false })
       if (upErr) throw upErr
       const { data } = supabase.storage.from('article-images').getPublicUrl(name)
-      setPhotoUrl(data.publicUrl)
+      changePhoto(data.publicUrl)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Erreur upload')
     } finally {
@@ -82,6 +88,7 @@ export default function TeamMemberEditor({ member }: Props) {
       .eq('id', member.id)
     setSaving(false)
     if (dbErr) { setError(dbErr.message); return }
+    setDirty(false)
     setSaved(true)
     setTimeout(() => {
       setSaved(false)
@@ -173,7 +180,7 @@ export default function TeamMemberEditor({ member }: Props) {
         <input
           type="text"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={e => changeName(e.target.value)}
           style={{
             width: '100%', boxSizing: 'border-box',
             border: '1px solid #e5e7eb', borderRadius: 6,
@@ -192,7 +199,7 @@ export default function TeamMemberEditor({ member }: Props) {
         <input
           type="text"
           value={role}
-          onChange={e => setRole(e.target.value)}
+          onChange={e => changeRole(e.target.value)}
           placeholder="ex : Président, Trésorier…"
           style={{
             width: '100%', boxSizing: 'border-box',
@@ -213,7 +220,7 @@ export default function TeamMemberEditor({ member }: Props) {
             <button
               key={c.value}
               type="button"
-              onClick={() => setBadgeColor(c.value)}
+              onClick={() => changeColor(c.value)}
               title={c.label}
               style={{
                 width: 28, height: 28, borderRadius: '50%',
@@ -228,7 +235,7 @@ export default function TeamMemberEditor({ member }: Props) {
           <input
             type="color"
             value={badgeColor}
-            onChange={e => setBadgeColor(e.target.value)}
+            onChange={e => changeColor(e.target.value)}
             style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', cursor: 'pointer', padding: 0, background: 'transparent' }}
             title="Couleur personnalisée"
           />
@@ -246,19 +253,19 @@ export default function TeamMemberEditor({ member }: Props) {
       <button
         type="button"
         onClick={handleSave}
-        disabled={saving || uploading}
+        disabled={saving || uploading || (!dirty && !saved)}
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          background: saved ? '#16a34a' : 'var(--ink, #262626)',
-          color: '#fff',
+          background: saved ? '#16a34a' : dirty ? 'var(--ink, #262626)' : '#d1d5db',
+          color: dirty || saved ? '#fff' : '#9ca3af',
           fontFamily: 'var(--font-display, "Archivo Black", sans-serif)',
           fontStyle: 'italic',
           fontWeight: 700, fontSize: 14,
           textTransform: 'uppercase', letterSpacing: '0.04em',
           padding: '12px', border: 'none', borderRadius: 6,
-          cursor: saving || uploading ? 'wait' : 'pointer',
+          cursor: saving || uploading ? 'wait' : (!dirty && !saved) ? 'default' : 'pointer',
           opacity: saving || uploading ? 0.7 : 1,
-          transition: 'background 0.2s',
+          transition: 'background 0.25s, color 0.25s',
           width: '100%',
         }}
       >
