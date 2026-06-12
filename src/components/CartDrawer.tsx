@@ -175,7 +175,7 @@ export default function CartDrawer() {
                   marginTop: 10,
                   background: '#FFE74A', color: 'var(--ink)',
                   fontFamily: 'var(--font-display)', fontStyle: 'italic',
-                  fontWeight: 700, fontSize: 14, textTransform: 'uppercase',
+                  fontWeight: 700, fontSize: 20, textTransform: 'uppercase',
                   padding: '12px 28px', border: 'none', borderRadius: 999,
                   cursor: 'pointer', letterSpacing: '0.02em',
                 }}

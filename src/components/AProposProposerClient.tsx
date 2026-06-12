@@ -152,7 +152,7 @@ export default function AProposProposerClient() {
               display: 'inline-flex', alignItems: 'center', gap: 8,
               background: '#FFE74A', color: 'var(--ink)',
               fontFamily: 'var(--font-display)', fontStyle: 'italic',
-              fontSize: 14, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
+              fontSize: 20, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
               padding: '11px 22px', border: 'none',
               borderRadius: 999,
             }}>

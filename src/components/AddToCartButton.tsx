@@ -40,7 +40,7 @@ export default function AddToCartButton({
           fontFamily: 'var(--font-display)',
           fontStyle: 'italic',
           fontWeight: 900,
-          fontSize: 16,
+          fontSize: 20,
           textTransform: 'uppercase',
           letterSpacing: '0.03em',
           padding: '16px 32px',
