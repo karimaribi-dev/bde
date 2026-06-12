@@ -141,17 +141,29 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
         </svg>
         <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 20, letterSpacing: '.02em' }}>bde_lisaa_dgc</span>
       </a>
+      {/* Crédit designers — visible uniquement sur desktop, juste sous l'handle */}
+      {!isMobile && (
+        <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 13, letterSpacing: '.02em', color: 'var(--ink)', opacity: 0.55, fontStyle: 'italic', margin: '18px 0 0' }}>
+          Designé par Célestine Goussard,<br />Liselotte Lecoq &amp; Marie Desbois
+        </p>
+      )}
+    </div>
+  )
+
+  /* ─────────── Crédit designers (mobile uniquement) ─────────── */
+  const DesignerCredit = () => (
+    <div style={{ padding: '14px 20px' }}>
+      <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 15, letterSpacing: '.02em', color: 'var(--ink)', opacity: 0.6, fontStyle: 'italic', margin: 0 }}>
+        Designé par Célestine Goussard, Liselotte Lecoq &amp; Marie Desbois
+      </p>
     </div>
   )
 
   /* ─────────── Legal ─────────── */
   const Legal = () => (
-    <div style={{ padding: isMobile ? '12px 20px' : '12px 36px', borderTop: '1px solid rgba(0,0,0,0.18)', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
+    <div style={{ padding: isMobile ? '12px 20px' : '12px 36px', borderTop: '1px solid rgba(0,0,0,0.18)', textAlign: isMobile ? 'left' : 'center' }}>
       <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.55 }}>
         © {new Date().getFullYear()} BDE LISAA PARIS – TOUS DROITS RÉSERVÉS
-      </span>
-      <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 10, letterSpacing: '.04em', color: 'var(--ink)', opacity: 0.45, fontStyle: 'italic' }}>
-        Designé par Célestine Goussard, Liselotte Lecoq &amp; Marie Desbois
       </span>
     </div>
   )
@@ -170,6 +182,8 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
         <NavLinks />
         <HR />
         <InstaBlock />
+        <HR />
+        <DesignerCredit />
         <Legal />
       </footer>
     )
