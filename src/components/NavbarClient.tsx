@@ -53,14 +53,9 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
   const [desktopQuery, setDesktopQuery]     = useState('')
   const [desktopResults, setDesktopResults] = useState<SearchResult[]>([])
   const [desktopLoading, setDesktopLoading] = useState(false)
-  const [panelSearch, setPanelSearch]       = useState('')
-  const [panelResults, setPanelResults]     = useState<SearchResult[]>([])
-  const [panelLoading, setPanelLoading]     = useState(false)
-
   const pathname       = usePathname()
   const wrapRef        = useRef<HTMLDivElement>(null)
   const inputRef       = useRef<HTMLInputElement>(null)
-  const panelSearchRef = useRef<HTMLInputElement>(null)
 
   const doSearch = useCallback(async (q: string): Promise<SearchResult[]> => {
     if (q.trim().length < 2) return []
@@ -82,16 +77,6 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
   }, [desktopQuery, doSearch, withSearch])
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (panelSearch.trim().length < 2) { setPanelResults([]); return }
-      setPanelLoading(true)
-      setPanelResults(await doSearch(panelSearch))
-      setPanelLoading(false)
-    }, 320)
-    return () => clearTimeout(timer)
-  }, [panelSearch, doSearch])
-
-  useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') { setSearchOpen(false); setDesktopQuery(''); setDesktopResults([]); setPanelOpen(false) }
       if (withSearch && (e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); setSearchOpen(true) }
@@ -106,12 +91,11 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
 
   useEffect(() => { if (searchOpen) setTimeout(() => inputRef.current?.focus(), 200) }, [searchOpen])
   useEffect(() => {
-    if (panelOpen) setTimeout(() => panelSearchRef.current?.focus(), 380)
     document.body.style.overflow = panelOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [panelOpen])
 
-  const closePanel = () => { setPanelOpen(false); setPanelSearch(''); setPanelResults([]) }
+  const closePanel = () => { setPanelOpen(false) }
   const closeDesktopSearch = () => { setSearchOpen(false); setDesktopQuery(''); setDesktopResults([]) }
   const showDesktopDrop   = searchOpen && desktopQuery.trim().length >= 2
   const showDesktopEmpty  = showDesktopDrop && !desktopLoading && desktopResults.length === 0
@@ -217,7 +201,7 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
           ))}
 
           <div className="nav-panel__locales">
-            {['fr', 'en', 'es', 'de'].map(code => (
+            {['fr', 'en'].map(code => (
               <button key={code} className={`nav-panel__locale${code === locale ? ' active' : ''}`}
                 onClick={() => { closePanel(); document.cookie = `locale_choice=${code};path=/;max-age=31536000;samesite=lax`; window.location.href = buildLocalePath(pathname, code) }}>
                 {code.toUpperCase()}
@@ -225,27 +209,7 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
             ))}
           </div>
 
-          <div className="nav-panel__search">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.7-4.7"/>
-            </svg>
-            <input ref={panelSearchRef} type="text" value={panelSearch} onChange={e => setPanelSearch(e.target.value)} placeholder={l.search_placeholder} />
-            {panelLoading && <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--mute)', flexShrink: 0 }}>…</span>}
-          </div>
-
-          {panelResults.length > 0 && (
-            <div className="nav-panel__results">
-              {panelResults.map(r => (
-                <Link key={r.id} href={`/articles/${r.slug}`} onClick={closePanel} className="nav-panel__result">
-                  {r.cat_name && <span className="nav-panel__result-cat">{r.cat_name}</span>}
-                  <span className="nav-panel__result-title">{r.title}</span>
-                </Link>
-              ))}
-            </div>
-          )}
-          {panelSearch.trim().length >= 2 && !panelLoading && panelResults.length === 0 && (
-            <div className="nav-panel__no-results">{l.no_results}</div>
-          )}
+          {/* recherche masquée */}
         </nav>
       </div>
     </>

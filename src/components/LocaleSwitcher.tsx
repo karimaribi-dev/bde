@@ -6,8 +6,6 @@ import { useState, useRef, useEffect } from 'react'
 const LOCALES = [
   { code: 'fr', label: 'FR' },
   { code: 'en', label: 'EN' },
-  { code: 'es', label: 'ES' },
-  { code: 'de', label: 'DE' },
 ]
 
 const LOCALE_CODES = LOCALES.map(l => l.code)
