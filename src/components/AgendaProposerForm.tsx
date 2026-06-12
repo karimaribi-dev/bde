@@ -127,6 +127,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             onChange={e => setText(e.target.value)}
             required
             rows={6}
+            placeholder="un événement, une idée, un club… tout est le bienvenu !"
             style={{
               width: '100%',
               border: 'none',

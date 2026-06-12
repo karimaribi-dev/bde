@@ -129,6 +129,7 @@ export default function AProposProposerClient() {
             value={text}
             onChange={e => setText(e.target.value)}
             required
+            placeholder="un événement, une idée, un club… tout est le bienvenu !"
             style={{
               width: '100%',
               border: 'none',
