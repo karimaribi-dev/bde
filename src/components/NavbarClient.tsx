@@ -173,44 +173,73 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
 
           {/* Hamburger — mobile uniquement */}
           <button className="topbar-hamburger" onClick={() => setPanelOpen(true)} aria-label="Ouvrir le menu">
-            <span /><span /><span />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/menu-burger.svg" alt="" style={{ width: 36, height: 26, display: 'block' }} />
           </button>
         </div>
       </header>
 
-      {/* ── Overlay ── */}
+      {/* ── Overlay (desktop uniquement) ── */}
       <div className={`nav-overlay${panelOpen ? ' open' : ''}`} onClick={closePanel} aria-hidden="true" />
 
-      {/* ── Slide-in panel mobile ── */}
+      {/* ── Panel mobile plein écran ── */}
       <div className={`nav-panel${panelOpen ? ' open' : ''}`} role="dialog" aria-modal="true" aria-label="Menu">
+
+        {/* En-tête : flèche retour + logo */}
         <div className="nav-panel__head">
-          <Link href={`/${locale}`} onClick={closePanel} className="nav-panel__brand" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <span className="brand-name" style={{ fontSize: 18 }}>BDE</span>
-            <span className="brand-sub" style={{ marginLeft: 8 }}>LISAA DGC</span>
-          </Link>
-          <button className="nav-panel__close" onClick={closePanel} aria-label="Fermer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-              <path d="M6 6l12 12M18 6L6 18"/>
+          <button className="nav-panel__back" onClick={closePanel} aria-label="Fermer">
+            <svg width="22" height="16" viewBox="0 0 24 18" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 9H2M10 1L2 9l8 8"/>
             </svg>
           </button>
+          <Link href={`/${locale}`} onClick={closePanel} className="nav-panel__brand">
+            <span style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: 36, lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>BDE</span>
+            <span style={{ background: 'var(--pink)', padding: '3px 10px 5px', fontFamily: '"new-atten", sans-serif', fontWeight: 500, fontStyle: 'italic', fontSize: 28, lineHeight: 1, textTransform: 'uppercase' }}>LISAA DGC</span>
+          </Link>
         </div>
 
+        {/* Liens de navigation — gros boutons jaunes */}
         <nav className="nav-panel__links">
           {NAV_ITEMS.map(item => (
-            <Link key={item.key} href={item.href(locale)} onClick={closePanel}>{item.label}</Link>
+            <Link key={item.key} href={item.href(locale)} onClick={closePanel}
+              className={activeSlug === item.key ? 'active' : ''}>
+              {item.label}
+            </Link>
           ))}
-
-          <div className="nav-panel__locales">
-            {['fr', 'en'].map(code => (
-              <button key={code} className={`nav-panel__locale${code === locale ? ' active' : ''}`}
-                onClick={() => { closePanel(); document.cookie = `locale_choice=${code};path=/;max-age=31536000;samesite=lax`; window.location.href = buildLocalePath(pathname, code) }}>
-                {code.toUpperCase()}
-              </button>
-            ))}
-          </div>
-
-          {/* recherche masquée */}
+          {/* Panier */}
+          <Link href={`/${locale}/shop`} onClick={closePanel} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: 'var(--yellow)', fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 18, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: 'var(--ink)', textDecoration: 'none', padding: '18px 24px', borderRadius: 4 }}>
+            <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 6h4l2.5 14h16l3-10H9"/><circle cx="12" cy="26" r="2"/><circle cx="23" cy="26" r="2"/>
+            </svg>
+            PANIER
+            <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 6h4l2.5 14h16l3-10H9"/><circle cx="12" cy="26" r="2"/><circle cx="23" cy="26" r="2"/>
+            </svg>
+          </Link>
         </nav>
+
+        {/* Toggle langue */}
+        <div className="nav-panel__locale-row">
+          <span className="nav-panel__locale-label" style={{ opacity: locale === 'fr' ? 1 : 0.45 }}>français</span>
+          <button
+            className={`nav-panel__locale-toggle${locale === 'en' ? ' en' : ''}`}
+            aria-label="Changer de langue"
+            onClick={() => {
+              const next = locale === 'fr' ? 'en' : 'fr'
+              closePanel()
+              document.cookie = `locale_choice=${next};path=/;max-age=31536000;samesite=lax`
+              window.location.href = buildLocalePath(pathname, next)
+            }}
+          />
+          <span className="nav-panel__locale-label" style={{ opacity: locale === 'en' ? 1 : 0.45 }}>english</span>
+        </div>
+
+        {/* Footer — mentions légales + contact */}
+        <div className="nav-panel__footer">
+          <Link href={`/${locale}/mentions-legales`} onClick={closePanel}>Mentions légales</Link>
+          <Link href={`/${locale}/contact`} onClick={closePanel}>Contact</Link>
+        </div>
+
       </div>
     </>
   )
