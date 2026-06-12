@@ -347,9 +347,10 @@ function EventCard({ ev, mini = false }: { ev: Event; mini?: boolean }) {
         boxShadow: '0 4px 12px rgba(0,0,0,.15)',
       }}>
         <div style={{
-          fontFamily: 'var(--font-display)',
+          fontFamily: '"neue-haas-grotesk-display", sans-serif',
           fontStyle: 'italic',
-          fontSize: mini ? 'clamp(12px,1vw,16px)' : 'clamp(15px,1.4vw,22px)',
+          fontWeight: 700,
+          fontSize: mini ? 'clamp(12px,1vw,16px)' : 26,
           textTransform: 'uppercase',
           letterSpacing: '-0.01em',
           textAlign: 'center',
