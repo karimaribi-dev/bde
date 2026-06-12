@@ -109,8 +109,8 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             placeholder="ton adresse mail"
             style={{
               width: '100%',
-              border: 'none',
-              borderBottom: '1.5px dashed rgba(0,0,0,0.55)',
+              border: '1.5px dotted rgba(0,0,0,0.55)',
+              borderRadius: 4,
               padding: '10px 16px',
               fontSize: 14,
               background: '#f5f5f5',
@@ -130,7 +130,8 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             placeholder="un événement, une idée, un club… tout est le bienvenu !"
             style={{
               width: '100%',
-              border: 'none',
+              border: '1.5px dotted rgba(0,0,0,0.55)',
+              borderRadius: 4,
               padding: '14px 16px',
               fontSize: 14,
               background: '#f5f5f5',
