@@ -97,20 +97,20 @@ export default function TeamMemberEditor({ member }: Props) {
       flexDirection: 'column',
       gap: 18,
     }}>
-      {/* Aperçu photo */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+      {/* ── Aperçu — identique à la page À propos ── */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, paddingBottom: 8 }}>
+
+        {/* Photo circulaire cliquable */}
         <div
           onClick={() => fileRef.current?.click()}
           style={{
-            width: 120, height: 130,
+            width: 150, height: 170,
             borderRadius: '50%',
             overflow: 'hidden',
             background: '#f0f0f0',
             cursor: 'pointer',
-            border: '2px dashed #d1d5db',
             position: 'relative',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'border-color 0.15s',
           }}
           title="Cliquer pour changer la photo"
         >
@@ -122,50 +122,45 @@ export default function TeamMemberEditor({ member }: Props) {
               style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
             />
           ) : (
-            <span style={{ fontSize: 36, opacity: 0.3 }}>👤</span>
+            <span style={{ fontSize: 48, opacity: 0.2 }}>👤</span>
           )}
-          {/* Overlay upload */}
+          {/* Overlay 📷 au hover */}
           <div style={{
-            position: 'absolute', inset: 0,
-            background: 'rgba(0,0,0,0.35)',
+            position: 'absolute', inset: 0, borderRadius: '50%',
+            background: 'rgba(0,0,0,0.38)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            opacity: 0,
-            transition: 'opacity 0.15s',
-            borderRadius: '50%',
+            opacity: 0, transition: 'opacity 0.15s',
           }}
           onMouseOver={e => (e.currentTarget.style.opacity = '1')}
           onMouseOut={e => (e.currentTarget.style.opacity = '0')}
           >
-            <span style={{ color: '#fff', fontSize: 22 }}>📷</span>
+            <i className="fa-solid fa-camera" style={{ color: '#fff', fontSize: 22 }} />
           </div>
         </div>
 
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={handleImageUpload}
-        />
+        <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
 
-        {uploading && (
-          <span style={{ fontSize: 12, color: '#6b7280', fontStyle: 'italic' }}>Upload en cours…</span>
-        )}
-
-        {/* Badge prévisualisation */}
+        {/* Badge nom — même style que la page publique */}
         <div style={{
           background: badgeColor,
-          color: '#262626',
+          color: 'var(--ink, #262626)',
           fontFamily: 'var(--font-display, "Archivo Black", sans-serif)',
           fontStyle: 'italic',
           fontWeight: 900,
-          fontSize: 13,
+          fontSize: 15,
           letterSpacing: '0.04em',
           textTransform: 'uppercase',
-          padding: '4px 14px 5px',
+          padding: '5px 16px 6px',
+          marginTop: -4,
+          position: 'relative',
+          zIndex: 1,
         }}>
           {name || '—'}
         </div>
+
+        {uploading && (
+          <span style={{ fontSize: 11, color: '#6b7280', fontStyle: 'italic', marginTop: 6 }}>Upload en cours…</span>
+        )}
       </div>
 
       {/* Nom */}
