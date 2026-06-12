@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Category } from '@/lib/types'
 
@@ -10,214 +11,218 @@ const NAV_COL1 = [
 ]
 const NAV_COL2 = [
   { label: 'COUP DE CŒUR', href: '/coup-de-coeur' },
-  { label: 'À PROPOS',     href: '/p/a-propos' },
+  { label: 'À PROPOS',     href: '/a-propos' },
 ]
 
-function scrollTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
+function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
-const linkStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-mono)',
-  fontSize: 11,
-  letterSpacing: '.1em',
+const navLinkStyle: React.CSSProperties = {
+  fontFamily: '"neue-haas-grotesk-text", "Helvetica Neue", sans-serif',
+  fontSize: 13,
+  letterSpacing: '.04em',
   textTransform: 'uppercase',
   color: 'var(--ink)',
   textDecoration: 'none',
   display: 'block',
-  padding: '4px 0',
+  padding: '5px 0',
 }
+
+const HR = () => (
+  <div style={{ borderTop: '1px solid rgba(0,0,0,0.18)', margin: '0' }} />
+)
 
 export default function SiteFooter({ categories }: { categories: Category[] }) {
   void categories
 
+  const [isMobile, setIsMobile] = useState(false)
+  const [dark, setDark] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 720)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark)
+  }, [dark])
+
+  /* ─────────── Brand row (partagé desktop + mobile) ─────────── */
+  const BrandRow = () => (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: isMobile ? '18px 20px' : '24px 36px',
+      borderBottom: '1px solid rgba(0,0,0,0.18)',
+    }}>
+      <Link href="/" style={{ display: 'inline-flex', alignItems: 'baseline', gap: 10, textDecoration: 'none', color: 'inherit' }}>
+        <span style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 36 : 48, lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>BDE</span>
+        <span style={{ background: 'var(--blue-strong)', padding: isMobile ? '3px 10px 4px' : '4px 12px 6px', fontFamily: '"new-atten", sans-serif', fontWeight: 500, fontStyle: 'italic', fontSize: isMobile ? 22 : 30, lineHeight: 1, textTransform: 'uppercase' }}>LISAA DGC</span>
+      </Link>
+      <button onClick={scrollTop} aria-label="Haut de page" style={{ width: isMobile ? 44 : 52, height: isMobile ? 44 : 52, border: '2px solid var(--ink)', borderRadius: '50%', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
+    </div>
+  )
+
+  /* ─────────── MAKE THE CAMPUS ALIVE (partagé) ─────────── */
+  const MakeCampusAlive = () => (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '28px 20px' : '36px 52px', position: 'relative' }}>
+      <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '28px 40px' : '36px 52px' }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/entoure.svg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} />
+        <span style={{ position: 'relative', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: isMobile ? 'clamp(26px, 8vw, 40px)' : 'clamp(20px, 2.4vw, 30px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em', textTransform: 'uppercase', display: 'block', textAlign: 'center' }}>
+          MAKE THE<br />CAMPUS ALIVE
+        </span>
+      </div>
+    </div>
+  )
+
+  /* ─────────── Dark mode toggle ─────────── */
+  const DarkModeToggle = () => (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '18px 20px' : '20px 36px' }}>
+      <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 800, fontSize: isMobile ? 20 : 17, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>
+        DARK MODE
+      </span>
+      <button
+        onClick={() => setDark(d => !d)}
+        aria-pressed={dark}
+        aria-label="Toggle dark mode"
+        style={{
+          width: 58, height: 30,
+          borderRadius: 15,
+          background: dark ? 'var(--ink)' : 'rgba(0,0,0,0.15)',
+          border: 'none',
+          cursor: 'pointer',
+          position: 'relative',
+          transition: 'background .2s',
+          flexShrink: 0,
+        }}
+      >
+        <span style={{
+          position: 'absolute',
+          top: 3, left: dark ? 31 : 3,
+          width: 24, height: 24,
+          borderRadius: '50%',
+          background: dark ? '#fff' : 'var(--ink)',
+          transition: 'left .2s',
+          display: 'block',
+        }} />
+      </button>
+    </div>
+  )
+
+  /* ─────────── Nav links ─────────── */
+  const NavLinks = () => (
+    <div style={{ padding: isMobile ? '18px 20px' : '28px 36px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 24px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {NAV_COL1.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {NAV_COL2.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
+      </div>
+    </div>
+  )
+
+  /* ─────────── Insta + apps ─────────── */
+  const InstaBlock = () => (
+    <div style={{ padding: isMobile ? '18px 20px' : '28px 36px' }}>
+      <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 800, fontSize: isMobile ? 20 : 15, letterSpacing: '-0.01em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+        SUIVEZ NOUS SUR INSTA !
+      </p>
+      <a href="https://instagram.com/bde_lisaa_dgc" target="_blank" rel="noreferrer"
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'var(--ink)', marginBottom: 16 }}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+        <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 15, letterSpacing: '.03em' }}>bde_lisaa_dgc</span>
+      </a>
+      <div style={{ display: 'flex', gap: 10 }}>
+        {[
+          { label: 'R',   bg: '#1a1a1a', color: '#fff', size: 16 },
+          { label: 'jow', bg: '#FF6B47', color: '#fff', size: 12 },
+          { label: '🌐',  bg: '#BFDBFE', color: '#111', size: 18 },
+        ].map(app => (
+          <div key={app.label} style={{ width: 48, height: 48, background: app.bg, color: app.color, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: app.size, fontWeight: 800, border: '1px solid rgba(0,0,0,0.1)' }}>
+            {app.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  /* ─────────── Legal ─────────── */
+  const Legal = () => (
+    <div style={{ padding: isMobile ? '12px 20px' : '12px 36px', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.18)' }}>
+      <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.55 }}>
+        © {new Date().getFullYear()} BDE LISAA PARIS – TOUS DROITS RÉSERVÉS
+      </span>
+    </div>
+  )
+
+  /* ═══════════════════════════════════════════════════════
+     MOBILE LAYOUT
+  ═══════════════════════════════════════════════════════ */
+  if (isMobile) {
+    return (
+      <footer style={{ background: 'var(--yellow)', fontFamily: 'var(--font-display)' }}>
+        <BrandRow />
+        <MakeCampusAlive />
+        <HR />
+        <DarkModeToggle />
+        <HR />
+        <NavLinks />
+        <HR />
+        <InstaBlock />
+        <Legal />
+      </footer>
+    )
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     DESKTOP LAYOUT (3 colonnes)
+  ═══════════════════════════════════════════════════════ */
   return (
     <footer style={{ background: 'var(--yellow)', borderTop: 'var(--hair)', fontFamily: 'var(--font-display)' }}>
 
-      {/* ── Top band : brand + scroll up ── */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '28px 36px',
-        borderBottom: 'var(--hair)',
-      }}>
-        <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(44px, 7vw, 72px)',
-            fontWeight: 800,
-            lineHeight: 1,
-            letterSpacing: '-0.02em',
-            textTransform: 'uppercase',
-          }}>BDE</span>
-          <span style={{
-            background: 'var(--blue)',
-            padding: '6px 18px 8px',
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(24px, 4.5vw, 52px)',
-            fontWeight: 800,
-            lineHeight: 1,
-            letterSpacing: '-0.01em',
-            fontStyle: 'italic',
-            textTransform: 'uppercase',
-          }}>LISAA DGC</span>
-        </Link>
-
-        <button
-          onClick={scrollTop}
-          aria-label="Haut de page"
-          style={{
-            width: 56,
-            height: 56,
-            border: '2px solid var(--ink)',
-            borderRadius: '50%',
-            background: 'transparent',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            transition: 'background .15s',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.background = 'var(--ink)')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="18 15 12 9 6 15"/>
-          </svg>
-        </button>
-      </div>
+      <BrandRow />
 
       {/* ── 3-column middle ── */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        borderBottom: 'var(--hair)',
-      }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', borderBottom: 'var(--hair)' }}>
 
-        {/* Col 1 — MENU */}
-        <div style={{ padding: '28px 36px', borderRight: 'var(--hair)' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 16,
-            paddingBottom: 12,
-            borderBottom: '1px dashed rgba(17,17,17,0.35)',
-          }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 800, fontStyle: 'italic', letterSpacing: '.04em', textTransform: 'uppercase' }}>
-              MENU
-            </span>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/smiley-handdrawn.svg" alt="" width={28} height={22} style={{ display: 'block' }} />
+        {/* Col 1 — MENU + DARK MODE */}
+        <div style={{ padding: '28px 36px', borderRight: 'var(--hair)', display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <div style={{ marginBottom: 20, paddingBottom: 14, borderBottom: '1px dashed rgba(17,17,17,0.3)' }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, fontStyle: 'italic', letterSpacing: '.04em', textTransform: 'uppercase' }}>MENU</span>
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', marginBottom: 28 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {NAV_COL1.map(l => (
-                <Link key={l.href} href={l.href} style={linkStyle}>{l.label}</Link>
-              ))}
+              {NAV_COL1.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {NAV_COL2.map(l => (
-                <Link key={l.href} href={l.href} style={linkStyle}>{l.label}</Link>
-              ))}
+              {NAV_COL2.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
             </div>
           </div>
+          <DarkModeToggle />
         </div>
 
         {/* Col 2 — INSTA */}
         <div style={{ padding: '28px 36px', borderRight: 'var(--hair)' }}>
-          <p style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 15,
-            fontWeight: 800,
-            fontStyle: 'italic',
-            letterSpacing: '.04em',
-            textTransform: 'uppercase',
-            margin: '0 0 14px',
-          }}>
-            SUIVEZ NOUS SUR INSTA !
-          </p>
-
-          <a href="https://instagram.com/bde_lisaa_dgc" target="_blank" rel="noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'var(--ink)', marginBottom: 20 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-            </svg>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '.05em' }}>bde_lisaa_dgc</span>
-          </a>
-
-          {/* App icon placeholders */}
-          <div style={{ display: 'flex', gap: 8 }}>
-            {[
-              { label: 'R', bg: '#1a1a1a', color: '#fff' },
-              { label: 'jow', bg: '#FF6B47', color: '#fff' },
-              { label: '🌐', bg: '#BFDBFE', color: '#111' },
-            ].map(app => (
-              <div key={app.label} style={{
-                width: 44,
-                height: 44,
-                background: app.bg,
-                color: app.color,
-                borderRadius: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontFamily: 'var(--font-display)',
-                fontSize: app.label === 'jow' ? 11 : 16,
-                fontWeight: 800,
-                letterSpacing: 0,
-                border: '1px solid rgba(0,0,0,0.12)',
-              }}>
-                {app.label}
-              </div>
-            ))}
-          </div>
+          <InstaBlock />
         </div>
 
-        {/* Col 3 — MAKE THE CAMPUS ALIVE + entoure SVG */}
-        <div style={{ padding: '28px 36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '36px 52px' }}>
-            {/* SVG contour dessiné à la main */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/entoure.svg"
-              alt=""
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                pointerEvents: 'none',
-              }}
-            />
-            <span style={{
-              position: 'relative',
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(18px, 2.2vw, 26px)',
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: '-0.02em',
-              textTransform: 'uppercase',
-              display: 'block',
-              textAlign: 'center',
-            }}>
-              MAKE THE<br />CAMPUS ALIVE
-            </span>
-          </div>
+        {/* Col 3 — MAKE THE CAMPUS ALIVE */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <MakeCampusAlive />
         </div>
 
       </div>
 
-      {/* ── Legal bar ── */}
-      <div style={{ padding: '12px 36px', textAlign: 'center' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.65 }}>
-          © {new Date().getFullYear()} BDE LISAA PARIS – TOUS DROITS RÉSERVÉS
-        </span>
-      </div>
+      <Legal />
 
     </footer>
   )

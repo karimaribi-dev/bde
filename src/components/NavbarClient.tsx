@@ -107,7 +107,7 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
 
         {/* Brand */}
         <Link href={`/${locale}`} className="brand" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span>BDE</span>
+          <span className="bde-word">BDE</span>
           <span className="lisaa-dgc">{l.tagline}</span>
         </Link>
 
