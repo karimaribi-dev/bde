@@ -109,7 +109,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             placeholder="ton adresse mail"
             style={{
               width: '100%',
-              border: '1px solid rgba(0,0,0,0.85)',
+              border: '1.5px dashed rgba(0,0,0,0.55)',
               borderRadius: 2,
               padding: '10px 16px',
               fontSize: 14,
@@ -129,7 +129,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             rows={6}
             style={{
               width: '100%',
-              border: '1px solid rgba(0,0,0,0.85)',
+              border: '1.5px dashed rgba(0,0,0,0.55)',
               borderRadius: 2,
               padding: '14px 16px',
               fontSize: 14,
