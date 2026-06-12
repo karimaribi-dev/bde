@@ -198,10 +198,10 @@ export default function CartDrawer() {
               <button
                 onClick={handleClose}
                 style={{
-                  background: 'var(--ink)', color: '#fff',
+                  background: '#FFE74A', color: 'var(--ink)',
                   fontFamily: 'var(--font-display)', fontStyle: 'italic',
-                  fontSize: 13, textTransform: 'uppercase',
-                  padding: '10px 22px', border: 'none', cursor: 'pointer',
+                  fontSize: 20, fontWeight: 700, textTransform: 'uppercase',
+                  padding: '12px 22px', border: 'none', borderRadius: 999, cursor: 'pointer',
                 }}
               >
                 Voir le shop →
@@ -397,11 +397,11 @@ export default function CartDrawer() {
                     style={{
                       marginTop: 6,
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                      background: 'var(--ink)', color: '#fff',
+                      background: '#FFE74A', color: 'var(--ink)',
                       fontFamily: 'var(--font-display)', fontStyle: 'italic',
-                      fontWeight: 700, fontSize: 15, textTransform: 'uppercase',
+                      fontWeight: 700, fontSize: 20, textTransform: 'uppercase',
                       letterSpacing: '0.04em',
-                      padding: '15px 24px', border: 'none',
+                      padding: '15px 24px', border: 'none', borderRadius: 999,
                       cursor: sending ? 'wait' : 'pointer',
                       opacity: sending ? 0.7 : 1,
                       width: '100%',

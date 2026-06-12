@@ -290,7 +290,7 @@ export default async function ClubDetailPage({
                     display: 'inline-flex', alignItems: 'center', gap: 6,
                     background: '#FFE74A', color: 'var(--ink)',
                     fontFamily: 'var(--font-display)', fontStyle: 'italic',
-                    fontSize: 12, letterSpacing: '0.04em', textTransform: 'uppercase',
+                    fontSize: 20, letterSpacing: '0.04em', textTransform: 'uppercase',
                     padding: '8px 20px', borderRadius: 999, alignSelf: 'flex-end', marginTop: 'auto',
                     fontWeight: 700,
                   }}>
@@ -337,8 +337,8 @@ export default async function ClubDetailPage({
               display: 'inline-flex', alignItems: 'center', gap: 10,
               background: '#FFE74A', color: 'var(--ink)',
               fontFamily: 'var(--font-display)', fontStyle: 'italic',
-              fontSize: 14, fontWeight: 700, letterSpacing: '0.04em',
-              textTransform: 'uppercase', textDecoration: 'none', padding: '12px 22px',
+              fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
+              textTransform: 'uppercase', textDecoration: 'none', padding: '12px 22px', borderRadius: 999,
             }}>
               VOIR LE SHOP
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
