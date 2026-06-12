@@ -43,8 +43,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
           <nav className="admin-nav-section">
             <div className="admin-nav-title">Site</div>
-            <AdminNavItem href="/admin/subscribers" icon="fa-solid fa-users" label="Abonnés" exact />
-            <AdminNavItem href="/admin/ads" icon="fa-solid fa-rectangle-ad" label="Publicités" />
             <AdminNavItem href="/admin/popups" icon="fa-solid fa-window-restore" label="Popups" />
             <AdminNavItem href="/admin/social" icon="fa-solid fa-share-nodes" label="Réseaux sociaux" exact />
             <AdminNavItem href="/admin/analytics" icon="fa-brands fa-google" label="Analytics" exact />
