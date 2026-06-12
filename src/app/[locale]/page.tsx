@@ -521,7 +521,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PRINT</div>
             <div style={{ fontFamily: '"new-atten", sans-serif', fontStyle: 'normal', fontWeight: 400, fontSize: 36, letterSpacing: '0em', opacity: 0.9 }}>tous les mardi — 18H</div>
             {/* Blurb — position absolute bas gauche */}
-            <div style={{ position: 'absolute', bottom: 18, left: 36, fontSize: 14, lineHeight: 1.3, color: 'var(--ink)' }}>
+            <div style={{ position: 'absolute', bottom: 18, left: 36, fontSize: 24, lineHeight: 1.3, color: 'var(--ink)' }}>
               <div>Passionés de print ?</div>
               <div>Vous êtes les bienvenues</div>
             </div>
