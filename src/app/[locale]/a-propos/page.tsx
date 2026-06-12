@@ -83,7 +83,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'clamp(10px,1.2vw,20px)' }}>
               <span>(</span>
               <span style={{
-                fontFamily: "'altesse-std', serif",
+                fontFamily: '"altesse-std-64pt", serif',
                 fontStyle: 'normal',
                 fontWeight: 400,
                 fontSize: '0.7em',

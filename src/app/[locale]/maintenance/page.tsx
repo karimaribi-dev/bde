@@ -32,7 +32,7 @@ export default async function MaintenancePage({
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: "'altesse-std', serif",
+      fontFamily: '"altesse-std-24pt", serif',
       padding: '40px 20px',
       textAlign: 'center',
       background: '#111',

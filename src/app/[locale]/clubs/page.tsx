@@ -56,7 +56,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
             <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px,1.5vw,20px)' }}>
               <span style={{ fontWeight: 900 }}>(</span>
               <span style={{
-                fontFamily: "'altesse-std', serif",
+                fontFamily: '"altesse-std-24pt", serif',
                 fontWeight: 400,
                 fontStyle: 'normal',
                 fontSize: 'clamp(22px, 2.4vw, 40px)',
