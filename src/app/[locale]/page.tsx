@@ -479,7 +479,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             justifyContent: 'center',
             gap: 4,
           }}>
-            <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>CLUB TYPO</div>
+            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB TYPO</div>
             <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les jeudis — 18H</div>
           </div>
 
@@ -501,7 +501,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             gap: 4,
             zIndex: 4,
           }}>
-            <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>CLUB PHOTO</div>
+            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PHOTO</div>
             <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les mercredis — 18H</div>
           </div>
 
@@ -518,7 +518,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             justifyContent: 'flex-start',
             gap: 4,
           }}>
-            <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>CLUB PRINT</div>
+            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PRINT</div>
             <div style={{ fontStyle: 'italic', fontSize: 13, letterSpacing: '0.02em', opacity: 0.9 }}>tous les mardi — 18H</div>
             {/* Blurb — position absolute bas gauche */}
             <div style={{ position: 'absolute', bottom: 18, left: 36, fontSize: 14, lineHeight: 1.3, color: 'var(--ink)' }}>
