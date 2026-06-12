@@ -640,6 +640,7 @@ html.dark .cart-drawer-bg { background: rgba(0,0,0,0.6) !important; }
   .club-detail-right { order: 2 !important; padding-top: 16px !important; }
   .club-taglines-desktop { display: none !important; }
   .club-taglines-mobile { display: flex !important; }
+  .club-detail-image-wrap { display: none !important; }
   .club-others-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
   .club-detail-shop { grid-template-columns: 1fr !important; gap: 0 !important; padding: 20px 0 40px !important; }
   .club-detail-shop > * { position: static !important; }

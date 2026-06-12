@@ -57,20 +57,6 @@ export default async function ClubDetailPage({
           <span style={{ color: 'var(--ink)' }}>{club.title}</span>
         </nav>
 
-        {/* Taglines — visible seulement sur mobile, affiché au-dessus du titre */}
-        <div className="club-taglines-mobile" style={{ display: 'none', flexDirection: 'column', gap: 4, marginBottom: 12, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
-          {club.tagline && (
-            <span style={{ display: 'inline-block', fontSize: 12, textTransform: 'uppercase', color: 'var(--ink)', letterSpacing: '0.02em' }}>
-              {club.tagline}
-            </span>
-          )}
-          {club.tagline_sub && (
-            <span style={{ display: 'inline-block', background: ac, color: at, padding: '5px 12px 7px', fontSize: 22, letterSpacing: '-0.01em', textTransform: 'uppercase', width: 'fit-content', marginLeft: 20 }}>
-              {club.tagline_sub}
-            </span>
-          )}
-        </div>
-
         {/* ═══════════ BLOC PRINCIPAL 2-COL ═══════════
             Gauche : titre + photo empilés
             Droite : taglines + séparateurs + sections + form           */}
@@ -108,8 +94,22 @@ export default async function ClubDetailPage({
               </span>
             </h1>
 
-            {/* Grande photo */}
-            <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', background: ac, position: 'relative', flexShrink: 0 }}>
+            {/* Taglines — mobile uniquement, sous le titre */}
+            <div className="club-taglines-mobile" style={{ display: 'none', flexDirection: 'column', gap: 4, marginBottom: 20, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
+              {club.tagline && (
+                <span style={{ display: 'inline-block', fontSize: 12, textTransform: 'uppercase', color: 'var(--ink)', letterSpacing: '0.02em' }}>
+                  {club.tagline}
+                </span>
+              )}
+              {club.tagline_sub && (
+                <span style={{ display: 'inline-block', background: ac, color: at, padding: '5px 12px 7px', fontSize: 22, letterSpacing: '-0.01em', textTransform: 'uppercase', width: 'fit-content', marginLeft: 20 }}>
+                  {club.tagline_sub}
+                </span>
+              )}
+            </div>
+
+            {/* Grande photo — cachée sur mobile */}
+            <div className="club-detail-image-wrap" style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', background: ac, position: 'relative', flexShrink: 0 }}>
               {club.image_url ? (
                 <Image
                   src={club.image_url}
