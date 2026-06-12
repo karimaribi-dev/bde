@@ -55,9 +55,8 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px,2.4vw,40px)', whiteSpace: 'nowrap' }}>
               <span>AGENDA</span>
               <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(80px,10vw,160px)', height: 'clamp(80px,10vw,160px)', flexShrink: 0 }}>
-                <svg viewBox="0 0 100 100" fill="none" stroke="#1a1a1a" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                  <path d="M20 20L80 80M40 80H80V40"/>
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/fleche-bas.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </span>
             </span>
             {/* Ligne 2 : smiley + & EVENT */}

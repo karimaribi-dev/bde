@@ -47,9 +47,8 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
             <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(20px, 3vw, 50px)' }}>
               <span>JOIN OUR</span>
               <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(70px,8vw,130px)', height: 'clamp(70px,8vw,130px)' }}>
-                <svg viewBox="0 0 100 100" fill="none" stroke="#262626" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                  <path d="M20 20L80 80M40 80H80V40"/>
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/fleche-bas.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </span>
             </span>
             {/* Ligne 2 : ( Amazing, Fun,... ) CLUBS */}
