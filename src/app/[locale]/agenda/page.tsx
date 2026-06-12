@@ -157,32 +157,21 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
           position: 'relative',
         }}>
           {/* Texte gauche */}
-          <div className="agenda-calendar-text" style={{ position: 'relative', paddingTop: 20, paddingLeft: 80 }}>
-            {/* Étoile bleue */}
-            <span aria-hidden="true" style={{ position: 'absolute', top: -30, left: 0, width: 90, height: 90, display: 'inline-flex' }}>
-              <svg viewBox="0 0 140 140" fill="none" stroke="#5FA0FB" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                <path d="M70 12 C72 26 78 36 84 40 C96 42 110 42 124 38 C112 50 102 60 100 68 C104 80 108 96 116 116 C100 102 84 92 70 90 C56 92 38 100 22 116 C30 100 36 82 38 68 C36 56 24 50 12 38 C26 42 40 42 52 40 C60 36 66 26 70 12 Z"/>
-              </svg>
-            </span>
+          <div className="agenda-calendar-text" style={{ position: 'relative', paddingTop: 20, paddingLeft: 0 }}>
             <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
-              fontWeight: 800,
-              fontSize: 'clamp(38px,4.4vw,60px)',
-              lineHeight: 1.05,
+              fontFamily: '"neue-haas-grotesk-display", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              fontSize: 32,
+              lineHeight: 1.15,
               textTransform: 'uppercase',
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.01em',
               color: 'var(--ink)',
               margin: 0,
             }}>
               L&apos;AGENDA POUR<br/>
               VOUS<br/>
               ORGANISER
-              <span aria-hidden="true" style={{ display: 'inline-block', width: 'clamp(50px,5vw,80px)', height: 'clamp(28px,3vw,44px)', verticalAlign: 'middle', marginLeft: 14 }}>
-                <svg viewBox="0 0 24 16" fill="none" stroke="#1a1a1a" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                  <path d="M2 8h19M14 1l7 7-7 7"/>
-                </svg>
-              </span>
             </h2>
           </div>
 
@@ -195,23 +184,10 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
 
         {/* ═══════════ Y ÉTIEZ VOUS ? / PASSÉS ═══════════ */}
         <section style={{ marginBottom: 60 }}>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
-            fontWeight: 900,
-            fontSize: 'clamp(20px,1.9vw,26px)',
-            lineHeight: 1.8,
-            textTransform: 'uppercase',
-            margin: '0 0 26px',
-            color: 'var(--ink)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: 6,
-          }}>
-            <span style={{ background: '#FFE74A', padding: '4px 12px' }}>Y ÉTIEZ VOUS ?</span>
-            <span style={{ background: '#4FA3FF', color: 'var(--ink)', padding: '4px 12px', marginLeft: 80 }}>NOS ÉVÉNEMENTS PASSÉS</span>
-          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, margin: '0 0 26px' }}>
+            <span style={{ background: '#FFE74A', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)' }}>Y ÉTIEZ VOUS ?</span>
+            <span style={{ background: '#4FA3FF', padding: '4px 12px', marginLeft: 80, fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)' }}>NOS ÉVÉNEMENTS PASSÉS</span>
+          </div>
 
           {past.length > 0 ? (
             <div className="agenda-past-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
@@ -296,19 +272,21 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: '0 0 18px' }}>
               *N&apos;hésitez pas à les soutenir en regardant le shop
             </p>
-            <Link href={`/${locale}/shop`} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: '#FFE74A', color: 'var(--ink)',
-              fontFamily: 'var(--font-display)', fontStyle: 'italic',
-              fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
-              textTransform: 'uppercase', textDecoration: 'none',
-              padding: '12px 22px', borderRadius: 999,
-            }}>
-              VOIR LE SHOP
-              <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
-                <path d="M2 8h19M14 1l7 7-7 7"/>
-              </svg>
-            </Link>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Link href={`/${locale}/shop`} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 10,
+                background: '#FFE74A', color: 'var(--ink)',
+                fontFamily: 'var(--font-display)', fontStyle: 'italic',
+                fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
+                textTransform: 'uppercase', textDecoration: 'none',
+                padding: '12px 22px', borderRadius: 999,
+              }}>
+                VOIR LE SHOP
+                <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
+                  <path d="M2 8h19M14 1l7 7-7 7"/>
+                </svg>
+              </Link>
+            </div>
           </div>
         </section>
 

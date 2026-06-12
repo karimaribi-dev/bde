@@ -53,23 +53,10 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
           <img src="/images/fleche-curl.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
         </span>
 
-        <h2 style={{
-          fontFamily: 'var(--font-display)',
-          fontStyle: 'italic',
-          fontWeight: 900,
-          fontSize: 'clamp(22px, 2.4vw, 32px)',
-          lineHeight: 1.55,
-          textTransform: 'uppercase',
-          color: 'var(--ink)',
-          margin: 0,
-          textAlign: 'center',
-        }}>
-          <span style={{ background: '#FFB3F0', padding: '4px 12px' }}>DES CHOSES À NOUS PROPOSER ?</span>
-          <br/>
-          <span style={{ background: '#FFB3F0', padding: '4px 12px', display: 'inline-block', marginTop: 6 }}>
-            DES ÉVÉNEMENTS ?&nbsp;&nbsp;DES CLUBS ?
-          </span>
-        </h2>
+        <div style={{ textAlign: 'center', margin: 0 }}>
+          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)', display: 'inline-block', marginRight: 6, marginBottom: 4 }}>DES CHOSES À NOUS PROPOSER ?</span>
+          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)', display: 'inline-block', marginBottom: 4 }}>DES ÉVÉNEMENTS ?&nbsp;&nbsp;DES CLUBS ?</span>
+        </div>
 
         <div style={{
           fontFamily: 'var(--font-display)',
