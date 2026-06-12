@@ -112,7 +112,7 @@ export default function AProposProposerClient() {
             type="email"
             value={mail}
             onChange={e => setMail(e.target.value)}
-            placeholder={`ton adresse ${STUDENT_DOMAIN}`}
+            placeholder="ton adresse mail"
             style={{
               width: '100%',
               border: '1px solid var(--ink)',

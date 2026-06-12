@@ -106,7 +106,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             type="email"
             value={mail}
             onChange={e => setMail(e.target.value)}
-            placeholder={`ton adresse ${STUDENT_DOMAIN}`}
+            placeholder="ton adresse mail"
             style={{
               width: '100%',
               border: '1px solid rgba(0,0,0,0.85)',
