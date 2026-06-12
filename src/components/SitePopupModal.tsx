@@ -94,7 +94,7 @@ export default function SitePopupModal({ popup }: { popup: Popup }) {
         }}>
           <h2 style={{
             fontFamily: '"altesse-std-24pt", serif',
-            fontSize: 22,
+            fontSize: 'clamp(28px, 2.5vw, 42px)',
             fontWeight: 700,
             color: '#111',
             lineHeight: 1.35,
