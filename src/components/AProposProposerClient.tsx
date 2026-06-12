@@ -147,12 +147,13 @@ export default function AProposProposerClient() {
           />
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
             {error && <p style={{ fontSize: 13, color: '#dc2626', marginBottom: 6 }}>{error}</p>}
-          <button type="submit" disabled={sending} style={{ opacity: sending ? 0.7 : 1, cursor: sending ? 'wait' : 'pointer',
+          <button type="submit" disabled={sending} style={{
+              opacity: sending ? 0.7 : 1, cursor: sending ? 'wait' : 'pointer',
               display: 'inline-flex', alignItems: 'center', gap: 8,
               background: '#FFE74A', color: 'var(--ink)',
               fontFamily: 'var(--font-display)', fontStyle: 'italic',
               fontSize: 14, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
-              padding: '11px 22px', border: 'none', cursor: 'pointer',
+              padding: '11px 22px', border: 'none',
               borderRadius: 999,
             }}>
               {sending ? 'Envoi…' : 'ENVOYER'}
