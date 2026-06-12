@@ -93,7 +93,7 @@ export default function SitePopupModal({ popup }: { popup: Popup }) {
           alignItems: hasImage ? 'flex-start' : 'center',
         }}>
           <h2 style={{
-            fontFamily: 'Georgia, serif',
+            fontFamily: "'altesse-std', serif",
             fontSize: 22,
             fontWeight: 700,
             color: '#111',

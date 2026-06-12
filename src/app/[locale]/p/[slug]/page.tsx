@@ -43,7 +43,7 @@ export default async function PublicPage({ params }: Props) {
       maxWidth: 720,
       margin: '0 auto',
       padding: '60px 24px',
-      fontFamily: 'Georgia, serif',
+      fontFamily: "'altesse-std', serif",
     }}>
       <h1 style={{
         fontSize: 32,
