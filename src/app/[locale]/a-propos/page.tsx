@@ -98,7 +98,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
           </h1>
 
           {/* Membres de l'équipe — données depuis la DB */}
-          <div style={{
+          <div className="team-members-row" style={{
             display: 'flex',
             justifyContent: 'center',
             gap: 'clamp(40px, 8vw, 110px)',
@@ -106,9 +106,9 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             flexWrap: 'wrap',
           }}>
             {members.map(member => (
-              <div key={member.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+              <div key={member.id} className="team-member-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
                 {/* Photo circulaire */}
-                <div style={{
+                <div className="team-member-photo" style={{
                   width: 'clamp(130px, 13vw, 190px)',
                   height: 'clamp(150px, 15vw, 210px)',
                   borderRadius: '50%',

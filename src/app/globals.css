@@ -679,4 +679,20 @@ html.dark .cart-drawer-bg { background: rgba(0,0,0,0.6) !important; }
     font-size: 13px !important;
     margin-bottom: 40px !important;
   }
+
+  /* ── À PROPOS — team members sur une ligne ── */
+  .team-members-row {
+    flex-wrap: nowrap !important;
+    gap: 16px !important;
+    align-items: flex-start !important;
+  }
+  .team-member-card {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+  }
+  .team-member-photo {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1/1 !important;
+  }
 }
