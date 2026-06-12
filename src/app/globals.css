@@ -107,14 +107,21 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: -0.01em; text-transform: uppercase;
   line-height: 1;
 }
+@keyframes lisaa-colors {
+  0%   { background: #5FA0FB; } /* bleu  */
+  25%  { background: #FEEF4C; } /* jaune */
+  50%  { background: #FF4D1F; } /* rouge */
+  75%  { background: #FF88E8; } /* rose  */
+  100% { background: #5FA0FB; } /* bleu  */
+}
 .brand .lisaa-dgc {
-  background: var(--pink);
   padding: 3px 10px 5px;
   font-family: "new-atten", sans-serif;
   font-weight: 500; font-style: italic;
   font-size: clamp(20px, 2.6vw, 32px);
   letter-spacing: 0.01em; text-transform: uppercase;
   line-height: 1; white-space: nowrap;
+  animation: lisaa-colors 6s ease-in-out infinite;
 }
 /* legacy pour le panel mobile */
 .brand-name { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; text-transform: uppercase; }
