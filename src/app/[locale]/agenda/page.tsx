@@ -360,8 +360,10 @@ function EventCard({ ev, mini = false }: { ev: Event; mini?: boolean }) {
           {ev.title}
         </div>
         <div style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: mini ? 10 : 11,
+          fontFamily: '"new-atten", sans-serif',
+          fontWeight: 400,
+          fontStyle: 'normal',
+          fontSize: mini ? 12 : 20,
           display: 'flex',
           gap: mini ? 8 : 12,
           justifyContent: 'center',
