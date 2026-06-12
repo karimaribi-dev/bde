@@ -115,8 +115,8 @@ export default function AProposProposerClient() {
             placeholder="ton adresse mail"
             style={{
               width: '100%',
-              border: '1.5px dashed var(--ink)',
-              borderRadius: 2,
+              border: 'none',
+              borderBottom: '1.5px dashed var(--ink)',
               padding: '10px 16px',
               fontSize: 14,
               background: '#fff',
@@ -131,8 +131,7 @@ export default function AProposProposerClient() {
             required
             style={{
               width: '100%',
-              border: '1.5px dashed var(--ink)',
-              borderRadius: 2,
+              border: 'none',
               padding: '14px 16px',
               minHeight: 140,
               fontSize: 14,
