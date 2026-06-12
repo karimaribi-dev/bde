@@ -338,7 +338,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           display: 'inline-flex', alignItems: 'center', gap: 12,
           background: 'var(--yellow)', color: 'var(--ink)',
           padding: '11px 24px', borderRadius: 999,
-          fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+          fontWeight: 700, fontSize: 20, letterSpacing: '.08em', textTransform: 'uppercase',
           whiteSpace: 'nowrap', textDecoration: 'none',
           transition: 'transform .12s, background .15s',
         }}
@@ -420,7 +420,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             display: 'inline-flex', alignItems: 'center', gap: 12,
             background: 'var(--yellow)', color: 'var(--ink)',
             padding: '11px 24px', borderRadius: 999,
-            fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+            fontWeight: 700, fontSize: 20, letterSpacing: '.08em', textTransform: 'uppercase',
             whiteSpace: 'nowrap', textDecoration: 'none', transition: 'transform .12s, background .15s',
           }}
             onMouseEnter={e => { e.currentTarget.style.background = 'var(--yellow-deep)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
@@ -541,7 +541,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             display: 'inline-flex', alignItems: 'center', gap: 12,
             background: 'var(--yellow)', color: 'var(--ink)',
             padding: '11px 24px', borderRadius: 999,
-            fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+            fontWeight: 700, fontSize: 20, letterSpacing: '.08em', textTransform: 'uppercase',
             whiteSpace: 'nowrap', textDecoration: 'none',
             transition: 'transform .12s, background .15s',
           }}
@@ -603,7 +603,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             display: 'inline-flex', alignItems: 'center', gap: 12,
             background: 'var(--yellow)', color: 'var(--ink)',
             padding: '11px 24px', borderRadius: 999,
-            fontWeight: 700, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase',
+            fontWeight: 700, fontSize: 20, letterSpacing: '.08em', textTransform: 'uppercase',
             whiteSpace: 'nowrap', textDecoration: 'none',
             transition: 'transform .12s, background .15s',
           }}
