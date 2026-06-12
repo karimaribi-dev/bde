@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Club } from '@/lib/types'
@@ -10,6 +10,15 @@ const TILTS = ['-5deg', '4deg', '-3deg', '6deg']
 interface Props { clubs: Club[]; locale: string }
 
 export default function ClubsCarouselClient({ clubs, locale }: Props) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 720)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   const trackRef   = useRef<HTMLDivElement>(null)
   const pausedRef  = useRef(false)
   const offsetRef  = useRef(0)
@@ -96,6 +105,21 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
 
   if (clubs.length === 0) return null
 
+  if (isMobile) {
+    return (
+      <div style={{ marginTop: 0 }}>
+        {clubs.map((club, i) => (
+          <div key={club.id}>
+            <MobileClubCard club={club} locale={locale} />
+            {i < clubs.length - 1 && (
+              <hr style={{ border: 'none', borderTop: '1px solid rgba(0,0,0,0.12)', margin: '32px 0' }} />
+            )}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   /*
    * On répète les clubs assez de fois pour que chaque "section" (1/3 du track)
    * soit plus large que le viewport. Minimum 10 cartes par section.
@@ -139,6 +163,80 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
         ))}
       </div>
     </div>
+  )
+}
+
+/* ── Card mobile ── */
+function MobileClubCard({ club, locale }: { club: Club; locale: string }) {
+  const ac = club.accent_color
+  const at = club.accent_text_color
+  return (
+    <article style={{ width: '100%' }}>
+      {/* Taglines */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4, marginBottom: 10 }}>
+        {club.tagline && (
+          <span style={{ background: ac, color: at, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 11, textTransform: 'uppercase', display: 'inline-block' }}>
+            {club.tagline}
+          </span>
+        )}
+        {club.tagline_sub && (
+          <span style={{ background: ac, color: at, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 11, textTransform: 'uppercase', display: 'inline-block', marginLeft: 32 }}>
+            {club.tagline_sub}
+          </span>
+        )}
+      </div>
+
+      {/* Titre */}
+      <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 900, fontSize: 32, lineHeight: 1, textTransform: 'uppercase', letterSpacing: '-0.02em', color: 'var(--ink)', margin: '0 0 14px' }}>
+        {club.title}
+      </h3>
+
+      {/* Image */}
+      {club.image_url && (
+        <div style={{ width: '100%', aspectRatio: '4/3', position: 'relative', marginBottom: 14, overflow: 'hidden', background: ac }}>
+          <Image src={club.image_url} alt={club.title} fill sizes="100vw" style={{ objectFit: 'cover' }} />
+        </div>
+      )}
+
+      {/* Description */}
+      {club.who_we_are && (
+        <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--ink)', margin: '0 0 12px' }}>
+          {club.who_we_are}
+        </p>
+      )}
+
+      {/* Info rows */}
+      {[
+        club.schedule  && { k: 'HORAIRES',         v: club.schedule },
+        club.frequency && { k: 'DATE / FRÉQUENCE', v: club.frequency },
+        club.location  && { k: 'LIEU',             v: club.location },
+      ].filter(Boolean).map((row) => {
+        const r = row as { k: string; v: string }
+        return (
+          <div key={r.k} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 10px', border: `1.2px solid ${ac}`, borderTop: 'none', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>
+            <span style={{ fontWeight: 900 }}>{r.k}</span>
+            <span>{r.v}</span>
+          </div>
+        )
+      })}
+
+      {/* CTA */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+        <Link href={`/${locale}/clubs/${club.slug}`} style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          background: 'var(--yellow)', color: 'var(--ink)',
+          fontFamily: 'var(--font-display)', fontStyle: 'italic',
+          fontSize: 18, fontWeight: 700, letterSpacing: '0.04em',
+          textTransform: 'uppercase', textDecoration: 'none',
+          padding: '12px 22px', borderRadius: 999,
+        }}>
+          EN SAVOIR PLUS
+          <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 14 }}>
+            <path d="M2 8h19M14 1l7 7-7 7"/>
+          </svg>
+        </Link>
+      </div>
+    </article>
   )
 }
 

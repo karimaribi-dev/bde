@@ -25,7 +25,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
     <>
       <NavbarClient categories={cats} locale={locale} activeSlug="clubs" />
 
-      <main style={{ padding: '0 40px' }}>
+      <main className="clubs-main" style={{ padding: '0 40px' }}>
 
         {/* ═══════════ HERO ═══════════ */}
         <section style={{ padding: '18px 0 50px' }}>
@@ -75,6 +75,13 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
           </h1>
         </section>
 
+        {/* ═══════════ EYEBROW ═══════════ */}
+        <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(14px,1.3vw,20px)', letterSpacing: '0.01em', textTransform: 'uppercase', margin: '0 0 30px' }}>
+          <span style={{ background: 'var(--orange-deep)', color: '#fff', padding: '5px 12px 7px' }}>
+            REJOINS L&apos;AVENTURE !&nbsp;&nbsp;INSCRIS-TOI !
+          </span>
+        </div>
+
         {/* ═══════════ CAROUSEL ═══════════ */}
         {clubs.length > 0 ? (
           <ClubsCarouselClient clubs={clubs} locale={locale} />
@@ -103,7 +110,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
         <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '40px 0' }} />
 
         {/* ═══════════ BASKET CTA ═══════════ */}
-        <section style={{
+        <section className="clubs-shop-section" style={{
           display: 'grid',
           gridTemplateColumns: '1.05fr 1fr',
           alignItems: 'center',
@@ -111,7 +118,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
           padding: '24px 0 60px',
           position: 'relative',
         }}>
-          <div style={{ position: 'relative', width: '100%' }}>
+          <div className="clubs-shop-image" style={{ position: 'relative', width: '100%' }}>
             <span aria-hidden="true" style={{ position: 'absolute', top: '-10%', right: '-12%', width: '60%', height: '60%', transform: 'rotate(-12deg)', zIndex: 0 }}>
               <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
                 <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
@@ -128,16 +135,18 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
               <img src="/images/prod-gourde.png"  alt="" style={{ position: 'absolute', left: '56%', top: '22%', width: '22%', transform: 'rotate(-4deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,.18))' }} />
             </div>
           </div>
-          <div>
+          <div className="clubs-shop-text">
             <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1.05, textTransform: 'uppercase', color: 'var(--ink)', margin: '0 0 14px' }}>
               INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?
             </h3>
             <p style={{ fontStyle: 'italic', fontSize: 13, opacity: 0.65, margin: '0 0 18px' }}>
               *N&apos;hésitez pas à les soutenir en regardant le shop
             </p>
+          </div>
+          <div className="clubs-shop-btn" style={{ gridColumn: 2, display: 'flex', justifyContent: 'flex-end', zIndex: 1 }}>
             <Link href={`/${locale}/shop`} style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: '#FFE74A', color: 'var(--ink)',
+              background: 'var(--yellow)', color: 'var(--ink)',
               fontFamily: 'var(--font-display)', fontStyle: 'italic',
               fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
               textTransform: 'uppercase', textDecoration: 'none', padding: '12px 22px', borderRadius: 999,
