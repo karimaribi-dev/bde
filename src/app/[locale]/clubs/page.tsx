@@ -119,9 +119,8 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
         }}>
           <div className="clubs-shop-image" style={{ position: 'relative', width: '100%' }}>
             <span aria-hidden="true" style={{ position: 'absolute', top: '-10%', right: '-12%', width: '60%', height: '60%', transform: 'rotate(-12deg)', zIndex: 0 }}>
-              <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
-                <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
-              </svg>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/etoile.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </span>
             <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', zIndex: 1 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
