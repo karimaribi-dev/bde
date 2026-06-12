@@ -385,15 +385,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           *N&apos;hésitez pas à slider pour plus d&apos;event
         </span>
         {isMobile ? (
-          /* Flèche ronde jaune sur mobile */
+          /* Flèche jaune simple sur mobile */
           <Link href={`/${locale}/agenda`} aria-label="Voir tous les événements" style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 48, height: 48, borderRadius: '50%',
-            background: 'var(--yellow)', color: 'var(--ink)',
-            border: '2px solid var(--ink)', textDecoration: 'none', flexShrink: 0,
+            color: 'var(--ink)', textDecoration: 'none', flexShrink: 0,
           }}>
-            <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 14 }}>
-              <path d="M2 8h19M14 1l7 7-7 7"/>
+            <svg viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 40, height: 26 }}>
+              <path d="M2 10h26M20 2l10 8-10 8" stroke="#262626" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </Link>
         ) : (
