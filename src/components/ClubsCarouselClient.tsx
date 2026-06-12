@@ -225,8 +225,8 @@ function MobileClubCard({ club, locale }: { club: Club; locale: string }) {
         <Link href={`/${locale}/clubs/${club.slug}`} style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: 'var(--yellow)', color: 'var(--ink)',
-          fontFamily: 'var(--font-display)', fontStyle: 'italic',
-          fontSize: 18, fontWeight: 700, letterSpacing: '0.04em',
+          fontFamily: '"neue-haas-grotesk-text", sans-serif', fontStyle: 'normal', fontWeight: 500,
+          fontSize: 20, letterSpacing: '0.02em',
           textTransform: 'uppercase', textDecoration: 'none',
           padding: '12px 22px', borderRadius: 999,
         }}>
@@ -359,9 +359,9 @@ function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: st
         style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: 'var(--yellow)', color: 'var(--ink)',
-          fontFamily: 'var(--font-display)', fontStyle: 'italic',
-          fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase',
-          padding: '10px 18px', textDecoration: 'none', borderRadius: 999,
+          fontFamily: '"neue-haas-grotesk-text", sans-serif', fontStyle: 'normal', fontWeight: 500,
+          fontSize: 20, letterSpacing: '0.02em', textTransform: 'uppercase',
+          padding: '10px 22px', textDecoration: 'none', borderRadius: 999,
           alignSelf: 'center', margin: '4px 0',
         }}
       >

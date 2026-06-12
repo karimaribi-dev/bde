@@ -102,7 +102,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             display: 'flex',
             justifyContent: 'center',
             gap: 'clamp(40px, 8vw, 110px)',
-            alignItems: 'flex-end',
+            alignItems: 'flex-start',
             flexWrap: 'wrap',
           }}>
             {members.map(member => (
