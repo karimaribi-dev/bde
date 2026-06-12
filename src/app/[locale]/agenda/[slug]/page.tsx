@@ -32,6 +32,7 @@ export default async function EventDetailPage({
   // Traduction : utilise la version anglaise si dispo et locale === 'en'
   const displayTitle       = (locale === 'en' && event.title_en)       ? event.title_en       : event.title
   const displayDescription = (locale === 'en' && event.description_en) ? event.description_en : event.description
+  const displayBadge       = (locale === 'en' && event.badge_en)       ? event.badge_en       : event.badge
 
   const eventDateFull = format(new Date(event.event_date), "EEEE d MMMM yyyy", { locale: fr })
 
@@ -65,7 +66,7 @@ export default async function EventDetailPage({
                 fontFamily: 'var(--font-display)',
                 fontSize: 12, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase',
               }}>
-                {event.badge}
+                {displayBadge}
               </span>
             </div>
 

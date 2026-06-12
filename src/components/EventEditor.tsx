@@ -83,6 +83,7 @@ export default function EventEditor({ event }: Props) {
   /* ── État du formulaire ── */
   const [lang, setLang]                     = useState<'fr' | 'en'>('fr')
   const [badge, setBadge]                   = useState(event?.badge ?? '')
+  const [badgeEn, setBadgeEn]               = useState(event?.badge_en ?? '')
   const [badgeColor, setBadgeColor]         = useState(event?.badge_color ?? '#FFB3F0')
   const [badgeTextColor, setBadgeTextColor] = useState(event?.badge_text_color ?? '#111111')
   const [title, setTitle]                   = useState(event?.title ?? '')
@@ -170,6 +171,7 @@ export default function EventEditor({ event }: Props) {
 
     const payload = {
       badge:            badge.trim().toUpperCase(),
+      badge_en:         badgeEn.trim().toUpperCase() || null,
       badge_color:      badgeColor,
       badge_text_color: badgeTextColor,
       title:            title.trim(),
@@ -248,17 +250,35 @@ export default function EventEditor({ event }: Props) {
 
         {/* Badge */}
         <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
-          <h2 className="text-sm font-semibold text-gray-900">Tag / Badge</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-900">Tag / Badge</h2>
+            <LangTabs lang={lang} setLang={setLang} />
+          </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Nom du tag *</label>
-            <input
-              value={badge}
-              onChange={e => setBadge(e.target.value)}
-              placeholder="Ex : AFTERWORK, OLYMPIADES, SOIRÉE…"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-              style={{ textTransform: 'uppercase' }}
-            />
+            {lang === 'fr' ? (
+              <>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Nom du tag * <span className="text-gray-400 font-normal">(français)</span></label>
+                <input
+                  value={badge}
+                  onChange={e => setBadge(e.target.value)}
+                  placeholder="Ex : AFTERWORK, OLYMPIADES, SOIRÉE…"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  style={{ textTransform: 'uppercase' }}
+                />
+              </>
+            ) : (
+              <>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Tag name <span className="text-gray-400 font-normal">(English — optional)</span></label>
+                <input
+                  value={badgeEn}
+                  onChange={e => setBadgeEn(e.target.value)}
+                  placeholder="Ex: AFTERWORK, GAMES, EVENING…"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  style={{ textTransform: 'uppercase' }}
+                />
+              </>
+            )}
           </div>
 
           <div>
@@ -317,7 +337,7 @@ export default function EventEditor({ event }: Props) {
               borderRadius: 3,
               fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
             }}>
-              {badge || 'TAG'}
+              {(lang === 'en' ? badgeEn : badge) || 'TAG'}
             </span>
           </div>
         </div>

@@ -93,6 +93,7 @@ export interface Category {
 export interface Event {
   id: string
   badge: string
+  badge_en: string | null
   badge_color: string
   badge_text_color: string
   title: string
