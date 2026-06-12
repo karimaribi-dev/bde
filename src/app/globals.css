@@ -632,4 +632,19 @@ html.dark .cart-drawer-bg { background: rgba(0,0,0,0.6) !important; }
   .clubs-shop-image { order: 2 !important; }
   .clubs-shop-btn { order: 3 !important; grid-column: 1 !important; margin-top: 16px !important; }
   .clubs-shop-section span[aria-hidden] { display: none !important; }
+
+  /* ── Club detail page responsive ── */
+  .club-detail-main { padding: 0 20px !important; }
+  .club-detail-section { grid-template-columns: 1fr !important; gap: 0 !important; padding: 20px 0 40px !important; }
+  .club-detail-left { order: 1 !important; }
+  .club-detail-right { order: 2 !important; padding-top: 16px !important; }
+  .club-taglines-desktop { display: none !important; }
+  .club-taglines-mobile { display: flex !important; }
+  .club-others-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+  .club-detail-shop { grid-template-columns: 1fr !important; gap: 0 !important; padding: 20px 0 40px !important; }
+  .club-detail-shop > * { position: static !important; }
+  .club-detail-shop-text { order: 1 !important; margin-bottom: 16px !important; }
+  .club-detail-shop-image { order: 2 !important; }
+  .club-detail-shop-btn { order: 3 !important; grid-column: 1 !important; margin-top: 16px !important; }
+  .club-detail-shop span[aria-hidden] { display: none !important; }
 }

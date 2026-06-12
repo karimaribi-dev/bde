@@ -46,12 +46,35 @@ export default async function ClubDetailPage({
     <>
       <NavbarClient categories={cats} locale={locale} activeSlug="clubs" />
 
-      <main style={{ padding: '0 40px' }}>
+      <main className="club-detail-main" style={{ padding: '0 40px' }}>
+
+        {/* Breadcrumb */}
+        <nav style={{ padding: '10px 0 4px', fontSize: 11, fontFamily: 'var(--font-display)', fontStyle: 'italic', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--mute)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          <Link href={`/${locale}`} style={{ color: 'var(--mute)', textDecoration: 'none' }}>ACCUEIL</Link>
+          <span>›</span>
+          <Link href={`/${locale}/clubs`} style={{ color: 'var(--mute)', textDecoration: 'none' }}>NOS CLUBS</Link>
+          <span>›</span>
+          <span style={{ color: 'var(--ink)' }}>{club.title}</span>
+        </nav>
+
+        {/* Taglines — visible seulement sur mobile, affiché au-dessus du titre */}
+        <div className="club-taglines-mobile" style={{ display: 'none', flexDirection: 'column', gap: 4, marginBottom: 12, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
+          {club.tagline && (
+            <span style={{ display: 'inline-block', fontSize: 12, textTransform: 'uppercase', color: 'var(--ink)', letterSpacing: '0.02em' }}>
+              {club.tagline}
+            </span>
+          )}
+          {club.tagline_sub && (
+            <span style={{ display: 'inline-block', background: ac, color: at, padding: '5px 12px 7px', fontSize: 22, letterSpacing: '-0.01em', textTransform: 'uppercase', width: 'fit-content', marginLeft: 20 }}>
+              {club.tagline_sub}
+            </span>
+          )}
+        </div>
 
         {/* ═══════════ BLOC PRINCIPAL 2-COL ═══════════
             Gauche : titre + photo empilés
             Droite : taglines + séparateurs + sections + form           */}
-        <section style={{
+        <section className="club-detail-section" style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: '0 60px',
@@ -60,7 +83,7 @@ export default async function ClubDetailPage({
         }}>
 
           {/* ── COLONNE GAUCHE ── */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="club-detail-left" style={{ display: 'flex', flexDirection: 'column' }}>
 
             {/* Titre + flèche diagonale */}
             <h1 style={{
@@ -102,9 +125,10 @@ export default async function ClubDetailPage({
           </div>
 
           {/* ── COLONNE DROITE ── */}
-          <div style={{ paddingTop: 8 }}>
+          <div className="club-detail-right" style={{ paddingTop: 8 }}>
 
             {/* Taglines */}
+            <div className="club-taglines-desktop">
             {(club.tagline || club.tagline_sub) && (
               <div style={{
                 fontFamily: 'var(--font-display)',
@@ -142,6 +166,7 @@ export default async function ClubDetailPage({
                 )}
               </div>
             )}
+            </div>
 
             {hr}
 
@@ -192,6 +217,9 @@ export default async function ClubDetailPage({
             {/* INFOS IMPORTANTES — lignes simples */}
             {infoItems.length > 0 && (
               <>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 900, fontSize: 'clamp(14px,1.2vw,18px)', textTransform: 'uppercase', letterSpacing: '0.01em', color: 'var(--ink)', margin: '0 0 12px' }}>
+                  LES INFOS IMPORTANTES
+                </h3>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {infoItems.map((item, idx) => (
                     <div key={item.key} style={{
@@ -249,7 +277,7 @@ export default async function ClubDetailPage({
               <br/>
               <span style={{ background: '#BFDBFE', padding: '4px 10px', display: 'inline-block', marginLeft: 40 }}>NOS AUTRES CLUBS !</span>
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28 }}>
+            <div className="club-others-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28 }}>
               {otherClubs.map(other => (
                 <Link key={other.id} href={`/${locale}/clubs/${other.slug}`} style={{
                   background: '#fff',
@@ -308,8 +336,8 @@ export default async function ClubDetailPage({
         <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: '40px 0' }} />
 
         {/* ═══════════ BASKET CTA ═══════════ */}
-        <section style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', alignItems: 'center', gap: 60, padding: '24px 0 60px', position: 'relative' }}>
-          <div style={{ position: 'relative', width: '100%' }}>
+        <section className="club-detail-shop" style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', alignItems: 'center', gap: 60, padding: '24px 0 60px', position: 'relative' }}>
+          <div className="club-detail-shop-image" style={{ position: 'relative', width: '100%' }}>
             <span aria-hidden="true" style={{ position: 'absolute', top: '-10%', right: '-12%', width: '60%', height: '60%', transform: 'rotate(-12deg)', zIndex: 0 }}>
               <svg viewBox="0 0 142 142" fill="#FEEF4C" style={{ width: '100%', height: '100%' }}>
                 <path d="M 33.516 62.621 L 0 33.516 L 33.516 71.882 L 0 116.863 L 50.273 82.025 L 64.385 142 L 70.559 82.025 L 142 103.634 L 93.05 71.882 L 118.627 46.745 L 70.559 46.745 L 70.559 11.025 L 50.273 46.745 L 26.901 0 L 33.516 62.621 Z"/>
@@ -326,16 +354,18 @@ export default async function ClubDetailPage({
               <img src="/images/prod-gourde.png"  alt="" style={{ position: 'absolute', left: '56%', top: '22%', width: '22%', transform: 'rotate(-4deg)', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,.18))' }} />
             </div>
           </div>
-          <div>
+          <div className="club-detail-shop-text">
             <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1.05, textTransform: 'uppercase', color: 'var(--ink)', margin: '0 0 14px' }}>
               INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?
             </h3>
             <p style={{ fontStyle: 'italic', fontSize: 13, opacity: 0.65, margin: '0 0 18px' }}>
               *N&apos;hésitez pas à les soutenir en regardant le shop
             </p>
+          </div>
+          <div className="club-detail-shop-btn" style={{ gridColumn: 2, display: 'flex', justifyContent: 'flex-end', zIndex: 1 }}>
             <Link href={`/${locale}/shop`} style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: '#FFE74A', color: 'var(--ink)',
+              background: 'var(--yellow)', color: 'var(--ink)',
               fontFamily: 'var(--font-display)', fontStyle: 'italic',
               fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
               textTransform: 'uppercase', textDecoration: 'none', padding: '12px 22px', borderRadius: 999,

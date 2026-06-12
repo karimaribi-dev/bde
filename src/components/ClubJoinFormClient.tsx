@@ -75,7 +75,7 @@ export default function ClubJoinFormClient({ clubTitle, clubSlug, accentColor }:
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </span>
-        REJOIGNEZ {clubTitle} !
+        REJOIGNEZ NOUS !
       </h3>
 
       {error && (
@@ -107,12 +107,12 @@ export default function ClubJoinFormClient({ clubTitle, clubSlug, accentColor }:
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
         <button type="submit" disabled={sending} style={{
-          display: 'inline-flex', alignItems: 'center', gap: 8,
-          background: 'var(--ink)', color: '#fff',
+          background: 'var(--yellow)', color: 'var(--ink)',
           fontFamily: 'var(--font-display)', fontStyle: 'italic',
-          fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase',
-          padding: '10px 18px', border: 'none', cursor: sending ? 'wait' : 'pointer',
-          opacity: sending ? 0.7 : 1,
+          fontSize: 18, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
+          padding: '12px 22px', border: 'none', borderRadius: 999,
+          cursor: sending ? 'wait' : 'pointer', opacity: sending ? 0.7 : 1,
+          display: 'inline-flex', alignItems: 'center', gap: 8,
         }}>
           {sending ? 'Envoi…' : 'ENVOYER'}
           <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 13 }}>
