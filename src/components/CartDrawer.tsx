@@ -78,6 +78,7 @@ export default function CartDrawer() {
     <>
       {/* ── Overlay ── */}
       <div
+        className="cart-drawer-bg"
         onClick={handleClose}
         style={{
           position: 'fixed', inset: 0, zIndex: 49,
@@ -91,10 +92,11 @@ export default function CartDrawer() {
 
       {/* ── Drawer ── */}
       <div
+        className="cart-drawer-inner"
         style={{
           position: 'fixed', top: 0, right: 0, bottom: 0,
           width: 'min(440px, 95vw)',
-          background: '#fff',
+          background: 'var(--paper)',
           zIndex: 50,
           boxShadow: '-8px 0 40px rgba(0,0,0,0.13)',
           transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
@@ -107,12 +109,12 @@ export default function CartDrawer() {
         {/* Header (sticky) */}
         <div style={{
           padding: '20px 22px 16px',
-          borderBottom: '1.5px solid #f0f0f0',
+          borderBottom: '1px solid var(--hair-mute, rgba(38,38,38,0.1))',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexShrink: 0,
-          background: '#fff',
+          background: 'var(--paper)',
           zIndex: 2,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -130,7 +132,7 @@ export default function CartDrawer() {
             </h2>
             {count > 0 && (
               <span style={{
-                background: '#FFE74A', color: 'var(--ink)',
+                background: 'var(--yellow)', color: 'var(--ink)',
                 fontFamily: 'var(--font-display)', fontStyle: 'italic',
                 fontWeight: 700, fontSize: 12,
                 padding: '2px 9px', borderRadius: 99,
@@ -143,9 +145,9 @@ export default function CartDrawer() {
             onClick={handleClose}
             style={{
               width: 34, height: 34, borderRadius: '50%',
-              border: '1.5px solid #e5e7eb', background: '#f9fafb',
+              border: '1.5px solid #e5e7eb', background: 'var(--paper-2)',
               cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 18, color: '#6b7280', lineHeight: 1,
+              fontSize: 18, color: 'var(--mute)', lineHeight: 1,
             }}
           >
             ×
@@ -173,7 +175,7 @@ export default function CartDrawer() {
                 onClick={handleClose}
                 style={{
                   marginTop: 10,
-                  background: '#FFE74A', color: 'var(--ink)',
+                  background: 'var(--yellow)', color: 'var(--ink)',
                   fontFamily: 'var(--font-display)', fontStyle: 'italic',
                   fontWeight: 700, fontSize: 20, textTransform: 'uppercase',
                   padding: '12px 28px', border: 'none', borderRadius: 999,
@@ -198,7 +200,7 @@ export default function CartDrawer() {
               <button
                 onClick={handleClose}
                 style={{
-                  background: '#FFE74A', color: 'var(--ink)',
+                  background: 'var(--yellow)', color: 'var(--ink)',
                   fontFamily: 'var(--font-display)', fontStyle: 'italic',
                   fontSize: 20, fontWeight: 700, textTransform: 'uppercase',
                   padding: '12px 22px', border: 'none', borderRadius: 999, cursor: 'pointer',
@@ -397,7 +399,7 @@ export default function CartDrawer() {
                     style={{
                       marginTop: 6,
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                      background: '#FFE74A', color: 'var(--ink)',
+                      background: 'var(--yellow)', color: 'var(--ink)',
                       fontFamily: 'var(--font-display)', fontStyle: 'italic',
                       fontWeight: 700, fontSize: 20, textTransform: 'uppercase',
                       letterSpacing: '0.04em',

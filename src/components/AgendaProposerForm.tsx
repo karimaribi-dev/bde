@@ -141,7 +141,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
             <button type="submit" disabled={sending} style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: '#FFE74A', color: 'var(--ink)',
+              background: 'var(--yellow)', color: 'var(--ink)',
               fontFamily: 'var(--font-display)',
               fontStyle: 'italic',
               fontSize: 20, fontWeight: 700,

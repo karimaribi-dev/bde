@@ -185,8 +185,8 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         {/* ═══════════ Y ÉTIEZ VOUS ? / PASSÉS ═══════════ */}
         <section style={{ marginBottom: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, margin: '0 0 26px' }}>
-            <span style={{ background: '#FFE74A', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)' }}>Y ÉTIEZ VOUS ?</span>
-            <span style={{ background: '#4FA3FF', padding: '4px 12px', marginLeft: 80, fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)' }}>NOS ÉVÉNEMENTS PASSÉS</span>
+            <span style={{ background: 'var(--yellow)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)' }}>Y ÉTIEZ VOUS ?</span>
+            <span style={{ background: 'var(--blue-strong)', padding: '4px 12px', marginLeft: 80, fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)' }}>NOS ÉVÉNEMENTS PASSÉS</span>
           </div>
 
           {past.length > 0 ? (
@@ -278,7 +278,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
           <div className="agenda-shop-btn" style={{ gridColumn: 2, display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', zIndex: 1 }}>
             <Link href={`/${locale}/shop`} style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
-              background: '#FFE74A', color: 'var(--ink)',
+              background: 'var(--yellow)', color: 'var(--ink)',
               fontFamily: 'var(--font-display)', fontStyle: 'italic',
               fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
               textTransform: 'uppercase', textDecoration: 'none',
