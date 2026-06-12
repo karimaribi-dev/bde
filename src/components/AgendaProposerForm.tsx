@@ -53,9 +53,9 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
           <img src="/images/fleche-curl.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
         </span>
 
-        <div style={{ textAlign: 'center', margin: 0 }}>
-          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)', display: 'inline-block', marginRight: 6, marginBottom: 4 }}>DES CHOSES À NOUS PROPOSER ?</span>
-          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)', display: 'inline-block', marginBottom: 4 }}>DES ÉVÉNEMENTS ?&nbsp;&nbsp;DES CLUBS ?</span>
+        <div style={{ textAlign: 'center', margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)', whiteSpace: 'nowrap' }}>DES CHOSES À NOUS PROPOSER ?</span>
+          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)', whiteSpace: 'nowrap' }}>DES ÉVÉNEMENTS ?&nbsp;&nbsp;DES CLUBS ?</span>
         </div>
 
         <div style={{
