@@ -255,7 +255,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             </div>
           </div>
 
-          {/* Texte + CTA */}
+          {/* Texte */}
           <div className="agenda-shop-text" style={{ position: 'relative', zIndex: 1 }}>
             <h3 style={{
               fontFamily: 'var(--font-display)',
@@ -269,24 +269,26 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             }}>
               INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?
             </h3>
-            <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: '0 0 18px' }}>
+            <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: 0 }}>
               *N&apos;hésitez pas à les soutenir en regardant le shop
             </p>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Link href={`/${locale}/shop`} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 10,
-                background: '#FFE74A', color: 'var(--ink)',
-                fontFamily: 'var(--font-display)', fontStyle: 'italic',
-                fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
-                textTransform: 'uppercase', textDecoration: 'none',
-                padding: '12px 22px', borderRadius: 999,
-              }}>
-                VOIR LE SHOP
-                <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
-                  <path d="M2 8h19M14 1l7 7-7 7"/>
-                </svg>
-              </Link>
-            </div>
+          </div>
+
+          {/* Bouton — sous l'image sur mobile, sous le texte sur desktop (col 2) */}
+          <div className="agenda-shop-btn" style={{ gridColumn: 2, display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', zIndex: 1 }}>
+            <Link href={`/${locale}/shop`} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              background: '#FFE74A', color: 'var(--ink)',
+              fontFamily: 'var(--font-display)', fontStyle: 'italic',
+              fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              padding: '12px 22px', borderRadius: 999,
+            }}>
+              VOIR LE SHOP
+              <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
+                <path d="M2 8h19M14 1l7 7-7 7"/>
+              </svg>
+            </Link>
           </div>
         </section>
 
