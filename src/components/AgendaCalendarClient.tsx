@@ -100,7 +100,7 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
       {/* ── Grille ── */}
       <div style={{ position: 'relative', overflow: 'visible' }}>
 
-        {/* Étoiles décoratives derrière */}
+        {/* Étoiles décoratives — derrière la grille (z-index: 0) */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
           <span style={{
             position: 'absolute', width: '28%', height: '60%',
@@ -120,34 +120,46 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
           </span>
         </div>
 
-        {/* Cases calendrier */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(7, 1fr)',
-          gridAutoRows: 'minmax(64px, 1fr)',
-          borderTop: '1.5px solid var(--ink)',
-          borderLeft: '1.5px solid var(--ink)',
-          position: 'relative',
-          zIndex: 1,
-        }}>
-          {/* Quadrillage hand-drawn en overlay */}
-          <div aria-hidden="true" style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'url(/images/quadrillage.svg)',
-            backgroundSize: '100% 100%',
-            backgroundRepeat: 'no-repeat',
-            mixBlendMode: 'multiply',
-            pointerEvents: 'none',
-            zIndex: 10,
-          }} />
-          {cells.map((day, i) => (
+        {/* Cases calendrier — z-index: 1 pour être au-dessus des étoiles */}
+        {(() => {
+          const numRows = cells.length / 7
+          return (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(7, 1fr)',
+            gridAutoRows: 'minmax(64px, 1fr)',
+            position: 'relative',
+            zIndex: 1,
+          }}>
+            {/* Quadrillage : span toutes les colonnes + lignes pour couvrir exactement la grille */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/quadrillage.svg"
+              aria-hidden="true"
+              alt=""
+              style={{
+                gridColumn: '1 / -1',
+                gridRow: `1 / span ${numRows}`,
+                width: '100%',
+                height: '100%',
+                objectFit: 'fill',
+                alignSelf: 'stretch',
+                justifySelf: 'stretch',
+                pointerEvents: 'none',
+              }}
+            />
+          {cells.map((day, i) => {
+            const col = (i % 7) + 1
+            const row = Math.floor(i / 7) + 1
+            return (
             <div key={i} style={{
-              borderRight: '1.5px solid var(--ink)',
-              borderBottom: '1.5px solid var(--ink)',
+              gridColumn: col,
+              gridRow: row,
               padding: '8px 6px 6px',
               minHeight: 64,
               position: 'relative',
               overflow: 'hidden',
+              zIndex: 1,
             }}>
               {day && (
                 <>
@@ -167,8 +179,8 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
                         display: 'block',
                         background: ev.badge_color,
                         color: ev.badge_text_color,
-                        fontSize: 8,
-                        padding: '2px 5px',
+                        fontSize: 11,
+                        padding: '3px 6px',
                         fontFamily: 'var(--font-display)',
                         fontStyle: 'italic',
                         textTransform: 'uppercase',
@@ -190,8 +202,11 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
                 </>
               )}
             </div>
-          ))}
-        </div>
+            )
+          })}
+          </div>
+          )
+        })()}
       </div>
     </div>
   )

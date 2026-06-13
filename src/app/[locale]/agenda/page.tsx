@@ -175,13 +175,12 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             }}>
               L&apos;AGENDA POUR<br/>
               VOUS<br/>
-              ORGANISER
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
+                ORGANISER
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/fleche-droite.svg" aria-hidden="true" alt="" style={{ width: 48, height: 48, objectFit: 'contain', flexShrink: 0 }} />
+              </span>
             </h2>
-            {/* Flèche → */}
-            <span aria-hidden="true" style={{ display: 'inline-flex', width: 52, height: 36 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/fleche-bas.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', transform: 'rotate(-90deg)' }} />
-            </span>
           </div>
 
           {/* Calendrier interactif */}
@@ -194,7 +193,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         {/* ═══════════ Y ÉTIEZ VOUS ? / PASSÉS ═══════════ */}
         <section style={{ marginBottom: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, margin: '0 0 26px' }}>
-            <span style={{ background: 'var(--yellow)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)' }}>Y ÉTIEZ VOUS ?</span>
+            <span style={{ background: 'var(--blue-strong)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)' }}>Y ÉTIEZ VOUS ?</span>
             <span style={{ background: 'var(--blue-strong)', padding: '4px 12px', marginLeft: 80, fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)' }}>NOS ÉVÉNEMENTS PASSÉS</span>
           </div>
 
