@@ -48,15 +48,18 @@ export default function AProposProposerClient() {
           fontStyle: 'italic',
           fontWeight: 700,
           fontSize: 'clamp(16px, 1.6vw, 24px)',
-          lineHeight: 1.75,
+          lineHeight: 1,
           margin: '0 0 16px',
           color: 'var(--ink)',
           textTransform: 'uppercase',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 0,
         }}>
           <span style={{ display: 'inline-block', background: '#FFB3F0', padding: '4px 10px' }}>
             DES CHOSES À NOUS PROPOSER ?
           </span>
-          <br/>
           <span style={{ display: 'inline-block', background: '#FFB3F0', padding: '4px 10px', marginLeft: 30 }}>
             DES ÉVÉNEMENTS ?&nbsp;&nbsp;DES CLUBS ?
           </span>
