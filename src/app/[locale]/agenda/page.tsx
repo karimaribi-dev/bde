@@ -161,10 +161,10 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
               fontFamily: '"neue-haas-grotesk-display", sans-serif',
               fontStyle: 'normal',
               fontWeight: 700,
-              fontSize: 32,
-              lineHeight: 1.15,
+              fontSize: 56,
+              lineHeight: 1.05,
               textTransform: 'uppercase',
-              letterSpacing: '-0.01em',
+              letterSpacing: '-0.02em',
               color: 'var(--ink)',
               margin: 0,
             }}>
