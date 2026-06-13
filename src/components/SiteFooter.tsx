@@ -16,6 +16,19 @@ const NAV_COL2 = [
 
 function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
+const LinkedInIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0, opacity: 0.75 }}>
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+)
+
+const ArrowDiagIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+    <line x1="7" y1="17" x2="17" y2="7"/>
+    <polyline points="7 7 17 7 17 17"/>
+  </svg>
+)
+
 const navLinkStyle: React.CSSProperties = {
   fontFamily: '"neue-haas-grotesk-text", "Helvetica Neue", sans-serif',
   fontSize: 13,
@@ -144,12 +157,14 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       {/* Crédit designers — visible uniquement sur desktop, juste sous l'handle */}
       {!isMobile && (
         <>
-          <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '18px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px' }}>
-            Designé par <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Célestine Goussard</a>,<br />
-            <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Liselotte Lecoq</a> &amp; <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Marie Desbois</a>
+          <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '18px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', lineHeight: 1.8 }}>
+            Designé par{' '}
+            <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Célestine Goussard<LinkedInIcon /></a>,<br />
+            <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Liselotte Lecoq<LinkedInIcon /></a>{' '}&amp;{' '}
+            <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Marie Desbois<LinkedInIcon /></a>
           </p>
-          <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '8px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', textDecoration: 'underline' }}>
-            Built by 5 Wheels
+          <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '8px 0 0', border: '1px solid #262626', display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', textDecoration: 'none' }}>
+            Built by 5 Wheels<ArrowDiagIcon />
           </a>
         </>
       )}
@@ -159,13 +174,15 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
   /* ─────────── Crédit designers (mobile uniquement) ─────────── */
   const DesignerCredit = () => (
     <div style={{ padding: '14px 20px' }}>
-      <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '0 0 8px', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px' }}>
-        Designé par <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Célestine Goussard</a>,{' '}
-        <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Liselotte Lecoq</a> &amp; <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Marie Desbois</a>
+      <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '0 0 8px', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', lineHeight: 1.8 }}>
+        Designé par{' '}
+        <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Célestine Goussard<LinkedInIcon /></a>,{' '}
+        <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Liselotte Lecoq<LinkedInIcon /></a>{' '}&amp;{' '}
+        <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Marie Desbois<LinkedInIcon /></a>
       </p>
       <br />
-      <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: 0, border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', textDecoration: 'underline' }}>
-        Built by 5 Wheels
+      <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: 0, border: '1px solid #262626', display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', textDecoration: 'none' }}>
+        Built by 5 Wheels<ArrowDiagIcon />
       </a>
     </div>
   )
