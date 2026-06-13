@@ -145,9 +145,10 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       {!isMobile && (
         <>
           <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '18px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px' }}>
-            Designé par Célestine Goussard,<br />Liselotte Lecoq &amp; Marie Desbois
+            Designé par <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Célestine Goussard</a>,<br />
+            <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Liselotte Lecoq</a> &amp; <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Marie Desbois</a>
           </p>
-          <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '8px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', textDecoration: 'none' }}>
+          <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '8px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', textDecoration: 'underline' }}>
             Built by 5 Wheels
           </a>
         </>
@@ -159,10 +160,11 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
   const DesignerCredit = () => (
     <div style={{ padding: '14px 20px' }}>
       <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '0 0 8px', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px' }}>
-        Designé par Célestine Goussard, Liselotte Lecoq &amp; Marie Desbois
+        Designé par <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Célestine Goussard</a>,{' '}
+        <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Liselotte Lecoq</a> &amp; <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Marie Desbois</a>
       </p>
       <br />
-      <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: 0, border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', textDecoration: 'none' }}>
+      <a href="https://5wheels.io/" target="_blank" rel="noreferrer" style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: 0, border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', textDecoration: 'underline' }}>
         Built by 5 Wheels
       </a>
     </div>
