@@ -35,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" className={`${jetbrainsMono.variable} ${inter.variable}`}>
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/zof5bsa.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" />
       </head>
       <body>
         <GtmLoader />

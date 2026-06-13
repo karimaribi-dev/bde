@@ -59,11 +59,10 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
         </button>
 
         <span style={{
-          fontFamily: 'var(--font-display)',
-          fontStyle: 'italic',
-          fontWeight: 700,
-          fontSize: 'clamp(18px, 1.6vw, 24px)',
-          letterSpacing: '0.04em',
+          fontFamily: "'Gaegu', cursive",
+          fontWeight: 400,
+          fontSize: 'clamp(20px, 1.8vw, 28px)',
+          letterSpacing: '0.02em',
           textTransform: 'uppercase',
           textAlign: 'center',
           display: 'inline-flex',
@@ -94,7 +93,7 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
         borderTop: '1.5px solid var(--ink)',
       }}>
         {['lun', 'mar', 'merc', 'jeu', 'ven', 'sam', 'dim'].map(d => (
-          <span key={d} style={{ fontStyle: 'italic', fontSize: 14, textAlign: 'center', color: 'var(--ink)' }}>{d}</span>
+          <span key={d} style={{ fontFamily: "'Gaegu', cursive", fontWeight: 400, fontSize: 16, textAlign: 'center', color: 'var(--ink)' }}>{d}</span>
         ))}
       </div>
 
@@ -144,7 +143,7 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
               {day && (
                 <>
                   <span style={{
-                    fontFamily: 'var(--font-display)',
+                    fontFamily: "'Gaegu', cursive",
                     fontSize: 26,
                     fontWeight: 400,
                     color: 'var(--ink)',

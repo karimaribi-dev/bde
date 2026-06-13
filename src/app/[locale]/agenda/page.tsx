@@ -157,6 +157,11 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         }}>
           {/* Texte gauche */}
           <div className="agenda-calendar-text" style={{ position: 'relative', paddingTop: 20, paddingLeft: 0 }}>
+            {/* Étoile bleue décorative */}
+            <span aria-hidden="true" style={{ display: 'inline-flex', width: 90, height: 90, marginBottom: 12 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/etoile.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            </span>
             <h2 style={{
               fontFamily: '"neue-haas-grotesk-display", sans-serif',
               fontStyle: 'normal',
@@ -166,12 +171,17 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
               textTransform: 'uppercase',
               letterSpacing: '-0.02em',
               color: 'var(--ink)',
-              margin: 0,
+              margin: '0 0 24px',
             }}>
               L&apos;AGENDA POUR<br/>
               VOUS<br/>
               ORGANISER
             </h2>
+            {/* Flèche → */}
+            <span aria-hidden="true" style={{ display: 'inline-flex', width: 52, height: 36 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/fleche-bas.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', transform: 'rotate(-90deg)' }} />
+            </span>
           </div>
 
           {/* Calendrier interactif */}
