@@ -125,14 +125,25 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
           gridAutoRows: 'minmax(64px, 1fr)',
-          backgroundImage: 'url(/images/quadrillage.svg)',
-          backgroundSize: '100% 100%',
-          backgroundRepeat: 'no-repeat',
+          borderTop: '1.5px solid var(--ink)',
+          borderLeft: '1.5px solid var(--ink)',
           position: 'relative',
           zIndex: 1,
         }}>
+          {/* Quadrillage hand-drawn en overlay */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'url(/images/quadrillage.svg)',
+            backgroundSize: '100% 100%',
+            backgroundRepeat: 'no-repeat',
+            mixBlendMode: 'multiply',
+            pointerEvents: 'none',
+            zIndex: 10,
+          }} />
           {cells.map((day, i) => (
             <div key={i} style={{
+              borderRight: '1.5px solid var(--ink)',
+              borderBottom: '1.5px solid var(--ink)',
               padding: '8px 6px 6px',
               minHeight: 64,
               position: 'relative',
