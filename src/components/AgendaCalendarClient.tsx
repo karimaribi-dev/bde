@@ -92,8 +92,8 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
         padding: '6px 0 8px',
         borderTop: '1.5px solid var(--ink)',
       }}>
-        {['lun', 'mar', 'merc', 'jeu', 'ven', 'sam', 'dim'].map(d => (
-          <span key={d} style={{ fontFamily: "'Gaegu', cursive", fontWeight: 400, fontSize: 16, textAlign: 'center', color: 'var(--ink)' }}>{d}</span>
+        {['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'].map(d => (
+          <span key={d} style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textAlign: 'center', color: 'var(--ink)' }}>{d}</span>
         ))}
       </div>
 
@@ -125,16 +125,14 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
           gridAutoRows: 'minmax(64px, 1fr)',
-          borderTop: '1.5px solid var(--ink)',
-          borderLeft: '1.5px solid var(--ink)',
-          background: '#fff',
+          backgroundImage: 'url(/images/quadrillage.svg)',
+          backgroundSize: '100% 100%',
+          backgroundRepeat: 'no-repeat',
           position: 'relative',
           zIndex: 1,
         }}>
           {cells.map((day, i) => (
             <div key={i} style={{
-              borderRight: '1.5px solid var(--ink)',
-              borderBottom: '1.5px solid var(--ink)',
               padding: '8px 6px 6px',
               minHeight: 64,
               position: 'relative',
