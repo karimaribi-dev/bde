@@ -186,12 +186,20 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const allArticles = [featured, ...latest, ...grid].filter((a): a is ArticleWithCat => a !== null)
   const BADGE_COLORS = ['var(--yellow)', 'var(--pink)', 'var(--blue)', 'var(--orange)']
 
-  /* Couleurs fixes pour la section clubs homepage */
-  const HOME_CLUB_BG   = ['#FF5500', '#5FA0FB', '#FF88E8']
-  const HOME_CLUB_TEXT = ['#FFFFFA', '#262626', '#262626']
-  const c0 = homeClubs[0] ? { ...homeClubs[0], accent_color: HOME_CLUB_BG[0], accent_text_color: HOME_CLUB_TEXT[0] } : null
-  const c1 = homeClubs[1] ? { ...homeClubs[1], accent_color: HOME_CLUB_BG[1], accent_text_color: HOME_CLUB_TEXT[1] } : null
-  const c2 = homeClubs[2] ? { ...homeClubs[2], accent_color: HOME_CLUB_BG[2], accent_text_color: HOME_CLUB_TEXT[2] } : null
+  /* Couleurs fixes par club (matchées par slug) */
+  const CLUB_COLORS: Record<string, { bg: string; text: string }> = {
+    typo:  { bg: '#FF5500', text: '#FFFFFA' },
+    photo: { bg: '#5FA0FB', text: '#262626' },
+    print: { bg: '#FF88E8', text: '#262626' },
+  }
+  function applyClubColor(club: Club): Club {
+    const key = Object.keys(CLUB_COLORS).find(k => club.slug?.toLowerCase().includes(k) || club.title?.toLowerCase().includes(k))
+    if (!key) return club
+    return { ...club, accent_color: CLUB_COLORS[key].bg, accent_text_color: CLUB_COLORS[key].text }
+  }
+  const c0 = homeClubs[0] ? applyClubColor(homeClubs[0]) : null
+  const c1 = homeClubs[1] ? applyClubColor(homeClubs[1]) : null
+  const c2 = homeClubs[2] ? applyClubColor(homeClubs[2]) : null
   const clubSchedule = (c: Club) => {
     const freq  = (isEn && c.frequency_en) ? c.frequency_en : c.frequency
     const sched = (isEn && c.schedule_en)  ? c.schedule_en  : c.schedule
@@ -740,49 +748,56 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           alignItems: 'flex-end',
           flexWrap: 'nowrap',
         }}>
-          {teamMembers.map(member => (
-            <div key={member.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-              {/* Photo circulaire */}
-              <div style={{
-                width: isMobile ? 'clamp(80px, 26vw, 110px)' : 'clamp(130px, 13vw, 190px)',
-                height: isMobile ? 'clamp(88px, 28vw, 120px)' : 'clamp(150px, 15vw, 210px)',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                background: '#f0f0f0',
-                position: 'relative',
-              }}>
-                {member.photo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={member.photo_url}
-                    alt={member.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
-                  />
-                ) : (
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: 48, opacity: 0.2 }}>👤</span>
+          {(() => {
+            const ROTATIONS = [-2, 1.5, -1, 2.5, -1.5, 1, -2.5, 2]
+            return teamMembers.map((member, idx) => {
+              const rot = ROTATIONS[idx % ROTATIONS.length]
+              return (
+                <div key={member.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+                  {/* Photo circulaire */}
+                  <div style={{
+                    width: isMobile ? 'clamp(80px, 26vw, 110px)' : 'clamp(130px, 13vw, 190px)',
+                    height: isMobile ? 'clamp(88px, 28vw, 120px)' : 'clamp(150px, 15vw, 210px)',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    background: '#f0f0f0',
+                    position: 'relative',
+                  }}>
+                    {member.photo_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={member.photo_url}
+                        alt={member.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+                      />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontSize: 48, opacity: 0.2 }}>👤</span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              {/* Badge nom */}
-              <div style={{
-                background: member.badge_color,
-                color: 'var(--ink)',
-                fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
-                fontWeight: 900,
-                fontSize: isMobile ? 'clamp(10px, 3vw, 13px)' : 'clamp(12px, 1.1vw, 16px)',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                padding: isMobile ? '3px 8px 4px' : '5px 14px 6px',
-                marginTop: -4,
-                zIndex: 1,
-                position: 'relative',
-              }}>
-                {member.name}
-              </div>
-            </div>
-          ))}
+                  {/* Badge nom */}
+                  <div style={{
+                    background: member.badge_color,
+                    color: 'var(--ink)',
+                    fontFamily: 'var(--font-display)',
+                    fontStyle: 'italic',
+                    fontWeight: 900,
+                    fontSize: isMobile ? 'clamp(10px, 3vw, 13px)' : 'clamp(12px, 1.1vw, 16px)',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    padding: isMobile ? '3px 8px 4px' : '5px 14px 6px',
+                    marginTop: -4,
+                    zIndex: 1,
+                    position: 'relative',
+                    transform: `rotate(${rot}deg)`,
+                  }}>
+                    {member.name}
+                  </div>
+                </div>
+              )
+            })
+          })()}
         </div>
       </section>
 

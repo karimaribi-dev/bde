@@ -265,12 +265,6 @@ export default function PageEditor({ page }: Props) {
             <p className="text-xs text-gray-400 mt-1">{metaDescription.length}/160</p>
           </div>
 
-          <div className="bg-blue-50 rounded-xl border border-blue-100 p-4">
-            <p className="text-xs text-blue-700 font-medium mb-2">Migration SQL requise</p>
-            <code className="text-xs text-blue-600 break-all">
-              ALTER TABLE pages ADD COLUMN IF NOT EXISTS title_en TEXT, ADD COLUMN IF NOT EXISTS content_en TEXT;
-            </code>
-          </div>
         </div>
       </div>
     </div>
