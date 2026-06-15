@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import imageCompression from 'browser-image-compression'
+import ImageCropModal from './ImageCropModal'
 
 interface Member {
   id: string
@@ -33,6 +34,7 @@ export default function TeamMemberEditor({ member }: Props) {
   const [photoUrl,   setPhotoUrl]   = useState(member.photo_url ?? '')
 
   const [uploading, setUploading] = useState(false)
+  const [cropSrc, setCropSrc]     = useState<string | null>(null)
   const [saving,    setSaving]    = useState(false)
   const [saved,     setSaved]     = useState(false)
   const [dirty,     setDirty]     = useState(false)
@@ -44,12 +46,18 @@ export default function TeamMemberEditor({ member }: Props) {
   function changeColor(v: string)      { setBadgeColor(v); setDirty(true) }
   function changePhoto(v: string)      { setPhotoUrl(v);   setDirty(true) }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
+    setCropSrc(URL.createObjectURL(file))
+  }
+
+  async function uploadCroppedImage(blob: Blob) {
+    setCropSrc(null)
     setUploading(true)
     setError('')
     try {
+      const file = new File([blob], 'team.webp', { type: 'image/webp' })
       const compressed = await imageCompression(file, {
         maxSizeMB: 0.5,
         maxWidthOrHeight: 800,
@@ -271,6 +279,14 @@ export default function TeamMemberEditor({ member }: Props) {
       >
         {saving ? 'Enregistrement…' : saved ? '✓ Sauvegardé' : 'Sauvegarder'}
       </button>
+    {cropSrc && (
+      <ImageCropModal
+        src={cropSrc}
+        aspect={1}
+        onConfirm={blob => { URL.revokeObjectURL(cropSrc); uploadCroppedImage(blob) }}
+        onCancel={() => { URL.revokeObjectURL(cropSrc); setCropSrc(null) }}
+      />
+    )}
     </div>
   )
 }
