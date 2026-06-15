@@ -232,7 +232,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
               </span>
               <span>ALIVE</span>
             </span>
-            <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            <span style={{ display: 'flex', flexDirection: 'column', gap: 0, textAlign: 'right' }}>
               <span>THE</span>
               <span style={{ position: 'relative', display: 'inline-block' }}>
                 <span aria-hidden="true" style={{ position: 'absolute', right: '-5%', top: '-10%', width: '45%', pointerEvents: 'none', zIndex: 0 }}>
