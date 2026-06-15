@@ -8,6 +8,7 @@ interface Point { x: number; y: number }
 
 interface Props {
   src: string
+  aspect?: number
   onConfirm: (blob: Blob) => void
   onCancel: () => void
 }
@@ -30,13 +31,14 @@ const RATIOS = [
   { label: '16 : 9', value: 16 / 9 },
   { label: '4 : 3',  value: 4 / 3  },
   { label: '3 : 2',  value: 3 / 2  },
+  { label: '3 : 4',  value: 3 / 4  },
   { label: '1 : 1',  value: 1      },
 ]
 
-export default function ImageCropModal({ src, onConfirm, onCancel }: Props) {
+export default function ImageCropModal({ src, aspect: defaultAspect, onConfirm, onCancel }: Props) {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
-  const [aspect, setAspect] = useState(16 / 9)
+  const [aspect, setAspect] = useState(defaultAspect ?? 16 / 9)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
   const [processing, setProcessing] = useState(false)
 
@@ -70,14 +72,14 @@ export default function ImageCropModal({ src, onConfirm, onCancel }: Props) {
           <button
             onClick={handleConfirm}
             disabled={processing}
-            style={{ padding: '7px 18px', background: '#fff', color: '#111', fontSize: 13, fontWeight: 700, cursor: 'pointer', borderRadius: 6, opacity: processing ? .5 : 1 }}
+            style={{ padding: '7px 18px', background: '#FFE74A', color: '#111', fontSize: 13, fontWeight: 700, cursor: 'pointer', borderRadius: 6, opacity: processing ? .5 : 1 }}
           >
             {processing ? 'Traitement…' : 'Valider le recadrage'}
           </button>
         </div>
       </div>
 
-      {/* Crop area */}
+      {/* Zone de crop */}
       <div style={{ position: 'relative', flex: 1 }}>
         <Cropper
           image={src}
@@ -90,7 +92,7 @@ export default function ImageCropModal({ src, onConfirm, onCancel }: Props) {
         />
       </div>
 
-      {/* Controls */}
+      {/* Contrôles */}
       <div style={{ background: '#0c0c0c', borderTop: '1px solid rgba(255,255,255,.1)', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
 
         {/* Zoom */}
@@ -98,15 +100,15 @@ export default function ImageCropModal({ src, onConfirm, onCancel }: Props) {
           <span style={{ color: 'rgba(255,255,255,.4)', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', whiteSpace: 'nowrap' }}>ZOOM</span>
           <input
             type="range" min={1} max={3} step={0.01} value={zoom}
-            onChange={(e) => setZoom(Number(e.target.value))}
-            style={{ flex: 1, accentColor: '#fff', cursor: 'pointer' }}
+            onChange={e => setZoom(Number(e.target.value))}
+            style={{ flex: 1, accentColor: '#FFE74A', cursor: 'pointer' }}
           />
           <span style={{ color: 'rgba(255,255,255,.5)', fontFamily: 'var(--font-mono)', fontSize: 11, minWidth: 32 }}>
             {zoom.toFixed(1)}×
           </span>
         </div>
 
-        {/* Aspect ratios */}
+        {/* Ratios */}
         <div style={{ display: 'flex', gap: 6 }}>
           {RATIOS.map(r => (
             <button
@@ -115,12 +117,11 @@ export default function ImageCropModal({ src, onConfirm, onCancel }: Props) {
               style={{
                 padding: '5px 12px', fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '.08em',
                 border: '1px solid',
-                borderColor: aspect === r.value ? '#fff' : 'rgba(255,255,255,.2)',
+                borderColor: aspect === r.value ? '#FFE74A' : 'rgba(255,255,255,.2)',
                 borderRadius: 5,
-                background: aspect === r.value ? '#fff' : 'transparent',
+                background: aspect === r.value ? '#FFE74A' : 'transparent',
                 color: aspect === r.value ? '#111' : 'rgba(255,255,255,.5)',
                 cursor: 'pointer',
-                transition: 'all .15s',
               }}
             >
               {r.label}

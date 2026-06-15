@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Club } from '@/lib/types'
 import Image from 'next/image'
 import imageCompression from 'browser-image-compression'
+import ImageCropModal from './ImageCropModal'
 
 /* ── Palettes de couleurs BDE ── */
 const ACCENT_PRESETS = [
@@ -110,6 +111,7 @@ export default function ClubEditor({ club }: Props) {
   const [isPublished, setIsPublished] = useState(club?.is_published ?? false)
 
   const [uploading, setUploading]   = useState(false)
+  const [cropSrc, setCropSrc]       = useState<string | null>(null)
   const [uploadInfo, setUploadInfo] = useState('')
   const [saving, setSaving]         = useState(false)
   const [saved, setSaved]           = useState(false)
@@ -121,11 +123,17 @@ export default function ClubEditor({ club }: Props) {
     if (!slugManual) setSlug(slugify(val))
   }
 
-  async function uploadImage(file: File) {
+  function selectImage(file: File) {
+    setCropSrc(URL.createObjectURL(file))
+  }
+
+  async function uploadCroppedImage(blob: Blob) {
+    setCropSrc(null)
     setUploading(true)
     setUploadInfo('')
     try {
-      const origKb = Math.round(file.size / 1024)
+      const origKb = Math.round(blob.size / 1024)
+      const file = new File([blob], 'club.webp', { type: 'image/webp' })
       const compressed = await compressImage(file)
       const compKb = Math.round(compressed.size / 1024)
       const path = `clubs/${Date.now()}.webp`
@@ -196,6 +204,7 @@ export default function ClubEditor({ club }: Props) {
 
   /* ── Render ── */
   return (
+    <>
     <div className="max-w-2xl">
 
       {/* Header */}
@@ -560,7 +569,7 @@ export default function ClubEditor({ club }: Props) {
           <label className="cursor-pointer block w-full text-center border-2 border-dashed border-gray-200 rounded-lg py-4 text-sm text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors">
             {uploading ? 'Compression…' : '+ Télécharger une photo'}
             <input type="file" accept="image/*" className="hidden"
-              onChange={e => { const f = e.target.files?.[0]; if (f) uploadImage(f) }} />
+              onChange={e => { const f = e.target.files?.[0]; if (f) selectImage(f) }} />
           </label>
           {uploadInfo && <p className="text-xs text-green-600 text-center">{uploadInfo} · WebP ✓</p>}
           <input
@@ -573,5 +582,15 @@ export default function ClubEditor({ club }: Props) {
 
       </div>
     </div>
+
+    {cropSrc && (
+      <ImageCropModal
+        src={cropSrc}
+        aspect={4 / 5}
+        onConfirm={blob => { URL.revokeObjectURL(cropSrc); uploadCroppedImage(blob) }}
+        onCancel={() => { URL.revokeObjectURL(cropSrc); setCropSrc(null) }}
+      />
+    )}
+    </>
   )
 }

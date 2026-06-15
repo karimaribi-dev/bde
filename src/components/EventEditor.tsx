@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Event } from '@/lib/types'
 import Image from 'next/image'
 import imageCompression from 'browser-image-compression'
+import ImageCropModal from './ImageCropModal'
 
 /* ── Couleurs BDE ── */
 const BADGE_PRESETS = [
@@ -108,6 +109,7 @@ export default function EventEditor({ event }: Props) {
   const [isPublished, setIsPublished]       = useState(event?.is_published ?? false)
 
   const [uploading, setUploading]   = useState(false)
+  const [cropSrc, setCropSrc]       = useState<string | null>(null)
   const [uploadInfo, setUploadInfo] = useState('')
   const [geocoding, setGeocoding]   = useState(false)
   const [saving, setSaving]         = useState(false)
@@ -145,11 +147,17 @@ export default function EventEditor({ event }: Props) {
     }
   }
 
-  async function uploadImage(file: File) {
+  function selectImage(file: File) {
+    setCropSrc(URL.createObjectURL(file))
+  }
+
+  async function uploadCroppedImage(blob: Blob) {
+    setCropSrc(null)
     setUploading(true)
     setUploadInfo('')
     try {
-      const originalKb = Math.round(file.size / 1024)
+      const originalKb = Math.round(blob.size / 1024)
+      const file = new File([blob], 'event.webp', { type: 'image/webp' })
       const compressed = await compressImage(file)
       const compressedKb = Math.round(compressed.size / 1024)
       const path = `events/${Date.now()}.webp`
@@ -224,6 +232,7 @@ export default function EventEditor({ event }: Props) {
 
   /* ── Render ── */
   return (
+    <>
     <div className="max-w-2xl">
 
       {/* Header */}
@@ -519,7 +528,7 @@ export default function EventEditor({ event }: Props) {
           <label className="cursor-pointer block w-full text-center border-2 border-dashed border-gray-200 rounded-lg py-4 text-sm text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors">
             {uploading ? 'Compression…' : '+ Télécharger une image'}
             <input type="file" accept="image/*" className="hidden"
-              onChange={e => { const f = e.target.files?.[0]; if (f) uploadImage(f) }} />
+              onChange={e => { const f = e.target.files?.[0]; if (f) selectImage(f) }} />
           </label>
           {uploadInfo && <p className="text-xs text-green-600 text-center">{uploadInfo} · WebP ✓</p>}
           <input
@@ -601,5 +610,15 @@ export default function EventEditor({ event }: Props) {
 
       </div>
     </div>
+
+    {cropSrc && (
+      <ImageCropModal
+        src={cropSrc}
+        aspect={3 / 4}
+        onConfirm={blob => { URL.revokeObjectURL(cropSrc); uploadCroppedImage(blob) }}
+        onCancel={() => { URL.revokeObjectURL(cropSrc); setCropSrc(null) }}
+      />
+    )}
+    </>
   )
 }
