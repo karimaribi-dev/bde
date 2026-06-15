@@ -44,7 +44,7 @@ export default function CartBubble() {
       MON PANIER
       {/* Badge count */}
       <span style={{
-        background: '#FFE74A', color: 'var(--ink)',
+        background: '#FFE74A', color: '#262626',
         borderRadius: 99, padding: '2px 8px',
         fontSize: 13, fontWeight: 900,
         lineHeight: 1.4,
