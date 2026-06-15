@@ -28,7 +28,7 @@ export default async function MediaPage() {
     supabase.from('events').select('title, image_url'),
     supabase.from('clubs').select('title, image_url'),
     supabase.from('team_members').select('name, photo_url'),
-    supabase.from('products').select('name, image_url'),
+    supabase.from('products').select('title, image_url'),
   ])
 
   // Index : url → { label, type }
@@ -37,7 +37,7 @@ export default async function MediaPage() {
   for (const e of events ?? [])   if (e.image_url)      urlIndex[e.image_url]       = { label: e.title, type: 'Événement' }
   for (const c of clubs ?? [])    if (c.image_url)      urlIndex[c.image_url]       = { label: c.title, type: 'Club' }
   for (const t of team ?? [])     if (t.photo_url)      urlIndex[t.photo_url]       = { label: t.name,  type: 'Équipe' }
-  for (const p of products ?? []) if (p.image_url)      urlIndex[p.image_url]       = { label: p.name,  type: 'Shop' }
+  for (const p of products ?? []) if (p.image_url)      urlIndex[p.image_url]       = { label: p.title, type: 'Shop' }
 
   // Enrichir chaque fichier avec son URL publique et l'usage
   const { data: { publicUrl: base } } = supabase.storage.from('article-images').getPublicUrl('_')
