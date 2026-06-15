@@ -56,7 +56,10 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
   const locale = isEn ? 'en' : 'fr'
 
   const [isMobile, setIsMobile] = useState(false)
-  const [dark, setDark] = useState(false)
+  const [dark, setDark] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    try { return localStorage.getItem('bde-dark') === '1' } catch { return false }
+  })
   const [extraPages, setExtraPages] = useState<{ title: string; title_en: string | null; slug: string }[]>([])
 
   useEffect(() => {
@@ -72,16 +75,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       .then(({ data }) => { if (data) setExtraPages(data) })
   }, [])
 
-  /* Lecture de la préférence dark au montage */
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('bde-dark') === '1'
-      setDark(saved)
-      document.documentElement.classList.toggle('dark', saved)
-    } catch {}
-  }, [])
-
-  /* Sync classe + localStorage à chaque changement */
+  /* Sync classe HTML + localStorage à chaque changement */
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
     try { localStorage.setItem('bde-dark', dark ? '1' : '0') } catch {}
