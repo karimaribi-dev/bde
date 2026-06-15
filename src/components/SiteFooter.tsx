@@ -9,9 +9,9 @@ import { Category } from '@/lib/types'
 const NAV_COL1 = [
   { label: 'AGENDA & EVENTS', labelEn: 'AGENDA & EVENTS', href: '/agenda' },
   { label: 'NOS CLUBS',       labelEn: 'OUR CLUBS',       href: '/clubs' },
-  { label: 'SHOP',            labelEn: 'SHOP',             href: '/shop' },
 ]
 const NAV_COL2 = [
+  { label: 'SHOP',     labelEn: 'SHOP',  href: '/shop' },
   { label: 'À PROPOS', labelEn: 'ABOUT', href: '/a-propos' },
 ]
 
@@ -156,7 +156,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
         </div>
       </div>
       {extraPages.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 10, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '4px 24px', marginTop: 10, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
           {extraPages.map(p => (
             <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{p.title.toUpperCase()}</Link>
           ))}
@@ -266,7 +266,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
             </div>
           </div>
           {extraPages.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 28, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '4px 24px', marginBottom: 28, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
               {extraPages.map(p => (
                 <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{p.title.toUpperCase()}</Link>
               ))}
