@@ -93,8 +93,13 @@ export default function EventEditor({ event }: Props) {
   const [description, setDescription]       = useState(event?.description ?? '')
   const [descriptionEn, setDescriptionEn]   = useState(event?.description_en ?? '')
   const [eventDate, setEventDate]           = useState(event?.event_date ?? '')
+  const [eventEndDate, setEventEndDate]     = useState(event?.event_end_date ?? '')
   const [eventTime, setEventTime]           = useState(event?.event_time ?? '')
+  const [eventEndTime, setEventEndTime]     = useState(event?.event_end_time ?? '')
   const [price, setPrice]                   = useState(event?.price ?? 'gratuit')
+  const [ctaLabel, setCtaLabel]             = useState(event?.cta_label ?? '')
+  const [ctaLabelEn, setCtaLabelEn]         = useState(event?.cta_label_en ?? '')
+  const [ctaUrl, setCtaUrl]                 = useState(event?.cta_url ?? '')
   const [imageUrl, setImageUrl]             = useState(event?.image_url ?? '')
   const [locationName, setLocationName]     = useState(event?.location_name ?? '')
   const [locationAddress, setLocationAddress] = useState(event?.location_address ?? '')
@@ -180,9 +185,14 @@ export default function EventEditor({ event }: Props) {
       description_en:   descriptionEn.trim() || null,
       title_en:         titleEn.trim() || null,
       event_date:       eventDate,
+      event_end_date:   eventEndDate || null,
       event_time:       eventTime.trim(),
+      event_end_time:   eventEndTime.trim() || null,
       price:            price.trim() || 'gratuit',
       image_url:        imageUrl || null,
+      cta_label:        ctaLabel.trim() || null,
+      cta_label_en:     ctaLabelEn.trim() || null,
+      cta_url:          ctaUrl.trim() || null,
       location_name:    locationName.trim() || null,
       location_address: locationAddress.trim() || null,
       location_lat:     locationLat,
@@ -383,9 +393,9 @@ export default function EventEditor({ event }: Props) {
         {/* Date, heure, prix */}
         <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
           <h2 className="text-sm font-semibold text-gray-900">Date & Infos pratiques</h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Date *</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Date début *</label>
               <input
                 type="date"
                 value={eventDate}
@@ -394,7 +404,16 @@ export default function EventEditor({ event }: Props) {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Heure</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Date fin <span className="text-gray-400 font-normal">(optionnel)</span></label>
+              <input
+                type="date"
+                value={eventEndDate}
+                onChange={e => setEventEndDate(e.target.value)}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Heure début</label>
               <input
                 value={eventTime}
                 onChange={e => setEventTime(e.target.value)}
@@ -403,6 +422,15 @@ export default function EventEditor({ event }: Props) {
               />
             </div>
             <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Heure fin <span className="text-gray-400 font-normal">(optionnel)</span></label>
+              <input
+                value={eventEndTime}
+                onChange={e => setEventEndTime(e.target.value)}
+                placeholder="Ex : 22h, 23h30"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            <div className="col-span-2">
               <label className="block text-xs font-medium text-gray-500 mb-1">Prix</label>
               <input
                 value={price}
@@ -411,6 +439,40 @@ export default function EventEditor({ event }: Props) {
                 className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Bouton CTA */}
+        <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-gray-900">Bouton d'action <span className="text-xs text-gray-400 font-normal">(lien billetterie, paiement…)</span></h2>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Texte du bouton (FR)</label>
+              <input
+                value={ctaLabel}
+                onChange={e => setCtaLabel(e.target.value)}
+                placeholder="Ex : Réserver ma place"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Texte du bouton (EN)</label>
+              <input
+                value={ctaLabelEn}
+                onChange={e => setCtaLabelEn(e.target.value)}
+                placeholder="Ex : Book my spot"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Lien (URL)</label>
+            <input
+              value={ctaUrl}
+              onChange={e => setCtaUrl(e.target.value)}
+              placeholder="https://…"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            />
           </div>
         </div>
 

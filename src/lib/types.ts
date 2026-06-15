@@ -102,13 +102,18 @@ export interface Event {
   description: string | null
   description_en: string | null
   event_date: string          // YYYY-MM-DD
+  event_end_date: string | null
   event_time: string
+  event_end_time: string | null
   price: string
   image_url: string | null
   location_name: string | null
   location_address: string | null
   location_lat: number | null
   location_lng: number | null
+  cta_label: string | null
+  cta_label_en: string | null
+  cta_url: string | null
   is_published: boolean
   created_at: string
   updated_at: string

@@ -8,6 +8,7 @@ import EventMapClient from '@/components/EventMapClient'
 import { Event, Category } from '@/lib/types'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { enUS } from 'date-fns/locale'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,7 +35,21 @@ export default async function EventDetailPage({
   const displayDescription = (locale === 'en' && event.description_en) ? event.description_en : event.description
   const displayBadge       = (locale === 'en' && event.badge_en)       ? event.badge_en       : event.badge
 
-  const eventDateFull = format(new Date(event.event_date), "EEEE d MMMM yyyy", { locale: fr })
+  const isEn = locale === 'en'
+  const dateFnsLocale = isEn ? enUS : fr
+
+  const eventDateFull = format(new Date(event.event_date), "EEEE d MMMM yyyy", { locale: dateFnsLocale })
+  const eventEndDateFull = event.event_end_date
+    ? format(new Date(event.event_end_date), "EEEE d MMMM yyyy", { locale: dateFnsLocale })
+    : null
+
+  const dateDisplay = eventEndDateFull
+    ? `${eventDateFull} → ${eventEndDateFull}`
+    : eventDateFull
+
+  const timeDisplay = [event.event_time, event.event_end_time].filter(Boolean).join(' → ')
+
+  const ctaLabel = (isEn && event.cta_label_en) ? event.cta_label_en : event.cta_label
 
   return (
     <>
@@ -107,10 +122,31 @@ export default async function EventDetailPage({
                   borderTop: '1px solid #e6e6e6',
                   paddingTop: 24,
                 }}>
-                  <InfoBlock label="Date" value={eventDateFull} capitalize />
-                  {event.event_time && <InfoBlock label="Heure" value={event.event_time} />}
-                  <InfoBlock label="Prix" value={event.price} />
-                  {event.location_name && <InfoBlock label="Lieu" value={event.location_name} />}
+                  <InfoBlock label={isEn ? 'Date' : 'Date'} value={dateDisplay} capitalize />
+                  {timeDisplay && <InfoBlock label={isEn ? 'Time' : 'Heure'} value={timeDisplay} />}
+                  <InfoBlock label={isEn ? 'Price' : 'Prix'} value={event.price} />
+                  {event.location_name && <InfoBlock label={isEn ? 'Location' : 'Lieu'} value={event.location_name} />}
+                  {ctaLabel && event.cta_url && (
+                    <a
+                      href={event.cta_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 10,
+                        background: 'var(--yellow)', color: 'var(--ink)',
+                        fontFamily: 'var(--font-display)', fontStyle: 'italic',
+                        fontWeight: 700, fontSize: 16, letterSpacing: '0.04em',
+                        textTransform: 'uppercase', textDecoration: 'none',
+                        padding: '13px 24px', borderRadius: 999, marginTop: 8,
+                        alignSelf: 'flex-start',
+                      }}
+                    >
+                      {ctaLabel}
+                      <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 12 }}>
+                        <path d="M2 8h19M14 1l7 7-7 7"/>
+                      </svg>
+                    </a>
+                  )}
                 </div>
 
                 {/* Description */}

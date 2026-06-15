@@ -374,10 +374,15 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                 boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
               }}>
                 <div style={{
-                  fontFamily: 'var(--font-display)', fontStyle: 'italic',
-                  fontSize: 'clamp(15px, 1.4vw, 22px)',
-                  textTransform: 'uppercase', letterSpacing: '-0.01em',
-                  textAlign: 'center', color: 'var(--ink)',
+                  fontFamily: '"neue-haas-grotesk-display", sans-serif',
+                  fontWeight: 700,
+                  fontStyle: 'italic',
+                  fontSize: 26,
+                  textTransform: 'uppercase',
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.1,
+                  textAlign: 'center',
+                  color: 'var(--ink)',
                 }}>
                   {ev.title}
                 </div>
