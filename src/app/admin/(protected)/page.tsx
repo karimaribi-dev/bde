@@ -254,7 +254,7 @@ export default async function AdminDashboard() {
         <i className="fa-solid fa-circle-info" style={{ color: '#9ca3af', fontSize: 15, flexShrink: 0 }} />
         <span>
           Vous rencontrez un problème ou un bug ?{' '}
-          <a href="mailto:karimaribi@gmail.com" style={{ color: '#4FA3FF', fontWeight: 600, textDecoration: 'none' }}>
+          <a href="mailto:karimaribi@gmail.com?subject=Ticket%20Site%20BDE" style={{ color: '#4FA3FF', fontWeight: 600, textDecoration: 'none' }}>
             Contactez le développeur
           </a>
         </span>
