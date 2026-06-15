@@ -94,11 +94,15 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
         <span style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 36 : 48, lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>BDE</span>
         <span style={{ background: 'var(--pink)', padding: isMobile ? '3px 10px 4px' : '4px 12px 6px', fontFamily: '"new-atten", sans-serif', fontWeight: 500, fontStyle: 'italic', fontSize: isMobile ? 22 : 30, lineHeight: 1, textTransform: 'uppercase', display: 'inline-block' }}>LISAA DGC</span>
       </Link>
-      <button onClick={scrollTop} aria-label="Haut de page" style={{ width: isMobile ? 44 : 52, height: isMobile ? 44 : 52, border: '2px solid var(--ink)', borderRadius: '50%', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="18 15 12 9 6 15"/>
-        </svg>
-      </button>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/flecheverslehaut.svg"
+        alt="Haut de page"
+        onClick={scrollTop}
+        role="button"
+        aria-label="Haut de page"
+        style={{ width: isMobile ? 44 : 52, height: isMobile ? 44 : 52, cursor: 'pointer', flexShrink: 0 }}
+      />
     </div>
   )
 
@@ -107,7 +111,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '28px 20px' : '36px 52px', position: 'relative' }}>
       <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '28px 40px' : '36px 52px' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/entoure.svg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} />
+        <img src="/images/entoure.svg" alt="" aria-hidden="true" className="footer-entoure" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} />
         <span style={{ position: 'relative', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: isMobile ? 'clamp(26px, 8vw, 40px)' : 'clamp(20px, 2.4vw, 30px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.02em', textTransform: 'uppercase', display: 'block', textAlign: 'center' }}>
           MAKE THE<br />CAMPUS ALIVE
         </span>

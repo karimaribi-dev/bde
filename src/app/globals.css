@@ -549,6 +549,21 @@ html.dark .event-card-body * { color: #262626 !important; }
 html.dark .nav-panel__locale-toggle { background: #5FA0FB !important; }
 html.dark .site-header .nav-panel__locale-toggle { background: #5FA0FB !important; }
 
+/* Shop labels "best of student creations" → bleu en dark mode */
+html.dark .shop-label-badge { background: #5FA0FB !important; color: #262626 !important; }
+
+/* Produits shop → textes et fond restent clairs en dark mode */
+html.dark .shop-product-card { background: #fff !important; }
+html.dark .shop-product-card * { color: #262626 !important; }
+
+/* CartDrawer → fond et textes restent clairs en dark mode */
+html.dark .cart-drawer-inner { background: #FFFFFA !important; }
+html.dark .cart-drawer-inner * { color: #262626 !important; }
+html.dark .cart-drawer-inner button { color: #262626 !important; }
+
+/* Footer entoure.svg (MAKE THE CAMPUS ALIVE) → blanc en dark mode */
+html.dark .footer-entoure { filter: invert(1); }
+
 /* ── Responsive ── */
 @media (max-width: 1180px) {
   .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }

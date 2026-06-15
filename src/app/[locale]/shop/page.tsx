@@ -66,10 +66,10 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
             fontSize: 'clamp(13px, 1.1vw, 16px)',
             letterSpacing: '0.01em',
           }}>
-            <span style={{ background: '#FFE74A', color: 'var(--ink)', padding: '6px 12px 8px' }}>
+            <span className="shop-label-badge" style={{ background: '#FFE74A', color: 'var(--ink)', padding: '6px 12px 8px' }}>
               {isEn ? 'The best of student creations' : 'La sélection de créations étudiantes'}
             </span>
-            <span style={{ background: '#FFE74A', color: 'var(--ink)', padding: '6px 12px 8px', transform: 'translateX(60px)' }}>
+            <span className="shop-label-badge" style={{ background: '#FFE74A', color: 'var(--ink)', padding: '6px 12px 8px', transform: 'translateX(60px)' }}>
               {isEn ? 'and limited edition merch' : 'et de merch en édition limitée'}
             </span>
           </div>
@@ -109,6 +109,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
                   {/* ── Lien cliquable (toute la surface) ── */}
                   <Link
                     href={`/${locale}/shop/${product.slug}`}
+                    className="shop-product-card"
                     style={{
                       position: 'absolute', inset: 0,
                       display: 'flex', flexDirection: 'column',
