@@ -54,7 +54,7 @@ export default async function PublicPage({ params }: Props) {
           <h1 style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 900,
-            fontSize: 'clamp(72px, 15.5vw, 224px)',
+            fontSize: 'clamp(36px, 7.75vw, 112px)',
             lineHeight: 0.9,
             letterSpacing: '-0.02em',
             textTransform: 'uppercase',

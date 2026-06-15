@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 const CONSENT_KEY = 'cookie_consent_v1'
 
@@ -21,6 +22,8 @@ function pushConsentRefused() {
 }
 
 export default function CookieBanner() {
+  const pathname = usePathname()
+  const isEn = pathname?.startsWith('/en') ?? false
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -81,8 +84,10 @@ export default function CookieBanner() {
         color: 'var(--paper)',
         opacity: 0.9,
       }}>
-        Nous utilisons des cookies pour mesurer l&apos;audience de notre site et améliorer votre expérience.
-        {' '}<a href="/politique-confidentialite" style={{ color: 'var(--yellow)', textDecoration: 'underline', fontSize: '0.9rem' }}>En savoir plus</a>
+        {isEn
+          ? <>We use cookies to measure our site&apos;s audience and improve your experience.{' '}<a href="/en/p/privacy-policy" style={{ color: 'var(--yellow)', textDecoration: 'underline', fontSize: '0.9rem' }}>Learn more</a></>
+          : <>Nous utilisons des cookies pour mesurer l&apos;audience de notre site et améliorer votre expérience.{' '}<a href="/fr/p/politique-confidentialite" style={{ color: 'var(--yellow)', textDecoration: 'underline', fontSize: '0.9rem' }}>En savoir plus</a></>
+        }
       </p>
 
       <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0 }}>
@@ -103,7 +108,7 @@ export default function CookieBanner() {
             cursor: 'pointer',
           }}
         >
-          Refuser
+          {isEn ? 'Decline' : 'Refuser'}
         </button>
         <button
           onClick={accept}
@@ -122,7 +127,7 @@ export default function CookieBanner() {
             cursor: 'pointer',
           }}
         >
-          Accepter
+          {isEn ? 'Accept' : 'Accepter'}
         </button>
       </div>
     </div>

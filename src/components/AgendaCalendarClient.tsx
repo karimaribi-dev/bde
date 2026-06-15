@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Event } from '@/lib/types'
 import { format, startOfMonth, getDay, getDaysInMonth, addMonths, subMonths } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { fr, enUS } from 'date-fns/locale'
 
 interface Props {
   events: Event[]
@@ -33,7 +33,12 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
     }
   })
 
-  const monthLabel = format(current, 'MMMM yyyy', { locale: fr }).toUpperCase()
+  const isEn = locale === 'en'
+  const dateFnsLocale = isEn ? enUS : fr
+  const monthLabel = format(current, 'MMMM yyyy', { locale: dateFnsLocale }).toUpperCase()
+  const WEEKDAYS = isEn
+    ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+    : ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']
 
   /* Grille: cases vides + jours + padding fin */
   const cells: (number | null)[] = [
@@ -92,7 +97,7 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
         padding: '6px 0 8px',
         borderTop: '1.5px solid var(--ink)',
       }}>
-        {['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'].map(d => (
+        {WEEKDAYS.map(d => (
           <span key={d} style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textAlign: 'center', color: 'var(--ink)' }}>{d}</span>
         ))}
       </div>

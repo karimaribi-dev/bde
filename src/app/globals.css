@@ -139,7 +139,7 @@ a { color: inherit; text-decoration: none; }
   transition: transform .12s, background .15s;
 }
 .main-nav a:hover { transform: translateY(-1px); background: var(--yellow-deep); }
-.main-nav a.is-active { background: var(--ink); color: #fff; }
+.main-nav a.is-active { background: #FF5500; color: #fff; }
 
 /* Cart */
 .cart-link {
@@ -289,7 +289,7 @@ a { color: inherit; text-decoration: none; }
   transition: background .12s;
 }
 .nav-panel__links a:hover { background: var(--yellow-deep); }
-.nav-panel__links a.active { background: var(--ink); color: var(--paper); }
+.nav-panel__links a.active { background: #FF5500; color: #fff; }
 
 /* Locale toggle */
 .nav-panel__locale-row {
