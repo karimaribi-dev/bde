@@ -221,8 +221,8 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             textTransform: 'uppercase',
             margin: 0,
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            columnGap: 'clamp(20px, 3vw, 60px)',
+            gridTemplateColumns: '0.65fr 1fr',
+            columnGap: 0,
           }}>
             <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               <span>MAKE</span>
