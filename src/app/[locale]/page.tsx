@@ -186,9 +186,12 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const allArticles = [featured, ...latest, ...grid].filter((a): a is ArticleWithCat => a !== null)
   const BADGE_COLORS = ['var(--yellow)', 'var(--pink)', 'var(--blue)', 'var(--orange)']
 
-  const c0 = homeClubs[0] ?? null
-  const c1 = homeClubs[1] ?? null
-  const c2 = homeClubs[2] ?? null
+  /* Couleurs fixes pour la section clubs homepage */
+  const HOME_CLUB_BG   = ['#FF5500', '#5FA0FB', '#FF88E8']
+  const HOME_CLUB_TEXT = ['#FFFFFA', '#262626', '#262626']
+  const c0 = homeClubs[0] ? { ...homeClubs[0], accent_color: HOME_CLUB_BG[0], accent_text_color: HOME_CLUB_TEXT[0] } : null
+  const c1 = homeClubs[1] ? { ...homeClubs[1], accent_color: HOME_CLUB_BG[1], accent_text_color: HOME_CLUB_TEXT[1] } : null
+  const c2 = homeClubs[2] ? { ...homeClubs[2], accent_color: HOME_CLUB_BG[2], accent_text_color: HOME_CLUB_TEXT[2] } : null
   const clubSchedule = (c: Club) => {
     const freq  = (isEn && c.frequency_en) ? c.frequency_en : c.frequency
     const sched = (isEn && c.schedule_en)  ? c.schedule_en  : c.schedule
@@ -407,13 +410,13 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           {isEn ? '*Feel free to scroll for more events' : "*N’hésitez pas à slider pour plus d’event"}
         </span>
         {isMobile ? (
-          /* Flèche jaune simple sur mobile */
+          /* Flèche bold sur mobile */
           <Link href={`/${locale}/agenda`} aria-label="Voir tous les événements" style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--ink)', textDecoration: 'none', flexShrink: 0,
+            textDecoration: 'none', flexShrink: 0,
           }}>
-            <svg viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 40, height: 26 }}>
-              <path d="M2 10h26M20 2l10 8-10 8" stroke="#262626" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg viewBox="0 0 58 58" fill="var(--yellow)" style={{ width: 44, height: 44 }}>
+              <path d="M-8.15183e-05 32.25L43.6091 32.25L23.5782 52.2808L28.6666 57.3333L57.3333 28.6667L28.6666 -1.25306e-06L23.6141 5.0525L43.6091 25.0833L-8.12051e-05 25.0833L-8.15183e-05 32.25Z"/>
             </svg>
           </Link>
         ) : (

@@ -545,6 +545,10 @@ html.dark svg[stroke="#FEEF4C"] { stroke: var(--yellow) !important; }
 html.dark .event-card-body { background: #fff !important; color: #262626 !important; }
 html.dark .event-card-body * { color: #262626 !important; }
 
+/* Switch FR/EN → reste bleu en dark mode */
+html.dark .nav-panel__locale-toggle { background: #5FA0FB !important; }
+html.dark .site-header .nav-panel__locale-toggle { background: #5FA0FB !important; }
+
 /* ── Responsive ── */
 @media (max-width: 1180px) {
   .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }

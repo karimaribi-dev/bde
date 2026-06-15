@@ -104,7 +104,10 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             alignItems: 'flex-start',
             flexWrap: 'wrap',
           }}>
-            {members.map(member => (
+            {members.map((member, idx) => {
+              const ROTATIONS = [-2, 1.5, -1, 2.5, -1.5, 1, -2.5, 2]
+              const rot = ROTATIONS[idx % ROTATIONS.length]
+              return (
               <div key={member.id} className="team-member-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
                 {/* Photo circulaire */}
                 <div className="team-member-photo" style={{
@@ -142,11 +145,13 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
                   marginTop: -4,
                   zIndex: 1,
                   position: 'relative',
+                  transform: `rotate(${rot}deg)`,
                 }}>
                   {member.name}
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         </section>
 

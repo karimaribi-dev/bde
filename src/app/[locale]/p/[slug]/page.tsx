@@ -12,18 +12,19 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const { locale, slug } = await params
   const supabase = await createClient()
   const { data } = await supabase
     .from('pages')
-    .select('title, meta_description')
+    .select('title, title_en, meta_description')
     .eq('slug', slug)
     .eq('is_published', true)
     .single()
 
   if (!data) return {}
+  const displayTitle = locale === 'en' && data.title_en ? data.title_en : data.title
   return {
-    title: data.title,
+    title: displayTitle,
     description: data.meta_description ?? undefined,
   }
 }
@@ -41,6 +42,10 @@ export default async function PublicPage({ params }: Props) {
 
   const cats = (categories ?? []) as Category[]
 
+  const isEn = locale === 'en'
+  const displayTitle   = isEn && page.title_en   ? page.title_en   : page.title
+  const displayContent = isEn && page.content_en ? page.content_en : page.content
+
   return (
     <>
       <NavbarClient categories={cats} locale={locale} />
@@ -57,18 +62,20 @@ export default async function PublicPage({ params }: Props) {
             color: 'var(--ink)',
             margin: 0,
           }}>
-            {page.title}
+            {displayTitle}
           </h1>
         </section>
         <div style={{ maxWidth: 720, margin: '0 auto' }}>
-          {page.content ? (
+          {displayContent ? (
             <div
               className="tiptap-content"
-              dangerouslySetInnerHTML={{ __html: page.content }}
+              dangerouslySetInnerHTML={{ __html: displayContent }}
               style={{ color: 'var(--ink)', fontSize: 17 }}
             />
           ) : (
-            <p style={{ fontFamily: '"new-atten", sans-serif', color: '#999', fontStyle: 'italic' }}>Contenu à venir.</p>
+            <p style={{ fontFamily: '"new-atten", sans-serif', color: '#999', fontStyle: 'italic' }}>
+              {isEn ? 'Content coming soon.' : 'Contenu à venir.'}
+            </p>
           )}
         </div>
       </main>

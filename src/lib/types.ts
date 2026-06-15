@@ -21,6 +21,8 @@ export interface Page {
   title: string
   slug: string
   content: string
+  title_en: string | null
+  content_en: string | null
   meta_description: string | null
   is_published: boolean
   created_at: string
