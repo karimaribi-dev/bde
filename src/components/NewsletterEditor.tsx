@@ -102,7 +102,7 @@ export default function NewsletterEditor({ newsletter }: Props) {
 
     setSaving(false)
     if (err) { setError(`Erreur : ${err.message}`) }
-    else { setSaved(true); router.refresh() }
+    else { setSaved(true); setTimeout(() => setSaved(false), 2000); router.refresh() }
   }
 
   async function handleSchedule() {
@@ -156,7 +156,7 @@ export default function NewsletterEditor({ newsletter }: Props) {
         <div className="flex items-center gap-2 flex-wrap">
           {!isSent && (
             <>
-              <button onClick={() => handleSave()} disabled={saving || saved}
+              <button onClick={() => handleSave()} disabled={saving}
                 className="px-4 py-2 text-sm font-medium border border-gray-200 rounded transition-colors hover:bg-gray-50 disabled:opacity-50"
               >
                 {saving ? 'Sauvegarde…' : saved ? '✓ Sauvegardé' : 'Sauvegarder brouillon'}

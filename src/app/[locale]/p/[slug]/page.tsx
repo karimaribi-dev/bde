@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import NavbarClient from '@/components/NavbarClient'
+import SiteFooter from '@/components/SiteFooter'
+import { Category } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,43 +29,50 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PublicPage({ params }: Props) {
-  const { slug } = await params
+  const { locale, slug } = await params
   const supabase = await createClient()
 
-  const { data: page } = await supabase
-    .from('pages')
-    .select('*')
-    .eq('slug', slug)
-    .eq('is_published', true)
-    .single()
+  const [{ data: page }, { data: categories }] = await Promise.all([
+    supabase.from('pages').select('*').eq('slug', slug).eq('is_published', true).single(),
+    supabase.from('categories').select('*').order('name'),
+  ])
 
   if (!page) notFound()
 
+  const cats = (categories ?? []) as Category[]
+
   return (
-    <div style={{
-      maxWidth: 720,
-      margin: '0 auto',
-      padding: '60px 24px',
-      fontFamily: '"altesse-std-24pt", serif',
-    }}>
-      <h1 style={{
-        fontSize: 32,
-        fontWeight: 700,
-        color: '#111',
-        marginBottom: 32,
-        lineHeight: 1.3,
-      }}>
-        {page.title}
-      </h1>
-      {page.content ? (
-        <div
-          className="tiptap-content"
-          dangerouslySetInnerHTML={{ __html: page.content }}
-          style={{ color: '#333', lineHeight: 1.8, fontSize: 16 }}
-        />
-      ) : (
-        <p style={{ color: '#999', fontStyle: 'italic' }}>Contenu à venir.</p>
-      )}
-    </div>
+    <>
+      <NavbarClient categories={cats} locale={locale} />
+      <main style={{ minHeight: '60vh', padding: '50px 40px 96px', background: 'var(--paper)' }}>
+        <section style={{ textAlign: 'center', paddingBottom: 60 }}>
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 900,
+            fontSize: 'clamp(56px, 10vw, 140px)',
+            lineHeight: 0.9,
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
+            fontStyle: 'italic',
+            color: 'var(--ink)',
+            margin: 0,
+          }}>
+            {page.title}
+          </h1>
+        </section>
+        <div style={{ maxWidth: 720, margin: '0 auto' }}>
+          {page.content ? (
+            <div
+              className="tiptap-content"
+              dangerouslySetInnerHTML={{ __html: page.content }}
+              style={{ color: 'var(--ink)', fontSize: 17 }}
+            />
+          ) : (
+            <p style={{ fontFamily: '"new-atten", sans-serif', color: '#999', fontStyle: 'italic' }}>Contenu à venir.</p>
+          )}
+        </div>
+      </main>
+      <SiteFooter categories={cats} />
+    </>
   )
 }

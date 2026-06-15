@@ -205,6 +205,7 @@ export default function EventEditor({ event }: Props) {
       setMessage(`Erreur : ${error.message}`)
     } else {
       setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
       setMessage(event?.id ? 'Événement mis à jour !' : 'Événement créé !')
       if (!event?.id) router.push('/admin/events')
       else router.refresh()
@@ -222,7 +223,7 @@ export default function EventEditor({ event }: Props) {
         </h1>
         <button
           onClick={handleSave}
-          disabled={saving || saved}
+          disabled={saving}
           className="px-4 py-2 text-sm font-medium text-white rounded transition-colors disabled:opacity-60"
           style={{ background: saved ? '#16a34a' : '#111' }}
         >

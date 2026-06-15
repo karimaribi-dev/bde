@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function SubscribeForm() {
+  const isEn = usePathname().startsWith('/en')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -19,18 +21,18 @@ export default function SubscribeForm() {
         body: JSON.stringify({ email }),
       })
       const data = await res.json()
-      if (!res.ok) { setStatus('error'); setErrorMsg(data.error ?? 'Erreur') }
+      if (!res.ok) { setStatus('error'); setErrorMsg(data.error ?? (isEn ? 'Error' : 'Erreur')) }
       else { setStatus('success'); setEmail('') }
     } catch {
       setStatus('error')
-      setErrorMsg('Erreur réseau, réessayez.')
+      setErrorMsg(isEn ? 'Network error, please try again.' : 'Erreur réseau, réessayez.')
     }
   }
 
   if (status === 'success') {
     return (
       <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '.1em', color: '#16a34a' }}>
-        ✓ Inscription confirmée !
+        {isEn ? '✓ Successfully subscribed!' : '✓ Inscription confirmée !'}
       </p>
     )
   }
@@ -41,7 +43,7 @@ export default function SubscribeForm() {
         type="email"
         value={email}
         onChange={e => setEmail(e.target.value)}
-        placeholder="votre@email.com"
+        placeholder={isEn ? 'your@email.com' : 'votre@email.com'}
         required
         style={{
           flex: 1,
@@ -73,7 +75,7 @@ export default function SubscribeForm() {
           opacity: status === 'loading' ? .6 : 1,
         }}
       >
-        {status === 'loading' ? '…' : "S'inscrire →"}
+        {status === 'loading' ? '…' : (isEn ? 'Subscribe →' : "S'inscrire →")}
       </button>
       {status === 'error' && (
         <p style={{ position: 'absolute', marginTop: 40, fontFamily: 'var(--font-mono)', fontSize: 11, color: '#dc2626' }}>{errorMsg}</p>

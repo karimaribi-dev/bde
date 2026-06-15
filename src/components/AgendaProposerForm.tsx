@@ -1,17 +1,20 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { isStudentEmail, STUDENT_EMAIL_ERROR, STUDENT_DOMAIN } from '@/lib/validate-email'
 
 interface Props { source?: string }
 
 export default function AgendaProposerForm({ source = 'agenda' }: Props) {
+  const isEn = usePathname().startsWith('/en')
   const [text,    setText]    = useState('')
   const [mail,    setMail]    = useState('')
   const [sending, setSending] = useState(false)
   const [sent,    setSent]    = useState(false)
   const [error,   setError]   = useState('')
+  const [consent, setConsent] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -32,9 +35,10 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
       source,
       message: text.trim(),
       mail: mail.trim() || null,
+      consent_at: new Date().toISOString(),
     })
     setSending(false)
-    if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
+    if (dbErr) { setError(isEn ? 'Sending error. Please try again.' : 'Erreur lors de l\'envoi. Réessaie.'); return }
     setSent(true)
     setText('')
   }
@@ -62,8 +66,8 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
         </span>
 
         <div style={{ textAlign: 'center', margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)', whiteSpace: 'nowrap' }}>DES CHOSES À NOUS PROPOSER ?</span>
-          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)', whiteSpace: 'nowrap' }}>DES ÉVÉNEMENTS ?&nbsp;&nbsp;DES CLUBS ?</span>
+          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)', whiteSpace: 'nowrap' }}>{isEn ? 'GOT IDEAS FOR US?' : 'DES CHOSES À NOUS PROPOSER ?'}</span>
+          <span style={{ background: 'var(--pink)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)', whiteSpace: 'nowrap' }}>{isEn ? 'EVENTS?  CLUBS?' : 'DES ÉVÉNEMENTS ?  DES CLUBS ?'}</span>
         </div>
 
         <div style={{
@@ -77,7 +81,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
           gap: 14,
           color: 'var(--ink)',
         }}>
-          ON VOUS ÉCOUTE
+          {isEn ? "WE'RE LISTENING" : 'ON VOUS ÉCOUTE'}
           <span style={{ display: 'inline-flex', width: 50, height: 38 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -101,11 +105,11 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             type="email"
             value={mail}
             onChange={e => setMail(e.target.value)}
-            placeholder="ton adresse mail"
+            placeholder={isEn ? 'your email' : 'ton adresse mail'}
             style={{
               width: '100%',
               border: '1.5px dotted rgba(0,0,0,0.55)',
-              marginBottom: 12,
+              marginBottom: 6,
               borderRadius: 4,
               padding: '10px 16px',
               fontSize: 14,
@@ -115,15 +119,20 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
               boxSizing: 'border-box',
             }}
           />
+          <p style={{ fontSize: 12, color: '#888', fontStyle: 'italic', margin: '0 0 12px', paddingLeft: 4 }}>
+            {isEn
+              ? 'Please use only the email address provided by the school.'
+              : "Merci d'utiliser uniquement votre adresse e-mail fournie par l'école."}
+          </p>
           <label style={{ fontStyle: 'italic', fontSize: 13, color: '#888', paddingLeft: 4 }}>
-            vos idées sont les bienvenues :
+            {isEn ? 'all ideas are welcome:' : 'vos idées sont les bienvenues :'}
           </label>
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
             required
             rows={6}
-            placeholder="un événement, une idée, un club… tout est le bienvenu !"
+            placeholder={isEn ? 'an event, an idea, a club… everything is welcome!' : 'un événement, une idée, un club… tout est le bienvenu !'}
             style={{
               width: '100%',
               border: '1.5px dotted rgba(0,0,0,0.55)',
@@ -138,8 +147,23 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
               boxSizing: 'border-box',
             }}
           />
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={e => setConsent(e.target.checked)}
+              style={{ marginTop: 3, flexShrink: 0, accentColor: 'var(--ink)', width: 15, height: 15, cursor: 'pointer' }}
+            />
+            <span style={{ fontSize: 12, color: '#555', lineHeight: 1.55 }}>
+              {isEn
+                ? <>I confirm that I am using the email address provided by the school and I agree that the information submitted will be used by the BDE de LISAA DGC to process my suggestion, in accordance with the <a href="/en/p/conditions-generales-dutilisation" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Terms of Use</a> and the <a href="/en/p/politique-de-confidentialite" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Privacy Policy</a>.</>
+                : <>En envoyant ce formulaire, je confirme utiliser l&apos;adresse e-mail fournie par l&apos;école et j&apos;accepte que les informations transmises soient utilisées par le BDE de LISAA DGC pour traiter ma suggestion, conformément aux <a href="/fr/p/conditions-generales-dutilisation" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Conditions Générales d&apos;Utilisation</a> et à la <a href="/fr/p/politique-de-confidentialite" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Politique de confidentialité</a> du site.</>
+              }
+            </span>
+          </label>
+
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
-            <button type="submit" disabled={sending} style={{
+            <button type="submit" disabled={sending || !consent} style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
               background: 'var(--yellow)', color: 'var(--ink)',
               fontFamily: 'var(--font-display)',
@@ -153,7 +177,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
               cursor: sending ? 'wait' : 'pointer',
               opacity: sending ? 0.7 : 1,
             }}>
-              {sending ? 'Envoi…' : 'ENVOYER'}
+              {sending ? (isEn ? 'Sending…' : 'Envoi…') : (isEn ? 'SEND' : 'ENVOYER')}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>
@@ -176,7 +200,7 @@ export default function AgendaProposerForm({ source = 'agenda' }: Props) {
             color: 'var(--ink)',
             margin: 0,
           }}>
-            Merci pour ta proposition ! 🙏
+            {isEn ? 'Thank you for your suggestion! 🙏' : 'Merci pour ta proposition ! 🙏'}
           </p>
         </div>
       )}

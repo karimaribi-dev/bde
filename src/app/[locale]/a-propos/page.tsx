@@ -58,7 +58,6 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
         <section style={{ textAlign: 'center', padding: '50px 0 60px' }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontWeight: 900,
             fontSize: 'clamp(56px, 10vw, 140px)',
             lineHeight: 0.9,
@@ -72,7 +71,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             gap: 6,
           }}>
             {/* Ligne 1 : MEET THE + smiley */}
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'clamp(14px,1.6vw,28px)' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'clamp(14px,1.6vw,28px)', fontStyle: 'italic' }}>
               <span>MEET THE</span>
               <span style={{ display: 'inline-flex', width: 'clamp(50px,6vw,90px)', height: 'clamp(50px,6vw,90px)' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,7 +80,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             </span>
             {/* Ligne 2 : ( Incredible. ) TEAM */}
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'clamp(10px,1.2vw,20px)' }}>
-              <span>(</span>
+              <span style={{ fontStyle: 'italic' }}>(</span>
               <span style={{
                 fontFamily: '"altesse-std-64pt", serif',
                 fontStyle: 'normal',
@@ -92,8 +91,8 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
               }}>
                 Incredible.
               </span>
-              <span>)</span>
-              <span>TEAM</span>
+              <span style={{ fontStyle: 'italic' }}>)</span>
+              <span style={{ fontStyle: 'italic' }}>TEAM</span>
             </span>
           </h1>
 

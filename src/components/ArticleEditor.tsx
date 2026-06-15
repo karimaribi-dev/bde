@@ -190,6 +190,7 @@ function handleTitleChange(value: string) {
       setMessage(`Erreur : ${error.message}`)
     } else {
       setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
       const labels = { draft: 'Brouillon sauvegardé.', now: 'Article publié !', schedule: `Programmé pour le ${new Date(scheduledAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.` }
       let msg = labels[publishMode]
 
@@ -224,7 +225,7 @@ function handleTitleChange(value: string) {
         <div className="flex gap-2">
           <button
             onClick={save}
-            disabled={saving || saved}
+            disabled={saving}
             className="px-4 py-2 text-sm font-medium text-white rounded transition-colors disabled:opacity-60"
             style={{ background: saved ? '#16a34a' : '#111' }}
           >

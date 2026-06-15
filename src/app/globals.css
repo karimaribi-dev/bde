@@ -428,6 +428,21 @@ footer { padding: 64px 28px 24px; }
   color: #999; pointer-events: none; float: left; height: 0; content: attr(data-placeholder);
 }
 
+/* ── Public page content (tiptap HTML output) ── */
+.tiptap-content { font-family: "new-atten", sans-serif; }
+.tiptap-content h1, .tiptap-content h2, .tiptap-content h3 { font-family: "neue-haas-grotesk-display", sans-serif; font-style: italic; text-transform: uppercase; font-weight: 700; margin: 2em 0 0.6em; line-height: 1.15; }
+.tiptap-content h1 { font-size: clamp(22px, 3vw, 32px); }
+.tiptap-content h2 { font-size: clamp(18px, 2.5vw, 26px); }
+.tiptap-content h3 { font-size: clamp(16px, 2vw, 20px); }
+.tiptap-content p { margin-bottom: 1.25em; line-height: 1.75; }
+.tiptap-content ul { list-style: disc; padding-left: 1.5em; margin-bottom: 1.25em; }
+.tiptap-content ol { list-style: decimal; padding-left: 1.5em; margin-bottom: 1.25em; }
+.tiptap-content li { margin-bottom: 0.4em; line-height: 1.7; }
+.tiptap-content blockquote { border-left: 3px solid var(--ink); padding-left: 1.2em; font-style: italic; color: #555; margin: 1.5em 0; }
+.tiptap-content a { color: var(--ink); text-decoration: underline; }
+.tiptap-content strong { font-weight: 700; }
+.tiptap-content code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-size: 13px; font-family: monospace; }
+
 /* ── Hover cards ── */
 .hover-card { transition: background .2s; }
 .hover-card:hover { background: var(--paper-2) !important; }

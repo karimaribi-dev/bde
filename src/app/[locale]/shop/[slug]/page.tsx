@@ -32,8 +32,9 @@ export default async function ProductPage({
   const sold    = product.stock_count === 0
 
   // Traduction : utilise la version anglaise si dispo et locale === 'en'
-  const displayTitle       = (locale === 'en' && product.title_en)       ? product.title_en       : product.title
-  const displayDescription = (locale === 'en' && product.description_en) ? product.description_en : product.description
+  const isEn = locale === 'en'
+  const displayTitle       = (isEn && product.title_en)       ? product.title_en       : product.title
+  const displayDescription = (isEn && product.description_en) ? product.description_en : product.description
 
   return (
     <>
@@ -43,7 +44,7 @@ export default async function ProductPage({
 
         {/* Breadcrumb */}
         <nav style={{ padding: '14px 0 0', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9ca3af' }}>
-          <Link href={`/${locale}/shop`} style={{ color: '#9ca3af', textDecoration: 'none' }}>Le Shop</Link>
+          <Link href={`/${locale}/shop`} style={{ color: '#9ca3af', textDecoration: 'none' }}>{isEn ? 'The Shop' : 'Le Shop'}</Link>
           <span style={{ margin: '0 8px' }}>/</span>
           <span style={{ color: 'var(--ink)' }}>{displayTitle}</span>
         </nav>
@@ -82,7 +83,7 @@ export default async function ProductPage({
                   textTransform: 'uppercase', padding: '10px 24px',
                   transform: 'rotate(-8deg)',
                 }}>
-                  ÉPUISÉ
+                  {isEn ? 'SOLD OUT' : 'ÉPUISÉ'}
                 </span>
               </div>
             )}
@@ -126,10 +127,10 @@ export default async function ProductPage({
               }} />
               <span style={{ fontSize: 13, color: '#6b7280', fontStyle: 'italic' }}>
                 {sold
-                  ? 'Épuisé'
+                  ? (isEn ? 'Sold out' : 'Épuisé')
                   : product.stock_count <= 5
-                    ? `Plus que ${product.stock_count} disponible${product.stock_count > 1 ? 's' : ''} !`
-                    : `${product.stock_count} disponibles`}
+                    ? (isEn ? `Only ${product.stock_count} left!` : `Plus que ${product.stock_count} disponible${product.stock_count > 1 ? 's' : ''} !`)
+                    : (isEn ? `${product.stock_count} available` : `${product.stock_count} disponibles`)}
               </span>
             </div>
 
@@ -148,7 +149,7 @@ export default async function ProductPage({
                 fontFamily: 'var(--font-display)', fontStyle: 'italic',
                 fontSize: 14, color: '#dc2626', textTransform: 'uppercase', margin: 0,
               }}>
-                Ce produit est épuisé. Reviens bientôt !
+                {isEn ? 'This product is sold out. Come back soon!' : 'Ce produit est épuisé. Reviens bientôt !'}
               </p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -162,7 +163,7 @@ export default async function ProductPage({
                   variant="full"
                 />
                 <p style={{ fontSize: 12, color: '#9ca3af', fontStyle: 'italic', margin: 0 }}>
-                  Tu pourras ajuster la quantité dans le panier et renseigner tes infos avant de valider.
+                  {isEn ? 'You can adjust the quantity in the cart and fill in your details before confirming.' : 'Tu pourras ajuster la quantité dans le panier et renseigner tes infos avant de valider.'}
                 </p>
               </div>
             )}
@@ -177,7 +178,7 @@ export default async function ProductPage({
               fontSize: 'clamp(18px, 1.6vw, 26px)',
               textTransform: 'uppercase', margin: '0 0 30px', color: 'var(--ink)',
             }}>
-              <span style={{ background: '#FFE74A', padding: '4px 10px' }}>VOUS AIMEREZ AUSSI</span>
+              <span style={{ background: '#FFE74A', padding: '4px 10px' }}>{isEn ? 'YOU MIGHT ALSO LIKE' : 'VOUS AIMEREZ AUSSI'}</span>
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
               {others.map(other => (

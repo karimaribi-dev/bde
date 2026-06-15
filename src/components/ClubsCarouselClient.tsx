@@ -170,18 +170,25 @@ export default function ClubsCarouselClient({ clubs, locale }: Props) {
 function MobileClubCard({ club, locale }: { club: Club; locale: string }) {
   const ac = club.accent_color
   const at = club.accent_text_color
+  const isEn = locale === 'en'
+  const taglineDisplay    = (isEn && club.tagline_en)     ? club.tagline_en     : club.tagline
+  const taglineSubDisplay = (isEn && club.tagline_sub_en) ? club.tagline_sub_en : club.tagline_sub
+  const whoWeAreDisplay   = (isEn && club.who_we_are_en)  ? club.who_we_are_en  : club.who_we_are
+  const scheduleDisplay   = (isEn && club.schedule_en)    ? club.schedule_en    : club.schedule
+  const frequencyDisplay  = (isEn && club.frequency_en)   ? club.frequency_en   : club.frequency
+  const locationDisplay   = (isEn && club.location_en)    ? club.location_en    : club.location
   return (
     <article style={{ width: '100%' }}>
       {/* Taglines */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4, marginBottom: 10 }}>
-        {club.tagline && (
+        {taglineDisplay && (
           <span style={{ background: ac, color: at, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 11, textTransform: 'uppercase', display: 'inline-block' }}>
-            {club.tagline}
+            {taglineDisplay}
           </span>
         )}
-        {club.tagline_sub && (
+        {taglineSubDisplay && (
           <span style={{ background: ac, color: at, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 11, textTransform: 'uppercase', display: 'inline-block', marginLeft: 32 }}>
-            {club.tagline_sub}
+            {taglineSubDisplay}
           </span>
         )}
       </div>
@@ -199,17 +206,17 @@ function MobileClubCard({ club, locale }: { club: Club; locale: string }) {
       )}
 
       {/* Description */}
-      {club.who_we_are && (
+      {whoWeAreDisplay && (
         <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--ink)', margin: '0 0 12px' }}>
-          {club.who_we_are}
+          {whoWeAreDisplay}
         </p>
       )}
 
       {/* Info rows */}
       {[
-        club.schedule  && { k: 'HORAIRES',         v: club.schedule },
-        club.frequency && { k: 'DATE / FRÉQUENCE', v: club.frequency },
-        club.location  && { k: 'LIEU',             v: club.location },
+        scheduleDisplay  && { k: isEn ? 'TIMES'            : 'HORAIRES',         v: scheduleDisplay },
+        frequencyDisplay && { k: isEn ? 'DATE / FREQUENCY' : 'DATE / FRÉQUENCE', v: frequencyDisplay },
+        locationDisplay  && { k: isEn ? 'LOCATION'         : 'LIEU',             v: locationDisplay },
       ].filter(Boolean).map((row) => {
         const r = row as { k: string; v: string }
         return (
@@ -230,7 +237,7 @@ function MobileClubCard({ club, locale }: { club: Club; locale: string }) {
           textTransform: 'uppercase', textDecoration: 'none',
           padding: '12px 22px', borderRadius: 999,
         }}>
-          EN SAVOIR PLUS
+          {isEn ? 'LEARN MORE' : 'EN SAVOIR PLUS'}
           <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 14 }}>
             <path d="M2 8h19M14 1l7 7-7 7"/>
           </svg>
@@ -244,9 +251,16 @@ function MobileClubCard({ club, locale }: { club: Club; locale: string }) {
 function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: string }) {
   const ac = club.accent_color
   const at = club.accent_text_color
+  const isEn = locale === 'en'
+  const taglineDisplay    = (isEn && club.tagline_en)     ? club.tagline_en     : club.tagline
+  const taglineSubDisplay = (isEn && club.tagline_sub_en) ? club.tagline_sub_en : club.tagline_sub
+  const whoWeAreDisplay   = (isEn && club.who_we_are_en)  ? club.who_we_are_en  : club.who_we_are
+  const scheduleDisplay   = (isEn && club.schedule_en)    ? club.schedule_en    : club.schedule
+  const frequencyDisplay  = (isEn && club.frequency_en)   ? club.frequency_en   : club.frequency
+  const locationDisplay   = (isEn && club.location_en)    ? club.location_en    : club.location
 
   const infoRow = (key: string, val: string, borderTop = true) => (
-    <div style={{
+    <div key={key} style={{
       margin: '0 18px',
       padding: '8px 10px',
       border: `1.2px solid ${ac}`,
@@ -264,9 +278,9 @@ function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: st
   )
 
   const infoRows = [
-    club.schedule  && infoRow('HORAIRES', club.schedule, true),
-    club.frequency && infoRow('DATE / FRÉQUENCE', club.frequency, !!club.schedule),
-    club.location  && infoRow('LIEU', club.location, !!(club.schedule || club.frequency)),
+    scheduleDisplay  && infoRow(isEn ? 'TIMES' : 'HORAIRES', scheduleDisplay, true),
+    frequencyDisplay && infoRow(isEn ? 'DATE / FREQUENCY' : 'DATE / FRÉQUENCE', frequencyDisplay, !!scheduleDisplay),
+    locationDisplay  && infoRow(isEn ? 'LOCATION' : 'LIEU', locationDisplay, !!(scheduleDisplay || frequencyDisplay)),
   ].filter(Boolean)
 
   return (
@@ -312,14 +326,14 @@ function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: st
         padding: '18px 18px 0',
         gap: 2,
       }}>
-        {club.tagline && (
+        {taglineDisplay && (
           <span style={{ display: 'inline-block', background: ac, color: at, padding: '3px 6px', width: 'fit-content', textTransform: 'uppercase' }}>
-            {club.tagline}
+            {taglineDisplay}
           </span>
         )}
-        {club.tagline_sub && (
+        {taglineSubDisplay && (
           <span style={{ display: 'inline-block', background: ac, color: at, padding: '3px 6px', width: 'fit-content', textTransform: 'uppercase', marginLeft: 60 }}>
-            {club.tagline_sub}
+            {taglineSubDisplay}
           </span>
         )}
       </div>
@@ -344,9 +358,9 @@ function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: st
       </header>
 
       {/* Description */}
-      {club.who_we_are && (
+      {whoWeAreDisplay && (
         <p style={{ padding: '0 18px', fontSize: 13, lineHeight: 1.45, color: 'var(--ink)', margin: 0 }}>
-          {club.who_we_are}
+          {whoWeAreDisplay}
         </p>
       )}
 
@@ -365,7 +379,7 @@ function ClubCard({ club, locale, tilt }: { club: Club; locale: string; tilt: st
           alignSelf: 'center', margin: '4px 0',
         }}
       >
-        EN SAVOIR PLUS
+        {isEn ? 'LEARN MORE' : 'EN SAVOIR PLUS'}
         <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 13 }}>
           <path d="M2 8h19M14 1l7 7-7 7"/>
         </svg>

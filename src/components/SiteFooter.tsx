@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import { Category } from '@/lib/types'
 
 const NAV_COL1 = [
-  { label: 'AGENDA & EVENT', href: '/agenda' },
+  { label: 'AGENDA & EVENTS', href: '/agenda' },
   { label: 'CLUB',           href: '/clubs' },
   { label: 'SHOP',           href: '/shop' },
 ]
@@ -50,14 +52,25 @@ const HR = () => (
 export default function SiteFooter({ categories }: { categories: Category[] }) {
   void categories
 
+  const pathname = usePathname()
+  const isEn = pathname.startsWith('/en')
+  const locale = isEn ? 'en' : 'fr'
+
   const [isMobile, setIsMobile] = useState(false)
   const [dark, setDark] = useState(false)
+  const [extraPages, setExtraPages] = useState<{ title: string; slug: string }[]>([])
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 720)
     check()
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
+  }, [])
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.from('pages').select('title, slug').eq('is_published', true).order('title')
+      .then(({ data }) => { if (data) setExtraPages(data) })
   }, [])
 
   useEffect(() => {
@@ -134,13 +147,22 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
 
   /* ─────────── Nav links ─────────── */
   const NavLinks = () => (
-    <div style={{ padding: isMobile ? '18px 20px' : '28px 36px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 24px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {NAV_COL1.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
+    <div style={{ padding: isMobile ? '18px 20px' : '28px 36px', display: 'flex', flexDirection: 'column', gap: '6px 24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 24px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {NAV_COL1.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {NAV_COL2.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
+        </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {NAV_COL2.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
-      </div>
+      {extraPages.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 10, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
+          {extraPages.map(p => (
+            <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{p.title.toUpperCase()}</Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 
@@ -148,7 +170,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
   const InstaBlock = () => (
     <div style={{ padding: isMobile ? '18px 20px' : '28px 36px' }}>
       <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 800, fontSize: isMobile ? 20 : 15, letterSpacing: '-0.01em', textTransform: 'uppercase', margin: '0 0 14px' }}>
-        SUIVEZ NOUS SUR INSTA !
+        {isEn ? 'FOLLOW US ON INSTA!' : 'SUIVEZ NOUS SUR INSTA !'}
       </p>
       <a href="https://instagram.com/bde_lisaa_dgc" target="_blank" rel="noreferrer"
         style={{ display: 'inline-flex', alignItems: 'center', gap: 12, textDecoration: 'none', color: 'var(--ink)' }}>
@@ -161,7 +183,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       {!isMobile && (
         <>
           <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '18px 0 0', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', lineHeight: 1.8 }}>
-            Designé par{' '}
+            {isEn ? 'Designed by' : 'Designé par'}{' '}
             <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Célestine Goussard<LinkedInIcon /></a>,<br />
             <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Liselotte Lecoq<LinkedInIcon /></a>{' '}&amp;{' '}
             <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Marie Desbois<LinkedInIcon /></a>
@@ -178,7 +200,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
   const DesignerCredit = () => (
     <div style={{ padding: '14px 20px' }}>
       <p style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 16, letterSpacing: '.02em', color: '#262626', fontStyle: 'italic', margin: '0 0 8px', border: '1px solid #262626', display: 'inline-block', padding: '8px 14px', lineHeight: 1.8 }}>
-        Designé par{' '}
+        {isEn ? 'Designed by' : 'Designé par'}{' '}
         <a href="https://www.linkedin.com/in/c%C3%A9lestine-goussard/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Célestine Goussard<LinkedInIcon /></a>,{' '}
         <a href="https://www.linkedin.com/in/liselottelecoq/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Liselotte Lecoq<LinkedInIcon /></a>{' '}&amp;{' '}
         <a href="https://www.linkedin.com/in/marie-desbois-3bb68a304/" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>Marie Desbois<LinkedInIcon /></a>
@@ -194,7 +216,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
   const Legal = () => (
     <div style={{ padding: isMobile ? '12px 20px' : '12px 36px', borderTop: '1px solid rgba(0,0,0,0.18)', textAlign: isMobile ? 'left' : 'center' }}>
       <span style={{ fontFamily: '"neue-haas-grotesk-text", sans-serif', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.55 }}>
-        © {new Date().getFullYear()} BDE LISAA PARIS – TOUS DROITS RÉSERVÉS
+        © {new Date().getFullYear()} BDE LISAA PARIS – {isEn ? 'ALL RIGHTS RESERVED' : 'TOUS DROITS RÉSERVÉS'}
       </span>
     </div>
   )
@@ -236,14 +258,21 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
           <div style={{ marginBottom: 20, paddingBottom: 14, borderBottom: '1px dashed rgba(17,17,17,0.3)' }}>
             <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, fontStyle: 'italic', letterSpacing: '.04em', textTransform: 'uppercase' }}>MENU</span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', marginBottom: 28 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', marginBottom: extraPages.length ? 14 : 28 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {NAV_COL1.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
+              {NAV_COL1.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {NAV_COL2.map(l => <Link key={l.href} href={l.href} style={navLinkStyle}>{l.label}</Link>)}
+              {NAV_COL2.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
             </div>
           </div>
+          {extraPages.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 28, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
+              {extraPages.map(p => (
+                <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{p.title.toUpperCase()}</Link>
+              ))}
+            </div>
+          )}
           <DarkModeToggle />
         </div>
 

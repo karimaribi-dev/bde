@@ -59,22 +59,30 @@ export default function CookieBanner() {
         left: 0,
         right: 0,
         zIndex: 10000,
-        background: '#0c0c0c',
-        color: '#f3efe6',
-        padding: '1.1rem 1.5rem',
+        background: 'var(--ink)',
+        color: 'var(--paper)',
+        padding: '1rem 2rem',
         display: 'flex',
         alignItems: 'center',
-        gap: '1.5rem',
+        gap: '2rem',
         flexWrap: 'wrap',
-        borderTop: '1px solid rgba(255,255,255,0.1)',
         animation: 'cookieSlideUp 0.3s ease',
       }}
     >
       <style>{`@keyframes cookieSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}`}</style>
 
-      <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, flex: 1, minWidth: 200, opacity: 0.85, fontFamily: 'var(--font-mono), monospace' }}>
+      <p style={{
+        margin: 0,
+        flex: 1,
+        minWidth: 220,
+        fontFamily: '"new-atten", sans-serif',
+        fontSize: '1rem',
+        lineHeight: 1.5,
+        color: 'var(--paper)',
+        opacity: 0.9,
+      }}>
         Nous utilisons des cookies pour mesurer l&apos;audience de notre site et améliorer votre expérience.
-        {' '}<a href="/politique-confidentialite" style={{ color: '#f3efe6', opacity: 0.6, textDecoration: 'underline', fontSize: '0.75rem' }}>En savoir plus</a>
+        {' '}<a href="/politique-confidentialite" style={{ color: 'var(--yellow)', textDecoration: 'underline', fontSize: '0.9rem' }}>En savoir plus</a>
       </p>
 
       <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0 }}>
@@ -82,14 +90,17 @@ export default function CookieBanner() {
           onClick={refuse}
           style={{
             background: 'transparent',
-            border: '1px solid rgba(243,239,230,0.3)',
-            color: '#f3efe6',
-            padding: '0.45rem 1rem',
-            fontSize: '0.75rem',
-            letterSpacing: '0.06em',
+            border: '1.5px solid rgba(255,255,250,0.3)',
+            color: 'var(--paper)',
+            padding: '0.5rem 1.4rem',
+            borderRadius: 999,
+            fontSize: '0.8rem',
+            fontFamily: 'var(--font-display)',
+            fontStyle: 'italic',
+            fontWeight: 700,
+            letterSpacing: '0.04em',
             textTransform: 'uppercase',
             cursor: 'pointer',
-            fontFamily: 'var(--font-mono), monospace',
           }}
         >
           Refuser
@@ -97,16 +108,18 @@ export default function CookieBanner() {
         <button
           onClick={accept}
           style={{
-            background: '#f3efe6',
-            border: '1px solid #f3efe6',
-            color: '#0c0c0c',
-            padding: '0.45rem 1rem',
-            fontSize: '0.75rem',
-            letterSpacing: '0.06em',
+            background: 'var(--yellow)',
+            border: 'none',
+            color: 'var(--ink)',
+            padding: '0.5rem 1.6rem',
+            borderRadius: 999,
+            fontSize: '0.8rem',
+            fontFamily: 'var(--font-display)',
+            fontStyle: 'italic',
+            fontWeight: 700,
+            letterSpacing: '0.04em',
             textTransform: 'uppercase',
             cursor: 'pointer',
-            fontFamily: 'var(--font-mono), monospace',
-            fontWeight: 600,
           }}
         >
           Accepter

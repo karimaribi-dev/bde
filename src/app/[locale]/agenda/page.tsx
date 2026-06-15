@@ -28,6 +28,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
   const past     = (pastRaw    ?? []) as Event[]
   const cats     = (categories ?? []) as Category[]
   const allEvents = [...upcoming, ...past]
+  const isEn = locale === 'en'
 
   return (
     <>
@@ -80,7 +81,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
           margin: '18px 0 30px',
         }}>
           <span style={{ background: 'var(--orange-deep)', color: '#fff', padding: '5px 12px 7px' }}>
-            DÉCOUVREZ VOS CAMARADES AVEC DES SUPERS ACTIVITÉS
+            {isEn ? 'DISCOVER YOUR CLASSMATES WITH AMAZING ACTIVITIES' : 'DÉCOUVREZ VOS CAMARADES AVEC DES SUPERS ACTIVITÉS'}
           </span>
         </div>
 
@@ -139,7 +140,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             letterSpacing: '0.06em',
             padding: '40px 0',
           }}>
-            Aucun événement à venir pour le moment.
+            {isEn ? 'No upcoming events at the moment.' : 'Aucun événement à venir pour le moment.'}
           </p>
         )}
 
@@ -173,13 +174,19 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
               color: 'var(--ink)',
               margin: '0 0 24px',
             }}>
-              L&apos;AGENDA POUR<br/>
-              VOUS<br/>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
-                ORGANISER
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/fleche-droite.svg" aria-hidden="true" alt="" style={{ width: 48, height: 48, objectFit: 'contain', flexShrink: 0 }} />
-              </span>
+              {isEn ? (
+                <>YOUR EVENTS<br/>CALENDAR</>
+              ) : (
+                <>
+                  L&apos;AGENDA POUR<br/>
+                  VOUS<br/>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
+                    ORGANISER
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/fleche-droite.svg" aria-hidden="true" alt="" style={{ width: 48, height: 48, objectFit: 'contain', flexShrink: 0 }} />
+                  </span>
+                </>
+              )}
             </h2>
           </div>
 
@@ -193,8 +200,8 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
         {/* ═══════════ Y ÉTIEZ VOUS ? / PASSÉS ═══════════ */}
         <section style={{ marginBottom: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0, margin: '0 0 26px' }}>
-            <span style={{ background: 'var(--blue-strong)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)' }}>Y ÉTIEZ VOUS ?</span>
-            <span style={{ background: 'var(--blue-strong)', padding: '4px 12px', marginLeft: 80, fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)' }}>NOS ÉVÉNEMENTS PASSÉS</span>
+            <span style={{ background: 'var(--blue-strong)', padding: '4px 12px', fontFamily: '"new-atten", sans-serif', fontWeight: 700, fontStyle: 'italic', fontSize: 16, textTransform: 'uppercase', color: 'var(--ink)' }}>{isEn ? 'WERE YOU THERE?' : 'Y ÉTIEZ VOUS ?'}</span>
+            <span style={{ background: 'var(--blue-strong)', padding: '4px 12px', marginLeft: 80, fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontStyle: 'normal', fontSize: 24, textTransform: 'uppercase', color: 'var(--ink)' }}>{isEn ? 'OUR PAST EVENTS' : 'NOS ÉVÉNEMENTS PASSÉS'}</span>
           </div>
 
           {past.length > 0 ? (
@@ -215,7 +222,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
               letterSpacing: '0.06em',
               padding: '30px 0',
             }}>
-              Les événements passés apparaîtront ici.
+              {isEn ? 'Past events will appear here.' : 'Les événements passés apparaîtront ici.'}
             </p>
           )}
         </section>
@@ -275,10 +282,10 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
               color: 'var(--ink)',
               margin: '0 0 14px',
             }}>
-              INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?
+              {isEn ? <>INTERESTED IN<br/>THEIR WORK?</> : <>INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?</>}
             </h3>
             <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: 0 }}>
-              *N&apos;hésitez pas à les soutenir en regardant le shop
+              {isEn ? '*Feel free to support them by browsing the shop' : '*N’hésitez pas à les soutenir en regardant le shop'}
             </p>
           </div>
 
@@ -292,7 +299,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
               textTransform: 'uppercase', textDecoration: 'none',
               padding: '12px 22px', borderRadius: 999,
             }}>
-              VOIR LE SHOP
+              {isEn ? 'SEE THE SHOP' : 'VOIR LE SHOP'}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>

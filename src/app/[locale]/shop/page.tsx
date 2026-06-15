@@ -26,6 +26,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
 
   const products = (productsRaw ?? []) as Product[]
   const cats     = (categories  ?? []) as Category[]
+  const isEn     = locale === 'en'
 
   return (
     <>
@@ -35,9 +36,9 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
 
         {/* ── Breadcrumb ── */}
         <nav style={{ padding: '14px 0 0', fontSize: 11, fontFamily: 'var(--font-display)', fontStyle: 'italic', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.6 }}>
-          <a href={`/${locale}`} style={{ color: 'inherit', textDecoration: 'none' }}>ACCUEIL</a>
+          <a href={`/${locale}`} style={{ color: 'inherit', textDecoration: 'none' }}>{isEn ? 'HOME' : 'ACCUEIL'}</a>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span>LE SHOP</span>
+          <span>{isEn ? 'THE SHOP' : 'LE SHOP'}</span>
         </nav>
 
         {/* ═══════════ HERO ═══════════ */}
@@ -66,10 +67,10 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
             letterSpacing: '0.01em',
           }}>
             <span style={{ background: '#FFE74A', color: 'var(--ink)', padding: '6px 12px 8px' }}>
-              La sélection de créations étudiantes
+              {isEn ? 'The best of student creations' : 'La sélection de créations étudiantes'}
             </span>
             <span style={{ background: '#FFE74A', color: 'var(--ink)', padding: '6px 12px 8px', transform: 'translateX(60px)' }}>
-              et de merch en édition limitée
+              {isEn ? 'and limited edition merch' : 'et de merch en édition limitée'}
             </span>
           </div>
         </section>
@@ -78,7 +79,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
         {products.length === 0 ? (
           <div style={{ padding: '80px 0', textAlign: 'center' }}>
             <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, textTransform: 'uppercase', color: '#aaa' }}>
-              Le shop arrive bientôt !
+              {isEn ? 'Shop coming soon!' : 'Le shop arrive bientôt !'}
             </p>
           </div>
         ) : (
@@ -140,7 +141,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
                         letterSpacing: '0.04em',
                         textTransform: 'uppercase',
                       }}>
-                        ÉPUISÉ
+                        {isEn ? 'SOLD OUT' : 'ÉPUISÉ'}
                       </span>
                     )}
 
@@ -215,8 +216,10 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
           opacity: 0.8,
           fontStyle: 'italic',
         }}>
-          Tous ces objets ont été imaginés et réalisés par des étudiants de LISAA avec le BDE, dans le cadre de l&apos;école.<br/>
-          Des créations 100&nbsp;% originales, 100&nbsp;% LISAA, proposées en éditions limitées.
+          {isEn
+            ? <>All these items were designed and created by LISAA students with the BDE, as part of the school.<br/>100&nbsp;% original creations, 100&nbsp;% LISAA, offered in limited editions.</>
+            : <>Tous ces objets ont été imaginés et réalisés par des étudiants de LISAA avec le BDE, dans le cadre de l&apos;école.<br/>Des créations 100&nbsp;% originales, 100&nbsp;% LISAA, proposées en éditions limitées.</>
+          }
         </p>
 
       </main>

@@ -70,6 +70,7 @@ export default function AdSlotEditor({ slot }: { slot: AdSlot }) {
       setError(`Erreur : ${err.message}`)
     } else {
       setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
       router.refresh()
     }
   }
@@ -98,7 +99,7 @@ export default function AdSlotEditor({ slot }: { slot: AdSlot }) {
 
           <button
             onClick={handleSave}
-            disabled={saving || saved}
+            disabled={saving}
             className="px-4 py-2 text-sm font-medium text-white rounded transition-colors disabled:opacity-60"
             style={{ background: saved ? '#16a34a' : '#111' }}
           >

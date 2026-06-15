@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Article, Category, Event } from '@/lib/types'
+import { Article, Category, Club, Event } from '@/lib/types'
 import { getCategoryName } from '@/lib/utils'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -64,6 +64,7 @@ const PAGE_SIZE = 6
 
 export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params)
+  const isEn = locale === 'en'
   const t = useTranslations('home')
   const tNav = useTranslations('nav')
   type ArticleWithCat = Article & { category: Category | null }
@@ -80,6 +81,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const [grid, setGrid] = useState<ArticleWithCat[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [dbEvents, setDbEvents] = useState<Event[]>([])
+  const [homeClubs, setHomeClubs] = useState<Club[]>([])
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(FALLBACK_MEMBERS)
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(false)
@@ -131,6 +133,9 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           .order('event_date', { ascending: true }),
         supabase.from('team_members').select('*').order('sort_order', { ascending: true }),
       ])
+      const { data: clubsData } = await supabase
+        .from('clubs').select('*').eq('is_published', true)
+        .order('sort_order', { ascending: true }).limit(3)
       const all = (arts ?? []) as ArticleWithCat[]
       setFeatured(all[0] ?? null)
       setLatest(all.slice(1, 6))
@@ -142,6 +147,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       setCategories(cats ?? [])
       setDbEvents((evts ?? []) as Event[])
       if (team && team.length > 0) setTeamMembers(team as TeamMember[])
+      setHomeClubs((clubsData ?? []) as Club[])
       setInitialized(true)
     }
     load()
@@ -179,6 +185,17 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
 
   const allArticles = [featured, ...latest, ...grid].filter((a): a is ArticleWithCat => a !== null)
   const BADGE_COLORS = ['var(--yellow)', 'var(--pink)', 'var(--blue)', 'var(--orange)']
+
+  const c0 = homeClubs[0] ?? null
+  const c1 = homeClubs[1] ?? null
+  const c2 = homeClubs[2] ?? null
+  const clubSchedule = (c: Club) => {
+    const freq  = (isEn && c.frequency_en) ? c.frequency_en : c.frequency
+    const sched = (isEn && c.schedule_en)  ? c.schedule_en  : c.schedule
+    return [freq, sched].filter(Boolean).join(' - ')
+  }
+  const c2tagline    = c2 ? ((isEn && c2.tagline_en)     ? c2.tagline_en     : c2.tagline)     : null
+  const c2taglineSub = c2 ? ((isEn && c2.tagline_sub_en) ? c2.tagline_sub_en : c2.tagline_sub) : null
 
   return (
     <>
@@ -382,7 +399,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       {/* ── Events footer ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, marginTop: 18, marginBottom: isMobile ? 40 : 60 }}>
         <span style={{ fontStyle: 'italic', fontSize: 14, color: 'var(--ink)', opacity: 0.7 }}>
-          *N&apos;hésitez pas à slider pour plus d&apos;event
+          {isEn ? '*Feel free to scroll for more events' : "*N’hésitez pas à slider pour plus d’event"}
         </span>
         {isMobile ? (
           /* Flèche jaune simple sur mobile */
@@ -403,7 +420,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             fontWeight: 700, fontSize: 20, letterSpacing: '.08em', textTransform: 'uppercase',
             whiteSpace: 'nowrap', textDecoration: 'none',
           }}>
-            VOIR TOUS LES ÉVENEMENTS
+            {isEn ? 'SEE ALL EVENTS' : 'VOIR TOUS LES ÉVENEMENTS'}
             <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 14 }}>
               <path d="M2 8h19M14 1l7 7-7 7"/>
             </svg>
@@ -507,7 +524,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             textTransform: 'uppercase',
             margin: 0,
           }}>
-            NOS CLUBS JUSTE<br />POUR VOUS
+            {isEn ? <>OUR CLUBS JUST<br />FOR YOU</> : <>NOS CLUBS JUSTE<br />POUR VOUS</>}
           </h2>
           {/* Flèche bouclée jaune — exactement celle du dossier */}
           <span style={{ display: 'inline-flex', width: 60, height: 80, marginBottom: -6, flexShrink: 0 }}>
@@ -519,80 +536,91 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
 
         {/* Blocs clubs */}
-        <div className="home-clubs-wrap" style={{ position: 'relative', width: '100%' }}>
+        {c0 && (
+          <div className="home-clubs-wrap" style={{ position: 'relative', width: '100%' }}>
 
-          {/* Orange — Club Typo */}
-          <div style={{
-            position: 'relative',
-            background: 'var(--orange-deep)',
-            width: isMobile ? '70%' : '53%',
-            height: isMobile ? 110 : 180,
-            clipPath: isMobile
-              ? 'polygon(0 0, calc(100% - 55px) 0, 100% 50%, calc(100% - 55px) 100%, 0 100%)'
-              : 'polygon(0 0, calc(100% - 100px) 0, 100% 50%, calc(100% - 100px) 100%, 0 100%)',
-            padding: isMobile ? '16px 65px 16px 18px' : '28px 110px 28px 40px',
-            zIndex: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: 2,
-          }}>
-            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB TYPO</div>
-            <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>tous les jeudis — 18H</div>
-          </div>
-
-          {/* Bleu — Club Photo */}
-          <div style={{
-            position: 'absolute',
-            top: isMobile ? 55 : 90,
-            right: 0,
-            background: 'var(--blue-strong)',
-            width: isMobile ? '73%' : 'calc(47% + 100px)',
-            height: isMobile ? 110 : 180,
-            clipPath: isMobile
-              ? 'polygon(55px 0, 100% 0, 100% 100%, 55px 100%, 0 50%)'
-              : 'polygon(100px 0, 100% 0, 100% 100%, 100px 100%, 0 50%)',
-            padding: isMobile ? '16px 18px 16px 70px' : '28px 40px 28px 130px',
-            textAlign: isMobile ? 'left' : 'right',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: isMobile ? 'flex-start' : 'flex-end',
-            justifyContent: 'center',
-            gap: 2,
-            zIndex: 4,
-          }}>
-            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PHOTO</div>
-            <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>tous les mercredis — 18H</div>
-          </div>
-
-          {/* Rose — Club Print */}
-          <div style={{
-            position: 'relative',
-            background: 'var(--pink)',
-            width: '100%',
-            minHeight: isMobile ? 160 : 290,
-            marginTop: isMobile ? 110 : 0,
-            padding: isMobile ? '16px 18px 70px' : '30px 40px 60px',
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            gap: 2,
-          }}>
-            <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>CLUB PRINT</div>
-            <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>tous les mardi — 18H</div>
-            <div style={{ position: 'absolute', bottom: 14, left: isMobile ? 18 : 36, fontSize: isMobile ? 15 : 24, lineHeight: 1.3, color: 'var(--ink)' }}>
-              <div>Passionné·e·s de print ?</div>
-              <div>Vous êtes les bienvenu·e·s</div>
+            {/* Bloc 1 — flèche gauche */}
+            <div style={{
+              position: 'relative',
+              background: c0.accent_color,
+              color: c0.accent_text_color,
+              width: isMobile ? '70%' : '53%',
+              height: isMobile ? 110 : 180,
+              clipPath: isMobile
+                ? 'polygon(0 0, calc(100% - 55px) 0, 100% 50%, calc(100% - 55px) 100%, 0 100%)'
+                : 'polygon(0 0, calc(100% - 100px) 0, 100% 50%, calc(100% - 100px) 100%, 0 100%)',
+              padding: isMobile ? '16px 65px 16px 18px' : '28px 110px 28px 40px',
+              zIndex: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: 2,
+            }}>
+              <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c0.title}</div>
+              {clubSchedule(c0) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>{clubSchedule(c0)}</div>}
             </div>
-            <Link href={`/${locale}/clubs`} aria-label="Découvrir les clubs"
-              style={{ position: 'absolute', bottom: 18, right: isMobile ? 18 : 36, width: 36, height: 22, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)', textDecoration: 'none' }}>
-              <svg viewBox="0 0 24 16" fill="none" stroke="#262626" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                <path d="M2 8h19M14 1l7 7-7 7"/>
-              </svg>
-            </Link>
+
+            {/* Bloc 2 — flèche droite */}
+            {c1 && (
+              <div style={{
+                position: 'absolute',
+                top: isMobile ? 55 : 90,
+                right: 0,
+                background: c1.accent_color,
+                color: c1.accent_text_color,
+                width: isMobile ? '73%' : 'calc(47% + 100px)',
+                height: isMobile ? 110 : 180,
+                clipPath: isMobile
+                  ? 'polygon(55px 0, 100% 0, 100% 100%, 55px 100%, 0 50%)'
+                  : 'polygon(100px 0, 100% 0, 100% 100%, 100px 100%, 0 50%)',
+                padding: isMobile ? '16px 18px 16px 70px' : '28px 40px 28px 130px',
+                textAlign: isMobile ? 'left' : 'right',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: isMobile ? 'flex-start' : 'flex-end',
+                justifyContent: 'center',
+                gap: 2,
+                zIndex: 4,
+              }}>
+                <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c1.title}</div>
+                {clubSchedule(c1) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>{clubSchedule(c1)}</div>}
+              </div>
+            )}
+
+            {/* Bloc 3 — pleine largeur */}
+            {c2 && (
+              <div style={{
+                position: 'relative',
+                background: c2.accent_color,
+                color: c2.accent_text_color,
+                width: '100%',
+                minHeight: isMobile ? 160 : 290,
+                marginTop: isMobile ? 110 : 0,
+                padding: isMobile ? '16px 18px 70px' : '30px 40px 60px',
+                zIndex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                gap: 2,
+              }}>
+                <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c2.title}</div>
+                {clubSchedule(c2) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>{clubSchedule(c2)}</div>}
+                {(c2tagline || c2taglineSub) && (
+                  <div style={{ position: 'absolute', bottom: 14, left: isMobile ? 18 : 36, fontSize: isMobile ? 15 : 24, lineHeight: 1.3, color: c2.accent_text_color }}>
+                    {c2tagline && <div>{c2tagline}</div>}
+                    {c2taglineSub && <div>{c2taglineSub}</div>}
+                  </div>
+                )}
+                <Link href={`/${locale}/clubs`} aria-label="Découvrir les clubs"
+                  style={{ position: 'absolute', bottom: 18, right: isMobile ? 18 : 36, width: isMobile ? 32 : 44, height: isMobile ? 32 : 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: c2.accent_text_color, textDecoration: 'none' }}>
+                  <svg viewBox="0 0 58 58" fill="currentColor" style={{ width: '100%', height: '100%' }}>
+                    <path d="M-8.15183e-05 32.25L43.6091 32.25L23.5782 52.2808L28.6666 57.3333L57.3333 28.6667L28.6666 -1.25306e-06L23.6141 5.0525L43.6091 25.0833L-8.12051e-05 25.0833L-8.15183e-05 32.25Z"/>
+                  </svg>
+                </Link>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         {/* CTA — btn pill exact du dossier */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 22 }}>
@@ -607,7 +635,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             onMouseEnter={e => { e.currentTarget.style.background = 'var(--yellow-deep)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'var(--yellow)'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            EN SAVOIR PLUS
+            {isEn ? 'LEARN MORE' : 'EN SAVOIR PLUS'}
             <span style={{ display: 'inline-flex', width: 18, height: 14 }}>
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
@@ -625,10 +653,10 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         /* ── Mobile shop section ── */
         <section style={{ padding: '20px 0' }}>
           <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(24px, 7vw, 32px)', lineHeight: 1.05, textTransform: 'uppercase', letterSpacing: '-0.01em', color: 'var(--ink)', margin: '0 0 8px' }}>
-            INTÉRESSÉ PAR LEURS<br />PRODUCTIONS ?
+            {isEn ? <>INTERESTED IN THEIR<br />PRODUCTIONS?</> : <>INTÉRESSÉ PAR LEURS<br />PRODUCTIONS ?</>}
           </h3>
           <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: '0 0 16px' }}>
-            *N&apos;hésitez pas à les soutenir en regardant le shop
+            {isEn ? '*Feel free to support them by checking out the shop' : "*N'hésitez pas à les soutenir en regardant le shop"}
           </p>
           {/* Image */}
           <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', marginBottom: 16 }}>
@@ -640,7 +668,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           {/* Bouton à droite */}
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Link href={`/${locale}/shop`} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'var(--yellow)', color: 'var(--ink)', padding: '11px 22px', borderRadius: 999, fontWeight: 700, fontSize: 20, letterSpacing: '.08em', textTransform: 'uppercase', textDecoration: 'none' }}>
-              VOIR LE SHOP
+              {isEn ? 'SEE THE SHOP' : 'VOIR LE SHOP'}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 14 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>
@@ -665,16 +693,16 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           </div>
           <div style={{ position: 'relative', zIndex: 1 }}>
             <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(28px, 3vw, 42px)', lineHeight: 1.05, textTransform: 'uppercase', letterSpacing: '-0.01em', color: 'var(--ink)', margin: '0 0 14px' }}>
-              INTÉRESSÉ PAR LEURS<br />PRODUCTIONS ?
+              {isEn ? <>INTERESTED IN THEIR<br />PRODUCTIONS?</> : <>INTÉRESSÉ PAR LEURS<br />PRODUCTIONS ?</>}
             </h3>
             <p style={{ fontStyle: 'italic', fontSize: 13, color: 'var(--ink)', opacity: 0.65, margin: '0 0 18px' }}>
-              *N&apos;hésitez pas à les soutenir en regardant le shop
+              {isEn ? '*Feel free to support them by checking out the shop' : "*N'hésitez pas à les soutenir en regardant le shop"}
             </p>
             <Link href={`/${locale}/shop`} style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: 'var(--yellow)', color: 'var(--ink)', padding: '11px 24px', borderRadius: 999, fontWeight: 700, fontSize: 20, letterSpacing: '.08em', textTransform: 'uppercase', whiteSpace: 'nowrap', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = 'var(--yellow-deep)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--yellow)'; e.currentTarget.style.transform = 'translateY(0)' }}
             >
-              VOIR LE SHOP
+              {isEn ? 'SEE THE SHOP' : 'VOIR LE SHOP'}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 14 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>

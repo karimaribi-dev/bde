@@ -56,55 +56,63 @@ export default function SitePopupModal({ popup }: { popup: Popup }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 20,
+        padding: 16,
       }}
     >
-      <div style={{
+      <style>{`
+        .popup-inner { display: flex; overflow: hidden; }
+        .popup-img   { position: relative; width: 45%; flex-shrink: 0; min-height: 340px; }
+        .popup-body  { flex: 1; padding: 52px 40px 48px; display: flex; flex-direction: column; justify-content: center; gap: 16px; }
+        .popup-body--centered { text-align: center; align-items: center; padding: 52px 48px 48px; }
+        @media (max-width: 560px) {
+          .popup-inner { flex-direction: column; }
+          .popup-img   { width: 100%; min-height: 180px; }
+          .popup-body  { padding: 28px 24px 32px; }
+          .popup-body--centered { padding: 28px 24px 32px; }
+        }
+      `}</style>
+
+      <div className="popup-inner" style={{
         background: '#fff',
         borderRadius: 4,
         maxWidth: hasImage ? 700 : 460,
         width: '100%',
-        display: 'flex',
-        overflow: 'hidden',
         position: 'relative',
         boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
       }}>
 
         {hasImage && (
-          <div style={{ position: 'relative', width: '45%', flexShrink: 0, minHeight: 340 }}>
+          <div className="popup-img">
             <Image
               src={popup.image_url!}
               alt={popup.image_alt || ''}
               fill
-              sizes="320px"
+              sizes="(max-width:560px) 100vw, 320px"
               style={{ objectFit: 'cover' }}
             />
           </div>
         )}
 
-        <div style={{
-          flex: 1,
-          padding: hasImage ? '52px 40px 48px' : '52px 48px 48px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          gap: 16,
+        <div className={`popup-body${!hasImage ? ' popup-body--centered' : ''}`} style={{
           textAlign: hasImage ? 'left' : 'center',
           alignItems: hasImage ? 'flex-start' : 'center',
         }}>
           <h2 style={{
-            fontFamily: '"altesse-std-24pt", serif',
-            fontSize: 'clamp(28px, 2.5vw, 42px)',
-            fontWeight: 700,
+            fontFamily: 'var(--font-display)',
+            fontStyle: 'italic',
+            fontSize: 'clamp(24px, 2.5vw, 38px)',
+            fontWeight: 900,
             color: '#111',
-            lineHeight: 1.35,
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
             margin: 0,
           }}>
             {popup.heading}
           </h2>
 
           {popup.subheading && (
-            <p style={{ fontSize: 14, color: '#666', lineHeight: 1.65, margin: 0 }}>
+            <p style={{ fontFamily: '"new-atten", sans-serif', fontSize: 18, color: '#444', lineHeight: 1.55, margin: 0 }}>
               {popup.subheading}
             </p>
           )}

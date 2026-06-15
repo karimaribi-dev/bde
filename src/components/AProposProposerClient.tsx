@@ -1,15 +1,18 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { isStudentEmail, STUDENT_EMAIL_ERROR, STUDENT_DOMAIN } from '@/lib/validate-email'
 
 export default function AProposProposerClient() {
+  const isEn = usePathname().startsWith('/en')
   const [text,    setText]    = useState('')
   const [mail,    setMail]    = useState('')
   const [sent,    setSent]    = useState(false)
   const [sending, setSending] = useState(false)
   const [error,   setError]   = useState('')
+  const [consent, setConsent] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -22,9 +25,10 @@ export default function AProposProposerClient() {
       source: 'a-propos',
       message: text.trim(),
       mail: mail.trim() || null,
+      consent_at: new Date().toISOString(),
     })
     setSending(false)
-    if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
+    if (dbErr) { setError(isEn ? 'Sending error. Please try again.' : 'Erreur lors de l\'envoi. Réessaie.'); return }
     setSent(true)
   }
 
@@ -58,10 +62,10 @@ export default function AProposProposerClient() {
           gap: 0,
         }}>
           <span style={{ display: 'inline-block', background: '#FFB3F0', padding: '4px 10px' }}>
-            DES CHOSES À NOUS PROPOSER ?
+            {isEn ? 'GOT IDEAS FOR US?' : 'DES CHOSES À NOUS PROPOSER ?'}
           </span>
           <span style={{ display: 'inline-block', background: '#FFB3F0', padding: '4px 10px', marginLeft: 30 }}>
-            DES ÉVÉNEMENTS ?&nbsp;&nbsp;DES CLUBS ?
+            {isEn ? 'EVENTS?  CLUBS?' : 'DES ÉVÉNEMENTS ?  DES CLUBS ?'}
           </span>
         </h2>
         <div style={{
@@ -74,7 +78,7 @@ export default function AProposProposerClient() {
           alignItems: 'center',
           gap: 12,
         }}>
-          ON VOUS ÉCOUTE
+          {isEn ? "WE'RE LISTENING" : 'ON VOUS ÉCOUTE'}
           <span style={{ display: 'inline-flex', width: 30, height: 30 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -91,7 +95,7 @@ export default function AProposProposerClient() {
           textAlign: 'center', position: 'relative', zIndex: 1,
         }}>
           <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 20, textTransform: 'uppercase', color: 'var(--ink)', margin: 0 }}>
-            Merci pour ta proposition ! 🙏
+            {isEn ? 'Thank you for your suggestion! 🙏' : 'Merci pour ta proposition ! 🙏'}
           </p>
         </div>
       ) : (
@@ -109,17 +113,17 @@ export default function AProposProposerClient() {
           }}
         >
           <label style={{ fontStyle: 'italic', fontSize: 13, color: '#888', display: 'block', marginBottom: 8, paddingLeft: 4 }}>
-            vos idées sont les bienvenues :
+            {isEn ? 'all ideas are welcome:' : 'vos idées sont les bienvenues :'}
           </label>
           <input
             type="email"
             value={mail}
             onChange={e => setMail(e.target.value)}
-            placeholder="ton adresse mail"
+            placeholder={isEn ? 'your email' : 'ton adresse mail'}
             style={{
               width: '100%',
               border: '1.5px dotted var(--ink)',
-              marginBottom: 12,
+              marginBottom: 6,
               borderRadius: 4,
               padding: '10px 16px',
               fontSize: 14,
@@ -128,12 +132,17 @@ export default function AProposProposerClient() {
               boxSizing: 'border-box',
             }}
           />
+          <p style={{ fontSize: 12, color: '#888', fontStyle: 'italic', marginBottom: 12, paddingLeft: 4 }}>
+            {isEn
+              ? 'Please use only the email address provided by the school.'
+              : 'Merci d\'utiliser uniquement votre adresse e-mail fournie par l\'école.'}
+          </p>
           <textarea
             rows={6}
             value={text}
             onChange={e => setText(e.target.value)}
             required
-            placeholder="un événement, une idée, un club… tout est le bienvenu !"
+            placeholder={isEn ? 'an event, an idea, a club… everything is welcome!' : 'un événement, une idée, un club… tout est le bienvenu !'}
             style={{
               width: '100%',
               border: '1.5px dotted var(--ink)',
@@ -148,9 +157,24 @@ export default function AProposProposerClient() {
               boxSizing: 'border-box',
             }}
           />
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 14, cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={e => setConsent(e.target.checked)}
+              style={{ marginTop: 3, flexShrink: 0, accentColor: 'var(--ink)', width: 15, height: 15, cursor: 'pointer' }}
+            />
+            <span style={{ fontSize: 12, color: '#555', lineHeight: 1.55 }}>
+              {isEn
+                ? <>En envoyant ce formulaire, I confirm that I am using the email address provided by the school and I agree that the information submitted will be used by the BDE de LISAA DGC to process my suggestion, in accordance with the <a href="/en/p/conditions-generales-dutilisation" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Terms of Use</a> and the <a href="/en/p/politique-de-confidentialite" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Privacy Policy</a>.</>
+                : <>En envoyant ce formulaire, je confirme utiliser l&apos;adresse e-mail fournie par l&apos;école et j&apos;accepte que les informations transmises soient utilisées par le BDE de LISAA DGC pour traiter ma suggestion, conformément aux <a href="/fr/p/conditions-generales-dutilisation" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Conditions Générales d&apos;Utilisation</a> et à la <a href="/fr/p/politique-de-confidentialite" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Politique de confidentialité</a> du site.</>
+              }
+            </span>
+          </label>
+
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
             {error && <p style={{ fontSize: 13, color: '#dc2626', marginBottom: 6 }}>{error}</p>}
-          <button type="submit" disabled={sending} style={{
+          <button type="submit" disabled={sending || !consent} style={{
               opacity: sending ? 0.7 : 1, cursor: sending ? 'wait' : 'pointer',
               display: 'inline-flex', alignItems: 'center', gap: 8,
               background: '#FFE74A', color: 'var(--ink)',
@@ -159,7 +183,7 @@ export default function AProposProposerClient() {
               padding: '11px 22px', border: 'none',
               borderRadius: 999,
             }}>
-              {sending ? 'Envoi…' : 'ENVOYER'}
+              {sending ? (isEn ? 'Sending…' : 'Envoi…') : (isEn ? 'SEND' : 'ENVOYER')}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 13 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>

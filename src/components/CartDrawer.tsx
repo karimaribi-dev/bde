@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useCart } from '@/components/CartContext'
 import { createClient } from '@/lib/supabase/client'
 import { isStudentEmail, STUDENT_EMAIL_ERROR, STUDENT_DOMAIN } from '@/lib/validate-email'
 
 export default function CartDrawer() {
   const { items, remove, setQty, clear, total, count, isOpen, close } = useCart()
+  const isEn = usePathname().startsWith('/en')
 
   const [step,    setStep]    = useState<'cart' | 'sent'>('cart')
   const [fields,  setFields]  = useState({ prenom: '', nom: '', classe: '', mail: '' })
@@ -47,7 +49,7 @@ export default function CartDrawer() {
       total: +total.toFixed(2),
     })
     setSending(false)
-    if (dbErr) { setError('Erreur lors de l\'envoi. Réessaie.'); return }
+    if (dbErr) { setError(isEn ? 'Sending error. Please try again.' : 'Erreur lors de l\'envoi. Réessaie.'); return }
     clear()
     setStep('sent')
   }
@@ -128,7 +130,7 @@ export default function CartDrawer() {
               margin: 0,
               letterSpacing: '-0.01em',
             }}>
-              MON PANIER
+              {isEn ? 'MY CART' : 'MON PANIER'}
             </h2>
             {count > 0 && (
               <span style={{
@@ -137,7 +139,7 @@ export default function CartDrawer() {
                 fontWeight: 700, fontSize: 12,
                 padding: '2px 9px', borderRadius: 99,
               }}>
-                {count} article{count > 1 ? 's' : ''}
+                {count} {isEn ? (count > 1 ? 'items' : 'item') : (count > 1 ? 'articles' : 'article')}
               </span>
             )}
           </div>
@@ -166,10 +168,10 @@ export default function CartDrawer() {
                 fontWeight: 900, fontSize: 22, textTransform: 'uppercase',
                 color: 'var(--ink)', margin: 0, lineHeight: 1.3,
               }}>
-                Commande reçue !
+                {isEn ? 'Order received!' : 'Commande reçue !'}
               </p>
               <p style={{ fontSize: 14, color: '#6b7280', margin: 0, lineHeight: 1.65, maxWidth: 280 }}>
-                On revient vers toi vite pour finaliser ta commande 🙌
+                {isEn ? "We'll be in touch soon to finalize your order 🙌" : 'On revient vers toi vite pour finaliser ta commande 🙌'}
               </p>
               <button
                 onClick={handleClose}
@@ -182,7 +184,7 @@ export default function CartDrawer() {
                   cursor: 'pointer', letterSpacing: '0.02em',
                 }}
               >
-                Continuer à shopper →
+                {isEn ? 'Continue shopping →' : 'Continuer à shopper →'}
               </button>
             </div>
           )}
@@ -195,7 +197,7 @@ export default function CartDrawer() {
                 fontFamily: 'var(--font-display)', fontStyle: 'italic',
                 fontSize: 16, textTransform: 'uppercase', color: '#aaa', margin: 0,
               }}>
-                Ton panier est vide
+                {isEn ? 'Your cart is empty' : 'Ton panier est vide'}
               </p>
               <button
                 onClick={handleClose}
@@ -206,7 +208,7 @@ export default function CartDrawer() {
                   padding: '12px 22px', border: 'none', borderRadius: 999, cursor: 'pointer',
                 }}
               >
-                Voir le shop →
+                {isEn ? 'Browse the shop →' : 'Voir le shop →'}
               </button>
             </div>
           )}
@@ -339,7 +341,7 @@ export default function CartDrawer() {
                   fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em',
                   color: '#999', margin: '0 0 16px',
                 }}>
-                  Tes coordonnées pour la commande
+                  {isEn ? 'Your details for the order' : 'Tes coordonnées pour la commande'}
                 </p>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                   {error && (
@@ -350,8 +352,8 @@ export default function CartDrawer() {
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                     {([
-                      { k: 'prenom', label: 'Prénom', required: true },
-                      { k: 'nom',    label: 'Nom',    required: true },
+                      { k: 'prenom', label: isEn ? 'First name' : 'Prénom', required: true },
+                      { k: 'nom',    label: isEn ? 'Last name'  : 'Nom',    required: true },
                     ] as const).map(({ k, label, required }) => (
                       <div key={k}>
                         <label style={{
@@ -373,7 +375,7 @@ export default function CartDrawer() {
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#aaa', marginBottom: 4 }}>Classe</label>
+                    <label style={{ display: 'block', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#aaa', marginBottom: 4 }}>{isEn ? 'Class' : 'Classe'}</label>
                     <input
                       type="text"
                       value={fields.classe}
@@ -410,7 +412,7 @@ export default function CartDrawer() {
                       transition: 'opacity 0.15s',
                     }}
                   >
-                    {sending ? 'Envoi en cours…' : 'COMMANDER'}
+                    {sending ? (isEn ? 'Sending…' : 'Envoi en cours…') : (isEn ? 'ORDER' : 'COMMANDER')}
                     {!sending && (
                       <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 14 }}>
                         <path d="M2 8h19M14 1l7 7-7 7"/>

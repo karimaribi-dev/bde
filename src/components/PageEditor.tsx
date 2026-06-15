@@ -19,11 +19,25 @@ export default function PageEditor({ page }: Props) {
 
   const [title, setTitle] = useState(page?.title ?? '')
   const [slug, setSlug] = useState(page?.slug ?? '')
+  const [slugManual, setSlugManual] = useState(!!page?.slug)
   const [metaDescription, setMetaDescription] = useState(page?.meta_description ?? '')
   const [isPublished, setIsPublished] = useState(page?.is_published ?? true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [message, setMessage] = useState('')
+
+  function slugify(str: string) {
+    return str.toLowerCase().normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+  }
+
+  function handleTitleChange(val: string) {
+    setTitle(val)
+    setSaved(false)
+    if (!slugManual) setSlug(slugify(val))
+  }
 
   const editor = useEditor({
     extensions: [
@@ -67,6 +81,7 @@ export default function PageEditor({ page }: Props) {
       setMessage(`Erreur : ${error.message}`)
     } else {
       setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
       setMessage('Page sauvegardée !')
       if (!page?.id) router.push('/admin/pages')
       else router.refresh()
@@ -92,7 +107,7 @@ export default function PageEditor({ page }: Props) {
           )}
           <button
             onClick={save}
-            disabled={saving || saved}
+            disabled={saving}
             className="px-4 py-2 text-sm font-medium text-white rounded transition-colors disabled:opacity-60"
             style={{ background: saved ? '#16a34a' : '#111' }}
           >
@@ -115,7 +130,7 @@ export default function PageEditor({ page }: Props) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
               <input
                 value={title}
-                onChange={(e) => { setTitle(e.target.value); setSaved(false) }}
+                onChange={(e) => handleTitleChange(e.target.value)}
                 placeholder="Titre de la page"
                 className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
@@ -126,7 +141,7 @@ export default function PageEditor({ page }: Props) {
                 <span className="text-sm text-gray-400">/p/</span>
                 <input
                   value={slug}
-                  onChange={(e) => { setSlug(e.target.value); setSaved(false) }}
+                  onChange={(e) => { setSlug(e.target.value); setSlugManual(true); setSaved(false) }}
                   placeholder="ma-page"
                   className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                 />

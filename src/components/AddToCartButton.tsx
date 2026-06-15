@@ -1,6 +1,7 @@
 'use client'
 
 import { useCart } from '@/components/CartContext'
+import { usePathname } from 'next/navigation'
 
 interface Props {
   productId:  string
@@ -19,6 +20,7 @@ export default function AddToCartButton({
   variant = 'circle',
 }: Props) {
   const { add } = useCart()
+  const isEn = usePathname().startsWith('/en')
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault()
@@ -57,7 +59,7 @@ export default function AddToCartButton({
           <line x1="3" y1="6" x2="21" y2="6"/>
           <path d="M16 10a4 4 0 01-8 0"/>
         </svg>
-        AJOUTER AU PANIER
+        {isEn ? 'ADD TO CART' : 'AJOUTER AU PANIER'}
       </button>
     )
   }
@@ -67,7 +69,7 @@ export default function AddToCartButton({
     <button
       type="button"
       onClick={handleClick}
-      aria-label={`Ajouter ${title} au panier`}
+      aria-label={isEn ? `Add ${title} to cart` : `Ajouter ${title} au panier`}
       style={{
         position: 'absolute',
         top: -14, right: 14,

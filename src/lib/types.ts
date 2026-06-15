@@ -119,14 +119,21 @@ export interface Club {
   title: string
   slug: string
   tagline: string
+  tagline_en: string | null
   tagline_sub: string | null
+  tagline_sub_en: string | null
   accent_color: string
   accent_text_color: string
   who_we_are: string | null
+  who_we_are_en: string | null
   objective: string | null
+  objective_en: string | null
   schedule: string | null
+  schedule_en: string | null
   frequency: string | null
+  frequency_en: string | null
   location: string | null
+  location_en: string | null
   member_count: string | null
   image_url: string | null
   is_published: boolean

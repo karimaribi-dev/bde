@@ -48,25 +48,62 @@ function Toggle({ on, onToggle, label, sub }: { on: boolean; onToggle: () => voi
   )
 }
 
+function LangTabs({ lang, setLang }: { lang: 'fr' | 'en'; setLang: (l: 'fr' | 'en') => void }) {
+  return (
+    <div style={{ display: 'inline-flex', border: '1.5px solid #e5e7eb', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
+      {(['fr', 'en'] as const).map(l => (
+        <button
+          key={l}
+          type="button"
+          onClick={() => setLang(l)}
+          style={{
+            padding: '5px 16px',
+            fontSize: 12,
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            background: lang === l ? '#111' : '#fff',
+            color: lang === l ? '#fff' : '#6b7280',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          {l === 'fr' ? '🇫🇷 FR' : '🇬🇧 EN'}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 interface Props { club?: Club }
 
 export default function ClubEditor({ club }: Props) {
   const router = useRouter()
   const supabase = createClient()
 
+  /* ── Langue active dans l'éditeur ── */
+  const [lang, setLang] = useState<'fr' | 'en'>('fr')
+
   /* ── État formulaire ── */
   const [title, setTitle]           = useState(club?.title ?? '')
   const [slug, setSlug]             = useState(club?.slug ?? '')
   const [slugManual, setSlugManual] = useState(!!club?.slug)
   const [tagline, setTagline]       = useState(club?.tagline ?? '')
+  const [taglineEn, setTaglineEn]   = useState(club?.tagline_en ?? '')
   const [taglineSub, setTaglineSub] = useState(club?.tagline_sub ?? '')
+  const [taglineSubEn, setTaglineSubEn] = useState(club?.tagline_sub_en ?? '')
   const [accentColor, setAccentColor] = useState(club?.accent_color ?? '#FFB3F0')
   const [accentText, setAccentText]   = useState(club?.accent_text_color ?? '#111111')
   const [whoWeAre, setWhoWeAre]     = useState(club?.who_we_are ?? '')
+  const [whoWeAreEn, setWhoWeAreEn] = useState(club?.who_we_are_en ?? '')
   const [objective, setObjective]   = useState(club?.objective ?? '')
-  const [schedule, setSchedule]     = useState(club?.schedule ?? '')
-  const [frequency, setFrequency]   = useState(club?.frequency ?? '')
-  const [location, setLocation]     = useState(club?.location ?? '')
+  const [objectiveEn, setObjectiveEn] = useState(club?.objective_en ?? '')
+  const [schedule, setSchedule]         = useState(club?.schedule ?? '')
+  const [scheduleEn, setScheduleEn]     = useState(club?.schedule_en ?? '')
+  const [frequency, setFrequency]       = useState(club?.frequency ?? '')
+  const [frequencyEn, setFrequencyEn]   = useState(club?.frequency_en ?? '')
+  const [location, setLocation]         = useState(club?.location ?? '')
+  const [locationEn, setLocationEn]     = useState(club?.location_en ?? '')
   const [memberCount, setMemberCount] = useState(club?.member_count ?? '')
   const [imageUrl, setImageUrl]     = useState(club?.image_url ?? '')
   const [sortOrder, setSortOrder]   = useState(club?.sort_order ?? 0)
@@ -115,14 +152,21 @@ export default function ClubEditor({ club }: Props) {
       title:             title.trim().toUpperCase(),
       slug:              slug.trim(),
       tagline:           tagline.trim().toUpperCase(),
+      tagline_en:        taglineEn.trim() || null,
       tagline_sub:       taglineSub.trim().toUpperCase() || null,
+      tagline_sub_en:    taglineSubEn.trim() || null,
       accent_color:      accentColor,
       accent_text_color: accentText,
       who_we_are:        whoWeAre.trim() || null,
+      who_we_are_en:     whoWeAreEn.trim() || null,
       objective:         objective.trim() || null,
+      objective_en:      objectiveEn.trim() || null,
       schedule:          schedule.trim() || null,
+      schedule_en:       scheduleEn.trim() || null,
       frequency:         frequency.trim() || null,
+      frequency_en:      frequencyEn.trim() || null,
       location:          location.trim() || null,
+      location_en:       locationEn.trim() || null,
       member_count:      memberCount.trim() || null,
       image_url:         imageUrl || null,
       sort_order:        sortOrder,
@@ -146,7 +190,7 @@ export default function ClubEditor({ club }: Props) {
       setSaved(true)
       setMessage(club?.id ? 'Club mis à jour !' : 'Club créé !')
       if (!club?.id) router.push('/admin/clubs')
-      else router.refresh()
+      else { router.refresh(); setTimeout(() => setSaved(false), 2000) }
     }
   }
 
@@ -161,7 +205,7 @@ export default function ClubEditor({ club }: Props) {
         </h1>
         <button
           onClick={handleSave}
-          disabled={saving || saved}
+          disabled={saving}
           className="px-4 py-2 text-sm font-medium text-white rounded transition-colors disabled:opacity-60"
           style={{ background: saved ? '#16a34a' : '#111' }}
         >
@@ -282,72 +326,133 @@ export default function ClubEditor({ club }: Props) {
           </div>
         </div>
 
-        {/* Tagline */}
-        <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-3">
-          <h2 className="text-sm font-semibold text-gray-900">Tagline</h2>
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">
-              Première ligne <span className="text-gray-400 font-normal">ex : INTÉRESSÉ PAR LA TYPOGRAPHIE ?</span>
-            </label>
-            <input
-              value={tagline}
-              onChange={e => setTagline(e.target.value)}
-              placeholder="Ex : INTÉRESSÉ PAR LA TYPOGRAPHIE ?"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
+        {/* Tagline + Qui + Objectif — onglets FR/EN */}
+        <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-900">Contenu</h2>
+            <LangTabs lang={lang} setLang={setLang} />
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">
-              Deuxième ligne <span className="text-gray-400 font-normal">ex : C&apos;EST POUR VOUS ! (optionnel)</span>
-            </label>
-            <input
-              value={taglineSub}
-              onChange={e => setTaglineSub(e.target.value)}
-              placeholder="Ex : C'EST POUR VOUS !"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
-          </div>
-          {/* Aperçu tagline */}
-          {(tagline || taglineSub) && (
-            <div style={{ padding: '10px 0 4px', display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'flex-start' }}>
-              {tagline && <span style={{ background: accentColor, color: accentText, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>{tagline}</span>}
-              {taglineSub && <span style={{ background: accentColor, color: accentText, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase', marginLeft: 48 }}>{taglineSub}</span>}
+
+          {/* FR — toujours monté, masqué si EN actif */}
+          <div className="space-y-4" style={{ display: lang === 'fr' ? 'block' : 'none' }}>
+            {/* Tagline FR */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Tagline</h3>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  Première ligne <span className="text-gray-400 font-normal">ex : INTÉRESSÉ PAR LA TYPOGRAPHIE ?</span>
+                </label>
+                <input
+                  value={tagline}
+                  onChange={e => setTagline(e.target.value)}
+                  placeholder="Ex : INTÉRESSÉ PAR LA TYPOGRAPHIE ?"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  Deuxième ligne <span className="text-gray-400 font-normal">ex : C&apos;EST POUR VOUS ! (optionnel)</span>
+                </label>
+                <input
+                  value={taglineSub}
+                  onChange={e => setTaglineSub(e.target.value)}
+                  placeholder="Ex : C'EST POUR VOUS !"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+              </div>
+              {(tagline || taglineSub) && (
+                <div style={{ padding: '6px 0 2px', display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'flex-start' }}>
+                  {tagline && <span style={{ background: accentColor, color: accentText, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>{tagline}</span>}
+                  {taglineSub && <span style={{ background: accentColor, color: accentText, padding: '3px 8px', fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase', marginLeft: 48 }}>{taglineSub}</span>}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+            {/* QUI SOMMES NOUS FR */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">QUI SOMMES NOUS ?</label>
+              <textarea
+                value={whoWeAre}
+                onChange={e => setWhoWeAre(e.target.value)}
+                placeholder="Décris le club, son ambiance, qui peut y participer…"
+                rows={5}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            {/* OBJECTIF FR */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">NOTRE OBJECTIF :</label>
+              <textarea
+                value={objective}
+                onChange={e => setObjective(e.target.value)}
+                placeholder="Les buts du club, les projets, les activités…"
+                rows={4}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+          </div>
 
-        {/* Qui sommes-nous */}
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            QUI SOMMES NOUS ?
-          </label>
-          <textarea
-            value={whoWeAre}
-            onChange={e => setWhoWeAre(e.target.value)}
-            placeholder="Décris le club, son ambiance, qui peut y participer…"
-            rows={5}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
-          />
-        </div>
-
-        {/* Objectif */}
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            NOTRE OBJECTIF :
-          </label>
-          <textarea
-            value={objective}
-            onChange={e => setObjective(e.target.value)}
-            placeholder="Les buts du club, les projets, les activités…"
-            rows={4}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
-          />
+          {/* EN — toujours monté, masqué si FR actif */}
+          <div className="space-y-4" style={{ display: lang === 'en' ? 'block' : 'none' }}>
+            {/* Tagline EN */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Tagline <span className="text-gray-400 font-normal normal-case">(English — optional)</span></h3>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">First line</label>
+                <input
+                  value={taglineEn}
+                  onChange={e => setTaglineEn(e.target.value)}
+                  placeholder="Ex: INTERESTED IN TYPOGRAPHY?"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Second line (optional)</label>
+                <input
+                  value={taglineSubEn}
+                  onChange={e => setTaglineSubEn(e.target.value)}
+                  placeholder="Ex: THIS IS FOR YOU!"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+              </div>
+            </div>
+            {/* WHO WE ARE EN */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                WHO ARE WE? <span className="text-gray-400 text-xs font-normal">(English — optional)</span>
+              </label>
+              <textarea
+                value={whoWeAreEn}
+                onChange={e => setWhoWeAreEn(e.target.value)}
+                placeholder="Describe the club in English…"
+                rows={5}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            {/* OBJECTIVE EN */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                OUR OBJECTIVE: <span className="text-gray-400 text-xs font-normal">(English — optional)</span>
+              </label>
+              <textarea
+                value={objectiveEn}
+                onChange={e => setObjectiveEn(e.target.value)}
+                placeholder="Goals, projects, activities in English…"
+                rows={4}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Infos importantes */}
         <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-3">
-          <h2 className="text-sm font-semibold text-gray-900">LES INFOS IMPORTANTES</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-900">LES INFOS IMPORTANTES</h2>
+            <LangTabs lang={lang} setLang={setLang} />
+          </div>
+
+          {/* FR — toujours monté */}
+          <div className="grid grid-cols-2 gap-3" style={{ display: lang === 'fr' ? 'grid' : 'none' }}>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Horaires</label>
               <input
@@ -372,6 +477,46 @@ export default function ClubEditor({ club }: Props) {
                 value={location}
                 onChange={e => setLocation(e.target.value)}
                 placeholder="Ex : FAB LAB, Salle 3…"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Nombre de membres</label>
+              <input
+                value={memberCount}
+                onChange={e => setMemberCount(e.target.value)}
+                placeholder="Ex : 12"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+          </div>
+
+          {/* EN — toujours monté */}
+          <div className="grid grid-cols-2 gap-3" style={{ display: lang === 'en' ? 'grid' : 'none' }}>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Times <span className="text-gray-400 font-normal">(English)</span></label>
+              <input
+                value={scheduleEn}
+                onChange={e => setScheduleEn(e.target.value)}
+                placeholder="Ex: 10am - 12pm"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Date / Frequency <span className="text-gray-400 font-normal">(English)</span></label>
+              <input
+                value={frequencyEn}
+                onChange={e => setFrequencyEn(e.target.value)}
+                placeholder="Ex: Every Friday"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Location <span className="text-gray-400 font-normal">(English)</span></label>
+              <input
+                value={locationEn}
+                onChange={e => setLocationEn(e.target.value)}
+                placeholder="Ex: FAB LAB, Room 3…"
                 className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>

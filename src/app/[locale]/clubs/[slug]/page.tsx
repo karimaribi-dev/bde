@@ -33,11 +33,21 @@ export default async function ClubDetailPage({
   const ac = club.accent_color
   const at = club.accent_text_color
 
+  const isEn = locale === 'en'
+  const taglineDisplay    = (isEn && club.tagline_en)    ? club.tagline_en    : club.tagline
+  const taglineSubDisplay = (isEn && club.tagline_sub_en) ? club.tagline_sub_en : club.tagline_sub
+  const whoWeAreDisplay   = (isEn && club.who_we_are_en) ? club.who_we_are_en : club.who_we_are
+  const objectiveDisplay  = (isEn && club.objective_en)  ? club.objective_en  : club.objective
+
+  const scheduleVal  = (isEn && club.schedule_en)  ? club.schedule_en  : club.schedule
+  const frequencyVal = (isEn && club.frequency_en) ? club.frequency_en : club.frequency
+  const locationVal  = (isEn && club.location_en)  ? club.location_en  : club.location
+
   const infoItems: { key: string; val: string }[] = [
-    club.schedule     && { key: 'HORAIRES',           val: club.schedule },
-    club.frequency    && { key: 'DATE / FRÉQUENCE',   val: club.frequency },
-    club.location     && { key: 'LIEU',                val: club.location },
-    club.member_count && { key: 'NOMBRE DE MEMBRES',  val: club.member_count },
+    scheduleVal    && { key: isEn ? 'TIMES'              : 'HORAIRES',          val: scheduleVal },
+    frequencyVal   && { key: isEn ? 'DATE / FREQUENCY'   : 'DATE / FRÉQUENCE',  val: frequencyVal },
+    locationVal    && { key: isEn ? 'LOCATION'           : 'LIEU',              val: locationVal },
+    club.member_count && { key: isEn ? 'MEMBERS'         : 'NOMBRE DE MEMBRES', val: club.member_count },
   ].filter(Boolean) as { key: string; val: string }[]
 
   const hr = <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '22px 0' }} />
@@ -50,9 +60,9 @@ export default async function ClubDetailPage({
 
         {/* Breadcrumb */}
         <nav style={{ padding: '10px 0 4px', fontSize: 11, fontFamily: 'var(--font-display)', fontStyle: 'italic', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--mute)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-          <Link href={`/${locale}`} style={{ color: 'var(--mute)', textDecoration: 'none' }}>ACCUEIL</Link>
+          <Link href={`/${locale}`} style={{ color: 'var(--mute)', textDecoration: 'none' }}>{isEn ? 'HOME' : 'ACCUEIL'}</Link>
           <span>›</span>
-          <Link href={`/${locale}/clubs`} style={{ color: 'var(--mute)', textDecoration: 'none' }}>NOS CLUBS</Link>
+          <Link href={`/${locale}/clubs`} style={{ color: 'var(--mute)', textDecoration: 'none' }}>{isEn ? 'OUR CLUBS' : 'NOS CLUBS'}</Link>
           <span>›</span>
           <span style={{ color: 'var(--ink)' }}>{club.title}</span>
         </nav>
@@ -95,14 +105,14 @@ export default async function ClubDetailPage({
 
             {/* Taglines — mobile uniquement, sous le titre */}
             <div className="club-taglines-mobile" style={{ display: 'none', flexDirection: 'column', gap: 4, marginBottom: 20, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
-              {club.tagline && (
+              {taglineDisplay && (
                 <span style={{ display: 'inline-block', background: ac, color: at, padding: '3px 10px 5px', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.02em', fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
-                  {club.tagline}
+                  {taglineDisplay}
                 </span>
               )}
-              {club.tagline_sub && (
+              {taglineSubDisplay && (
                 <span style={{ display: 'inline-block', background: ac, color: at, padding: '5px 12px 7px', fontSize: 22, letterSpacing: '-0.01em', textTransform: 'uppercase', width: 'fit-content', marginLeft: 20, fontFamily: 'var(--font-display)', fontStyle: 'italic' }}>
-                  {club.tagline_sub}
+                  {taglineSubDisplay}
                 </span>
               )}
             </div>
@@ -128,7 +138,7 @@ export default async function ClubDetailPage({
 
             {/* Taglines */}
             <div className="club-taglines-desktop">
-            {(club.tagline || club.tagline_sub) && (
+            {(taglineDisplay || taglineSubDisplay) && (
               <div style={{
                 fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
@@ -137,7 +147,7 @@ export default async function ClubDetailPage({
                 gap: 4,
                 marginBottom: 28,
               }}>
-                {club.tagline && (
+                {taglineDisplay && (
                   <span style={{
                     display: 'inline-block',
                     background: ac,
@@ -149,10 +159,10 @@ export default async function ClubDetailPage({
                     width: 'fit-content',
                     fontStyle: 'italic',
                   }}>
-                    {club.tagline}
+                    {taglineDisplay}
                   </span>
                 )}
-                {club.tagline_sub && (
+                {taglineSubDisplay && (
                   <span style={{
                     display: 'inline-block',
                     background: ac,
@@ -164,7 +174,7 @@ export default async function ClubDetailPage({
                     width: 'fit-content',
                     marginLeft: 20,
                   }}>
-                    {club.tagline_sub}
+                    {taglineSubDisplay}
                   </span>
                 )}
               </div>
@@ -174,7 +184,7 @@ export default async function ClubDetailPage({
             {hr}
 
             {/* QUI SOMMES NOUS */}
-            {club.who_we_are && (
+            {whoWeAreDisplay && (
               <>
                 <h3 style={{
                   fontFamily: 'var(--font-display)',
@@ -186,17 +196,17 @@ export default async function ClubDetailPage({
                   color: 'var(--ink)',
                   margin: '0 0 12px',
                 }}>
-                  QUI SOMMES NOUS ?
+                  {isEn ? 'WHO ARE WE?' : 'QUI SOMMES NOUS ?'}
                 </h3>
                 <p style={{ fontSize: 16, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
-                  {club.who_we_are}
+                  {whoWeAreDisplay}
                 </p>
                 {hr}
               </>
             )}
 
             {/* NOTRE OBJECTIF */}
-            {club.objective && (
+            {objectiveDisplay && (
               <>
                 <h3 style={{
                   fontFamily: 'var(--font-display)',
@@ -208,10 +218,10 @@ export default async function ClubDetailPage({
                   color: 'var(--ink)',
                   margin: '0 0 12px',
                 }}>
-                  NOTRE OBJECTIF :
+                  {isEn ? 'OUR OBJECTIVE:' : 'NOTRE OBJECTIF :'}
                 </h3>
                 <p style={{ fontSize: 16, lineHeight: 1.65, color: 'var(--ink)', margin: 0, opacity: 0.85 }}>
-                  {club.objective}
+                  {objectiveDisplay}
                 </p>
                 {hr}
               </>
@@ -221,7 +231,7 @@ export default async function ClubDetailPage({
             {infoItems.length > 0 && (
               <>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 900, fontSize: 'clamp(14px,1.2vw,18px)', textTransform: 'uppercase', letterSpacing: '0.01em', color: 'var(--ink)', margin: '0 0 12px' }}>
-                  LES INFOS IMPORTANTES
+                  {isEn ? 'KEY INFORMATION' : 'LES INFOS IMPORTANTES'}
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {infoItems.map((item, idx) => (
@@ -260,7 +270,7 @@ export default async function ClubDetailPage({
             )}
 
             {/* Formulaire rejoindre */}
-            <ClubJoinFormClient clubTitle={club.title} clubSlug={club.slug} accentColor={ac} />
+            <ClubJoinFormClient clubTitle={club.title} clubSlug={club.slug} accentColor={ac} locale={locale} />
 
           </div>
         </section>
@@ -276,9 +286,9 @@ export default async function ClubDetailPage({
               margin: '0 0 32px',
               color: 'var(--ink)',
             }}>
-              <span style={{ background: '#BFDBFE', padding: '4px 10px' }}>VOUS POUVEZ AUSSI DÉCOUVRIR</span>
+              <span style={{ background: '#BFDBFE', padding: '4px 10px' }}>{isEn ? 'YOU CAN ALSO DISCOVER' : 'VOUS POUVEZ AUSSI DÉCOUVRIR'}</span>
               <br/>
-              <span style={{ background: '#BFDBFE', padding: '4px 10px', display: 'inline-block', marginLeft: 40 }}>NOS AUTRES CLUBS !</span>
+              <span style={{ background: '#BFDBFE', padding: '4px 10px', display: 'inline-block', marginLeft: 40 }}>{isEn ? 'OUR OTHER CLUBS!' : 'NOS AUTRES CLUBS !'}</span>
             </h2>
             <div className="club-others-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28 }}>
               {otherClubs.map(other => (
@@ -307,14 +317,16 @@ export default async function ClubDetailPage({
                       <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     </span>
                   </header>
-                  {other.schedule && (
+                  {(other.schedule || other.schedule_en) && (
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderTop: `1.2px solid ${other.accent_color}`, fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>
-                      <span style={{ fontWeight: 900 }}>HORAIRES</span><span>{other.schedule}</span>
+                      <span style={{ fontWeight: 900 }}>{isEn ? 'TIMES' : 'HORAIRES'}</span>
+                      <span>{(isEn && other.schedule_en) ? other.schedule_en : other.schedule}</span>
                     </div>
                   )}
-                  {other.location && (
+                  {(other.location || other.location_en) && (
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderTop: `1.2px solid ${other.accent_color}`, fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 12, textTransform: 'uppercase' }}>
-                      <span style={{ fontWeight: 900 }}>LIEU</span><span>{other.location}</span>
+                      <span style={{ fontWeight: 900 }}>{isEn ? 'LOCATION' : 'LIEU'}</span>
+                      <span>{(isEn && other.location_en) ? other.location_en : other.location}</span>
                     </div>
                   )}
                   <span style={{
@@ -325,7 +337,7 @@ export default async function ClubDetailPage({
                     padding: '8px 20px', borderRadius: 999, alignSelf: 'flex-end', marginTop: 'auto',
                     fontWeight: 700,
                   }}>
-                    DÉCOUVRIR LE CLUB
+                    {isEn ? 'DISCOVER THE CLUB' : 'DÉCOUVRIR LE CLUB'}
                     <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 12 }}>
                       <path d="M2 8h19M14 1l7 7-7 7"/>
                     </svg>
@@ -359,10 +371,10 @@ export default async function ClubDetailPage({
           </div>
           <div className="club-detail-shop-text">
             <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1.05, textTransform: 'uppercase', color: 'var(--ink)', margin: '0 0 14px' }}>
-              INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?
+              {isEn ? <>INTERESTED IN<br/>THEIR WORK?</> : <>INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?</>}
             </h3>
             <p style={{ fontStyle: 'italic', fontSize: 13, opacity: 0.65, margin: '0 0 18px' }}>
-              *N&apos;hésitez pas à les soutenir en regardant le shop
+              {isEn ? '*Feel free to support them by browsing the shop' : "*N’hésitez pas à les soutenir en regardant le shop"}
             </p>
           </div>
           <div className="club-detail-shop-btn" style={{ gridColumn: 2, display: 'flex', justifyContent: 'flex-end', zIndex: 1 }}>
@@ -373,7 +385,7 @@ export default async function ClubDetailPage({
               fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
               textTransform: 'uppercase', textDecoration: 'none', padding: '12px 22px', borderRadius: 999,
             }}>
-              VOIR LE SHOP
+              {isEn ? 'SEE THE SHOP' : 'VOIR LE SHOP'}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>

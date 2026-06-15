@@ -20,6 +20,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
 
   const clubs = (clubsRaw ?? []) as Club[]
   const cats  = (categories ?? []) as Category[]
+  const isEn  = locale === 'en'
 
   return (
     <>
@@ -31,7 +32,6 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
         <section style={{ padding: '18px 0 50px' }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontWeight: 900,
             fontSize: 'clamp(60px, 11vw, 170px)',
             lineHeight: 0.9,
@@ -44,7 +44,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
             gap: 6,
           }}>
             {/* Ligne 1 : JOIN OUR + flèche */}
-            <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(20px, 3vw, 50px)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(20px, 3vw, 50px)', fontStyle: 'italic' }}>
               <span>JOIN OUR</span>
               <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(70px,8vw,130px)', height: 'clamp(70px,8vw,130px)' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -53,7 +53,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
             </span>
             {/* Ligne 2 : ( Amazing, Fun,... ) CLUBS */}
             <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px,1.5vw,20px)' }}>
-              <span style={{ fontWeight: 900 }}>(</span>
+              <span style={{ fontWeight: 900, fontStyle: 'italic' }}>(</span>
               <span style={{
                 fontFamily: '"altesse-std-24pt", serif',
                 fontWeight: 400,
@@ -68,8 +68,8 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
               }}>
                 Amazing, Fun,<br/>Creative,…
               </span>
-              <span style={{ fontWeight: 900 }}>)</span>
-              <span>CLUBS</span>
+              <span style={{ fontWeight: 900, fontStyle: 'italic' }}>)</span>
+              <span style={{ fontStyle: 'italic' }}>CLUBS</span>
             </span>
           </h1>
         </section>
@@ -77,7 +77,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
         {/* ═══════════ EYEBROW ═══════════ */}
         <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(14px,1.3vw,20px)', letterSpacing: '0.01em', textTransform: 'uppercase', margin: '0 0 30px' }}>
           <span style={{ background: 'var(--orange-deep)', color: '#fff', padding: '5px 12px 7px' }}>
-            REJOINS L&apos;AVENTURE !&nbsp;&nbsp;INSCRIS-TOI !
+            {isEn ? 'JOIN THE ADVENTURE!  SIGN UP!' : 'REJOINS L’AVENTURE !  INSCRIS-TOI !'}
           </span>
         </div>
 
@@ -87,7 +87,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
         ) : (
           <div style={{ padding: '60px 0', textAlign: 'center' }}>
             <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 18, textTransform: 'uppercase', color: '#aaa' }}>
-              Les clubs arrivent bientôt !
+              {isEn ? 'Clubs coming soon!' : 'Les clubs arrivent bientôt !'}
             </p>
           </div>
         )}
@@ -135,10 +135,10 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
           </div>
           <div className="clubs-shop-text">
             <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1.05, textTransform: 'uppercase', color: 'var(--ink)', margin: '0 0 14px' }}>
-              INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?
+              {isEn ? <>INTERESTED IN<br/>THEIR WORK?</> : <>INTÉRESSÉ PAR LEURS<br/>PRODUCTIONS ?</>}
             </h3>
             <p style={{ fontStyle: 'italic', fontSize: 13, opacity: 0.65, margin: '0 0 18px' }}>
-              *N&apos;hésitez pas à les soutenir en regardant le shop
+              {isEn ? '*Feel free to support them by browsing the shop' : "*N'hésitez pas à les soutenir en regardant le shop"}
             </p>
           </div>
           <div className="clubs-shop-btn" style={{ gridColumn: 2, display: 'flex', justifyContent: 'flex-end', zIndex: 1 }}>
@@ -149,7 +149,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
               fontSize: 20, fontWeight: 700, letterSpacing: '0.04em',
               textTransform: 'uppercase', textDecoration: 'none', padding: '12px 22px', borderRadius: 999,
             }}>
-              VOIR LE SHOP
+              {isEn ? 'SEE THE SHOP' : 'VOIR LE SHOP'}
               <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 24, height: 16 }}>
                 <path d="M2 8h19M14 1l7 7-7 7"/>
               </svg>

@@ -41,6 +41,7 @@ export default function SocialLinksEditor({ initial }: { initial: SocialLinks })
       setError(`Erreur : ${error.message}`)
     } else {
       setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
       router.refresh()
     }
   }
@@ -51,7 +52,7 @@ export default function SocialLinksEditor({ initial }: { initial: SocialLinks })
         <h1 className="text-2xl font-bold text-gray-900">Réseaux sociaux</h1>
         <button
           onClick={handleSave}
-          disabled={saving || saved}
+          disabled={saving}
           className="px-4 py-2 text-sm font-medium text-white rounded transition-colors disabled:opacity-60"
           style={{ background: saved ? '#16a34a' : '#111' }}
         >
