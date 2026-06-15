@@ -238,6 +238,28 @@ export default async function AdminDashboard() {
         </Link>
       </div>
 
+      {/* ── Contact développeur ── */}
+      <div style={{
+        marginTop: 8,
+        padding: '14px 20px',
+        background: '#f9fafb',
+        border: '1px solid #e5e7eb',
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        fontSize: 13,
+        color: '#6b7280',
+      }}>
+        <i className="fa-solid fa-circle-info" style={{ color: '#9ca3af', fontSize: 15, flexShrink: 0 }} />
+        <span>
+          Vous rencontrez un problème ou un bug ?{' '}
+          <a href="mailto:karimaribi@gmail.com" style={{ color: '#4FA3FF', fontWeight: 600, textDecoration: 'none' }}>
+            Contactez le développeur
+          </a>
+        </span>
+      </div>
+
     </>
   )
 }
