@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Category } from '@/lib/types'
 import LocaleSwitcher, { buildLocalePath } from './LocaleSwitcher'
 import { usePathname } from 'next/navigation'
+import { useCart } from '@/components/CartContext'
 
 interface NavLabels {
   home: string
@@ -53,6 +54,7 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
   const [desktopResults, setDesktopResults] = useState<SearchResult[]>([])
   const [desktopLoading, setDesktopLoading] = useState(false)
   const pathname       = usePathname()
+  const { count: cartCount } = useCart()
   const wrapRef        = useRef<HTMLDivElement>(null)
   const inputRef       = useRef<HTMLInputElement>(null)
 
@@ -178,10 +180,22 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
           </div>
 
           {/* Panier */}
-          <Link href={`/${locale}/shop`} className="cart-link" aria-label="Panier">
+          <Link href={`/${locale}/shop`} className="cart-link" aria-label="Panier" style={{ position: 'relative' }}>
             <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 6h4l2.5 14h16l3-10H9"/><circle cx="12" cy="26" r="2"/><circle cx="23" cy="26" r="2"/><path d="M9 20l-1 2"/>
             </svg>
+            {cartCount > 0 && (
+              <span style={{
+                position: 'absolute', top: -6, right: -6,
+                background: '#FFE74A', color: '#262626',
+                fontSize: 10, fontWeight: 900, lineHeight: 1,
+                width: 17, height: 17, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'var(--font-display)',
+              }}>
+                {cartCount}
+              </span>
+            )}
           </Link>
 
           {/* Hamburger — mobile uniquement */}
