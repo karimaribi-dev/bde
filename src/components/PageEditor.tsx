@@ -139,7 +139,6 @@ export default function PageEditor({ page }: Props) {
     padding: '6px 18px',
     fontSize: 13,
     fontWeight: active ? 700 : 400,
-    borderBottom: active ? '2px solid #111' : '2px solid transparent',
     background: 'transparent',
     border: 'none',
     borderBottom: active ? '2px solid #111' : '2px solid transparent',
