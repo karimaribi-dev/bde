@@ -74,7 +74,7 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
           {monthLabel}
           <span style={{ display: 'inline-flex', width: 34, height: 24, flexShrink: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <img src="/images/smiley-handdrawn.svg" alt="" className="smiley-img" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </span>
         </span>
 
@@ -137,6 +137,7 @@ export default function AgendaCalendarClient({ events, locale }: Props) {
               src="/images/quadrillage.svg"
               aria-hidden="true"
               alt=""
+              className="quadrillage-img"
               style={{
                 gridColumn: '1 / -1',
                 gridRow: `1 / span ${numRows}`,

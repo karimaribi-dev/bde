@@ -64,7 +64,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px,2.4vw,40px)', whiteSpace: 'nowrap' }}>
               <span aria-hidden="true" style={{ display: 'inline-flex', width: 'clamp(90px,11vw,170px)', height: 'clamp(60px,8vw,130px)', flexShrink: 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src="/images/smiley-handdrawn.svg" alt="" className="smiley-img" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </span>
               <span>&amp; EVENTS</span>
             </span>
@@ -161,7 +161,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             {/* Étoile bleue décorative */}
             <span aria-hidden="true" style={{ display: 'inline-flex', width: 90, height: 90, marginBottom: 12 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/etoile.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              <img src="/images/etoile.svg" alt="" className="deco-star-img" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </span>
             <h2 style={{
               fontFamily: '"neue-haas-grotesk-display", sans-serif',

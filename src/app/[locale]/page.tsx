@@ -228,7 +228,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
               <span>MAKE</span>
               <span aria-hidden="true" style={{ display: 'block', height: '0.86em' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '0.86em', height: '0.86em', display: 'block' }} />
+                <img src="/images/smiley-handdrawn.svg" alt="" className="smiley-img" style={{ width: '0.86em', height: '0.86em', display: 'block' }} />
               </span>
               <span>ALIVE</span>
             </span>
@@ -269,7 +269,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
             <span style={{ display: 'flex', alignItems: 'center', gap: '0.08em' }}>
               <span aria-hidden="true" style={{ display: 'inline-flex', width: '0.75em', height: '0.75em', flexShrink: 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%' }} />
+                <img src="/images/smiley-handdrawn.svg" alt="" className="smiley-img" style={{ width: '100%', height: '100%' }} />
               </span>
               <span style={{ position: 'relative', display: 'inline-block' }}>
                 <span aria-hidden="true" style={{ position: 'absolute', right: '-8%', top: '-15%', width: '42%', pointerEvents: 'none', zIndex: 0 }}>
@@ -368,7 +368,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                 {ev.badge}
               </div>
               {/* Info panel bas */}
-              <div style={{
+              <div className="event-card-body" style={{
                 position: 'absolute', bottom: 12, left: 12, right: 12,
                 background: '#fff', padding: '12px 14px 14px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.15)',

@@ -525,6 +525,26 @@ html.dark .form-input { background: #2e2e2e !important; border-bottom-color: rgb
 /* CartDrawer */
 html.dark .cart-drawer-bg { background: rgba(0,0,0,0.6) !important; }
 
+/* ── Dark mode : éléments spécifiques ── */
+
+/* Quadrillage agenda → blanc */
+html.dark .quadrillage-img { filter: invert(1); }
+
+/* Smiley (dessin main noir) → blanc */
+html.dark .smiley-img { filter: invert(1); }
+
+/* Étoile SVG (img file) → hue-rotate jaune→bleu */
+html.dark .deco-star-img { filter: hue-rotate(180deg); }
+
+/* Étoiles SVG inline jaunes → couleur dark-mode (bleu) */
+html.dark svg[fill="#FFE74A"],
+html.dark svg[fill="#FEEF4C"] { fill: var(--yellow) !important; }
+html.dark svg[stroke="#FEEF4C"] { stroke: var(--yellow) !important; }
+
+/* Cards event/club : fond blanc + texte noir (pas de flip en dark) */
+html.dark .event-card-body { background: #fff !important; color: #262626 !important; }
+html.dark .event-card-body * { color: #262626 !important; }
+
 /* ── Responsive ── */
 @media (max-width: 1180px) {
   .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }

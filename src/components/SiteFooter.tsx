@@ -72,8 +72,19 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       .then(({ data }) => { if (data) setExtraPages(data) })
   }, [])
 
+  /* Lecture de la préférence dark au montage */
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('bde-dark') === '1'
+      setDark(saved)
+      document.documentElement.classList.toggle('dark', saved)
+    } catch {}
+  }, [])
+
+  /* Sync classe + localStorage à chaque changement */
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
+    try { localStorage.setItem('bde-dark', dark ? '1' : '0') } catch {}
   }, [dark])
 
   /* ─────────── Brand row (partagé desktop + mobile) ─────────── */

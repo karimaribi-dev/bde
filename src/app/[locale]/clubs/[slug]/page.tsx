@@ -314,7 +314,7 @@ export default async function ClubDetailPage({
                     </h3>
                     <span style={{ display: 'inline-flex', width: 24, height: 24, flexShrink: 0 }}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      <img src="/images/smiley-handdrawn.svg" alt="" className="smiley-img" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     </span>
                   </header>
                   {(other.schedule || other.schedule_en) && (

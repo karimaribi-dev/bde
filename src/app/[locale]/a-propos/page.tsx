@@ -75,7 +75,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
               <span>MEET THE</span>
               <span style={{ display: 'inline-flex', width: 'clamp(50px,6vw,90px)', height: 'clamp(50px,6vw,90px)' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src="/images/smiley-handdrawn.svg" alt="" className="smiley-img" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </span>
             </span>
             {/* Ligne 2 : ( Incredible. ) TEAM */}

@@ -97,7 +97,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
           {/* Étoile bleue décorative */}
           <span aria-hidden="true" style={{ position: 'absolute', top: -40, left: -20, width: 180, height: 180, zIndex: 0, pointerEvents: 'none' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/etoile.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <img src="/images/etoile.svg" alt="" className="deco-star-img" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </span>
           <div style={{ position: 'relative', zIndex: 1 }}>
             <AgendaProposerForm />
