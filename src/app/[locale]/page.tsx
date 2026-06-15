@@ -205,7 +205,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       <Marquee articles={allArticles} />
 
       {/* ── MAIN ── */}
-      <main className="home-main" style={{ padding: '0 80px' }}>
+      <main className="home-main" style={{ padding: '0 clamp(16px, 5.5vw, 80px)' }}>
 
       {/* ── Hero BDE ── */}
       <section style={{ padding: '24px 0 36px', position: 'relative' }}>
@@ -214,15 +214,15 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         {!isMobile && (
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 224,
+            fontSize: 'clamp(90px, 15.5vw, 224px)',
             fontWeight: 800,
             lineHeight: 0.86,
             letterSpacing: '-0.02em',
             textTransform: 'uppercase',
             margin: 0,
             display: 'grid',
-            gridTemplateColumns: '0.65fr 1fr',
-            columnGap: 0,
+            gridTemplateColumns: '1fr 1fr',
+            columnGap: 'clamp(20px, 3vw, 60px)',
           }}>
             <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               <span>MAKE</span>
@@ -250,7 +250,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         {isMobile && (
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 224,
+            fontSize: 'clamp(36px, 13vw, 120px)',
             fontWeight: 800,
             lineHeight: 0.88,
             letterSpacing: '-0.02em',
@@ -549,46 +549,42 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
               position: 'relative',
               background: c0.accent_color,
               color: c0.accent_text_color,
-              width: isMobile ? '70%' : '53%',
-              height: isMobile ? 110 : 180,
-              clipPath: isMobile
-                ? 'polygon(0 0, calc(100% - 55px) 0, 100% 50%, calc(100% - 55px) 100%, 0 100%)'
-                : 'polygon(0 0, calc(100% - 100px) 0, 100% 50%, calc(100% - 100px) 100%, 0 100%)',
-              padding: isMobile ? '16px 65px 16px 18px' : '28px 110px 28px 40px',
+              width: '53%',
+              height: 'clamp(100px, 14vw, 180px)',
+              clipPath: 'polygon(0 0, calc(100% - clamp(55px, 8vw, 100px)) 0, 100% 50%, calc(100% - clamp(55px, 8vw, 100px)) 100%, 0 100%)',
+              padding: 'clamp(14px, 2vw, 28px) clamp(65px, 8.5vw, 110px) clamp(14px, 2vw, 28px) clamp(18px, 3vw, 40px)',
               zIndex: 3,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               gap: 2,
             }}>
-              <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c0.title}</div>
-              {clubSchedule(c0) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>{clubSchedule(c0)}</div>}
+              <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: 'clamp(22px, 5.8vw, 76px)', lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c0.title}</div>
+              {clubSchedule(c0) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: 'clamp(13px, 2.8vw, 36px)', opacity: 0.9 }}>{clubSchedule(c0)}</div>}
             </div>
 
             {/* Bloc 2 — flèche droite */}
             {c1 && (
               <div style={{
                 position: 'absolute',
-                top: isMobile ? 55 : 90,
+                top: 'clamp(50px, 7vw, 90px)',
                 right: 0,
                 background: c1.accent_color,
                 color: c1.accent_text_color,
-                width: isMobile ? '73%' : 'calc(47% + 100px)',
-                height: isMobile ? 110 : 180,
-                clipPath: isMobile
-                  ? 'polygon(55px 0, 100% 0, 100% 100%, 55px 100%, 0 50%)'
-                  : 'polygon(100px 0, 100% 0, 100% 100%, 100px 100%, 0 50%)',
-                padding: isMobile ? '16px 18px 16px 70px' : '28px 40px 28px 130px',
-                textAlign: isMobile ? 'left' : 'right',
+                width: 'calc(47% + clamp(55px, 8vw, 100px))',
+                height: 'clamp(100px, 14vw, 180px)',
+                clipPath: 'polygon(clamp(55px, 8vw, 100px) 0, 100% 0, 100% 100%, clamp(55px, 8vw, 100px) 100%, 0 50%)',
+                padding: 'clamp(14px, 2vw, 28px) clamp(18px, 3vw, 40px) clamp(14px, 2vw, 28px) clamp(70px, 9.5vw, 130px)',
+                textAlign: 'right',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: isMobile ? 'flex-start' : 'flex-end',
+                alignItems: 'flex-end',
                 justifyContent: 'center',
                 gap: 2,
                 zIndex: 4,
               }}>
-                <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c1.title}</div>
-                {clubSchedule(c1) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>{clubSchedule(c1)}</div>}
+                <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: 'clamp(22px, 5.8vw, 76px)', lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c1.title}</div>
+                {clubSchedule(c1) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: 'clamp(13px, 2.8vw, 36px)', opacity: 0.9 }}>{clubSchedule(c1)}</div>}
               </div>
             )}
 
@@ -599,25 +595,25 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
                 background: c2.accent_color,
                 color: c2.accent_text_color,
                 width: '100%',
-                minHeight: isMobile ? 160 : 290,
-                marginTop: isMobile ? 110 : 0,
-                padding: isMobile ? '16px 18px 70px' : '30px 40px 60px',
+                minHeight: 'clamp(160px, 22vw, 290px)',
+                marginTop: 0,
+                padding: 'clamp(14px, 2.5vw, 30px) clamp(18px, 3vw, 40px) clamp(50px, 6vw, 60px)',
                 zIndex: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
                 gap: 2,
               }}>
-                <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: isMobile ? 'clamp(30px, 9vw, 44px)' : 76, lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c2.title}</div>
-                {clubSchedule(c2) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: isMobile ? 16 : 36, opacity: 0.9 }}>{clubSchedule(c2)}</div>}
+                <div style={{ fontFamily: '"neue-haas-grotesk-display", sans-serif', fontWeight: 700, fontSize: 'clamp(22px, 5.8vw, 76px)', lineHeight: 1, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>{c2.title}</div>
+                {clubSchedule(c2) && <div style={{ fontFamily: '"new-atten", sans-serif', fontWeight: 400, fontSize: 'clamp(13px, 2.8vw, 36px)', opacity: 0.9 }}>{clubSchedule(c2)}</div>}
                 {(c2tagline || c2taglineSub) && (
-                  <div style={{ position: 'absolute', bottom: 14, left: isMobile ? 18 : 36, fontSize: isMobile ? 15 : 24, lineHeight: 1.3, color: c2.accent_text_color }}>
+                  <div style={{ position: 'absolute', bottom: 14, left: 'clamp(18px, 3vw, 36px)', fontSize: 'clamp(13px, 2vw, 24px)', lineHeight: 1.3, color: c2.accent_text_color }}>
                     {c2tagline && <div>{c2tagline}</div>}
                     {c2taglineSub && <div>{c2taglineSub}</div>}
                   </div>
                 )}
                 <Link href={`/${locale}/clubs`} aria-label="Découvrir les clubs"
-                  style={{ position: 'absolute', bottom: 18, right: isMobile ? 18 : 36, width: isMobile ? 32 : 44, height: isMobile ? 32 : 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: c2.accent_text_color, textDecoration: 'none' }}>
+                  style={{ position: 'absolute', bottom: 18, right: 'clamp(18px, 3vw, 36px)', width: 'clamp(28px, 3.5vw, 44px)', height: 'clamp(28px, 3.5vw, 44px)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: c2.accent_text_color, textDecoration: 'none' }}>
                   <svg viewBox="0 0 58 58" fill="currentColor" style={{ width: '100%', height: '100%' }}>
                     <path d="M-8.15183e-05 32.25L43.6091 32.25L23.5782 52.2808L28.6666 57.3333L57.3333 28.6667L28.6666 -1.25306e-06L23.6141 5.0525L43.6091 25.0833L-8.12051e-05 25.0833L-8.15183e-05 32.25Z"/>
                   </svg>

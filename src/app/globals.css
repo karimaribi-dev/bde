@@ -671,7 +671,7 @@ html.dark .cart-drawer-bg { background: rgba(0,0,0,0.6) !important; }
   .club-detail-right { order: 2 !important; padding-top: 16px !important; }
   .club-taglines-desktop { display: none !important; }
   .club-taglines-mobile { display: flex !important; }
-  .club-detail-image-wrap { display: none !important; }
+  .club-detail-image-wrap { aspect-ratio: 3/2 !important; }
   .club-others-grid {
     display: flex !important;
     flex-wrap: nowrap !important;

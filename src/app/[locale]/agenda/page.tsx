@@ -42,7 +42,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
             fontWeight: 900,
-            fontSize: 224,
+            fontSize: 'clamp(72px, 15.5vw, 224px)',
             lineHeight: 0.86,
             letterSpacing: '-0.02em',
             textTransform: 'uppercase',

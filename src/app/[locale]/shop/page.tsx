@@ -47,7 +47,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
             fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
             fontWeight: 900,
-            fontSize: 224,
+            fontSize: 'clamp(72px, 15.5vw, 224px)',
             letterSpacing: '-0.02em',
             lineHeight: 1,
             color: 'var(--ink)',
