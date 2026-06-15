@@ -205,7 +205,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       <Marquee articles={allArticles} />
 
       {/* ── MAIN ── */}
-      <main className="home-main" style={{ padding: '0 40px' }}>
+      <main className="home-main" style={{ padding: '0 80px' }}>
 
       {/* ── Hero BDE ── */}
       <section style={{ padding: '24px 0 36px', position: 'relative' }}>
