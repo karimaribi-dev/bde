@@ -35,15 +35,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={`${jetbrainsMono.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
+        {/* Anti-flash dark mode — doit s'exécuter avant hydration */}
+        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem('bde-dark')==='1')document.documentElement.classList.add('dark')}catch(e){}` }} />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" />
       </head>
-      <Script id="dark-mode-init" strategy="beforeInteractive">{`try{if(localStorage.getItem('bde-dark')==='1')document.documentElement.classList.add('dark')}catch(e){}`}</Script>
-      <Script id="typekit-init" strategy="afterInteractive">{`(function(d){var config={kitId:'zof5bsa',scriptTimeout:3000,async:true},h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\\bwf-loading\\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)})(document);`}</Script>
       <body>
         <GtmLoader />
         {children}
         <SitePopup />
         <CookieConsent />
+        <Script id="typekit-init" strategy="afterInteractive">{`(function(d){var config={kitId:'zof5bsa',scriptTimeout:3000,async:true},h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\\bwf-loading\\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)})(document);`}</Script>
       </body>
     </html>
   );
