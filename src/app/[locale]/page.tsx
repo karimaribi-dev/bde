@@ -226,9 +226,9 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           }}>
             <span style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               <span>MAKE</span>
-              <span aria-hidden="true" style={{ display: 'block', height: 'clamp(60px, 9vw, 130px)' }}>
+              <span aria-hidden="true" style={{ display: 'block', height: '0.86em' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: 'clamp(60px, 9vw, 130px)', height: 'clamp(60px, 9vw, 130px)', display: 'block' }} />
+                <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '0.86em', height: '0.86em', display: 'block' }} />
               </span>
               <span>ALIVE</span>
             </span>
