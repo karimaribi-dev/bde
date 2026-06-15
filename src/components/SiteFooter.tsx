@@ -7,13 +7,12 @@ import { createClient } from '@/lib/supabase/client'
 import { Category } from '@/lib/types'
 
 const NAV_COL1 = [
-  { label: 'AGENDA & EVENTS', href: '/agenda' },
-  { label: 'CLUB',           href: '/clubs' },
-  { label: 'SHOP',           href: '/shop' },
+  { label: 'AGENDA & EVENTS', labelEn: 'AGENDA & EVENTS', href: '/agenda' },
+  { label: 'NOS CLUBS',       labelEn: 'OUR CLUBS',       href: '/clubs' },
+  { label: 'SHOP',            labelEn: 'SHOP',             href: '/shop' },
 ]
 const NAV_COL2 = [
-  { label: 'COUP DE CŒUR', href: '/coup-de-coeur' },
-  { label: 'À PROPOS',     href: '/a-propos' },
+  { label: 'À PROPOS', labelEn: 'ABOUT', href: '/a-propos' },
 ]
 
 function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
@@ -150,10 +149,10 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
     <div style={{ padding: isMobile ? '18px 20px' : '28px 36px', display: 'flex', flexDirection: 'column', gap: '6px 24px' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 24px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {NAV_COL1.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
+          {NAV_COL1.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{isEn ? l.labelEn : l.label}</Link>)}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {NAV_COL2.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
+          {NAV_COL2.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{isEn ? l.labelEn : l.label}</Link>)}
         </div>
       </div>
       {extraPages.length > 0 && (
@@ -260,10 +259,10 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', marginBottom: extraPages.length ? 14 : 28 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {NAV_COL1.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
+              {NAV_COL1.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{isEn ? l.labelEn : l.label}</Link>)}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {NAV_COL2.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{l.label}</Link>)}
+              {NAV_COL2.map(l => <Link key={l.href} href={`/${locale}${l.href}`} style={navLinkStyle}>{isEn ? l.labelEn : l.label}</Link>)}
             </div>
           </div>
           {extraPages.length > 0 && (

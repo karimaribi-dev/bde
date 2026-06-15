@@ -32,11 +32,10 @@ interface SearchResult {
 
 /* Nav links — hardcodés, pas liés aux catégories */
 const NAV_ITEMS = [
-  { key: 'agenda',       label: 'AGENDA',        href: (l: string) => `/${l}/agenda` },
-  { key: 'clubs',        label: 'NOS CLUBS',      href: (l: string) => `/${l}/clubs` },
-  { key: 'shop',         label: 'SHOP',           href: (l: string) => `/${l}/shop` },
-  // { key: 'coup',      label: 'COUP DE CŒUR',   href: (l: string) => `/${l}/coup-de-coeur` },
-  { key: 'propos',       label: 'À PROPOS',       href: (l: string) => `/${l}/a-propos` },
+  { key: 'agenda', label: 'AGENDA & EVENTS', labelEn: 'AGENDA & EVENTS', href: (l: string) => `/${l}/agenda` },
+  { key: 'clubs',  label: 'NOS CLUBS',       labelEn: 'OUR CLUBS',       href: (l: string) => `/${l}/clubs` },
+  { key: 'shop',   label: 'SHOP',            labelEn: 'SHOP',            href: (l: string) => `/${l}/shop` },
+  { key: 'propos', label: 'À PROPOS',        labelEn: 'ABOUT',           href: (l: string) => `/${l}/a-propos` },
 ]
 
 export default function NavbarClient({ categories: _cats, activeSlug, withSearch = false, locale = 'fr', labels }: Props) {
@@ -119,7 +118,7 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
               href={item.href(locale)}
               className={activeSlug === item.key ? 'is-active' : ''}
             >
-              {item.label}
+              {locale === 'en' ? item.labelEn : item.label}
             </Link>
           ))}
         </nav>
@@ -219,7 +218,7 @@ export default function NavbarClient({ categories: _cats, activeSlug, withSearch
             {NAV_ITEMS.map(item => (
               <Link key={item.key} href={item.href(locale)} onClick={closePanel}
                 className={activeSlug === item.key ? 'active' : ''}>
-                {item.label}
+                {locale === 'en' ? item.labelEn : item.label}
               </Link>
             ))}
             {/* Panier */}

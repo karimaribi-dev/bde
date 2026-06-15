@@ -66,7 +66,7 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </span>
-              <span>&amp; EVENT</span>
+              <span>&amp; EVENTS</span>
             </span>
           </h1>
         </section>
