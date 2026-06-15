@@ -214,7 +214,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         {!isMobile && (
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(72px, 12vw, 160px)',
+            fontSize: 224,
             fontWeight: 800,
             lineHeight: 0.86,
             letterSpacing: '-0.02em',
@@ -250,7 +250,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         {isMobile && (
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(60px, 17vw, 80px)',
+            fontSize: 224,
             fontWeight: 800,
             lineHeight: 0.88,
             letterSpacing: '-0.02em',

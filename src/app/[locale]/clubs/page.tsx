@@ -33,7 +33,7 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
           <h1 style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 900,
-            fontSize: 'clamp(60px, 11vw, 170px)',
+            fontSize: 224,
             lineHeight: 0.9,
             letterSpacing: '-0.02em',
             textTransform: 'uppercase',

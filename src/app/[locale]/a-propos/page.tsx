@@ -59,7 +59,7 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
           <h1 style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 900,
-            fontSize: 'clamp(56px, 10vw, 140px)',
+            fontSize: 224,
             lineHeight: 0.9,
             letterSpacing: '-0.02em',
             textTransform: 'uppercase',
