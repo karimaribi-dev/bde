@@ -14,7 +14,7 @@ export default function CartBubble() {
         position: 'fixed',
         bottom: 28, right: 28,
         zIndex: 48,
-        background: 'var(--ink)',
+        background: '#262626',
         color: '#fff',
         border: 'none',
         borderRadius: 999,
