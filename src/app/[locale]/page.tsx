@@ -188,7 +188,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
 
   /* Couleurs fixes par club (matchées par slug) */
   const CLUB_COLORS: Record<string, { bg: string; text: string }> = {
-    typo:  { bg: '#FF5500', text: '#FFFFFA' },
+    typo:  { bg: '#FF5500', text: '#262626' },
     photo: { bg: '#5FA0FB', text: '#262626' },
     print: { bg: '#FF88E8', text: '#262626' },
   }

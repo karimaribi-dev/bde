@@ -57,7 +57,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
 
   const [isMobile, setIsMobile] = useState(false)
   const [dark, setDark] = useState(false)
-  const [extraPages, setExtraPages] = useState<{ title: string; slug: string }[]>([])
+  const [extraPages, setExtraPages] = useState<{ title: string; title_en: string | null; slug: string }[]>([])
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 720)
@@ -68,7 +68,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
 
   useEffect(() => {
     const supabase = createClient()
-    supabase.from('pages').select('title, slug').eq('is_published', true).order('title')
+    supabase.from('pages').select('title, title_en, slug').eq('is_published', true).order('title')
       .then(({ data }) => { if (data) setExtraPages(data) })
   }, [])
 
@@ -169,7 +169,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
       {extraPages.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '4px 24px', marginTop: 10, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
           {extraPages.map(p => (
-            <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{p.title.toUpperCase()}</Link>
+            <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{(isEn && p.title_en ? p.title_en : p.title).toUpperCase()}</Link>
           ))}
         </div>
       )}
@@ -279,7 +279,7 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
           {extraPages.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '4px 24px', marginBottom: 28, paddingTop: 10, borderTop: '1px dashed rgba(17,17,17,0.2)' }}>
               {extraPages.map(p => (
-                <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{p.title.toUpperCase()}</Link>
+                <Link key={p.slug} href={`/${locale}/p/${p.slug}`} style={navLinkStyle}>{(isEn && p.title_en ? p.title_en : p.title).toUpperCase()}</Link>
               ))}
             </div>
           )}
