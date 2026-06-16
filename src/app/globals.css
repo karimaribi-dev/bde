@@ -564,6 +564,11 @@ html.dark .cart-drawer-inner button { color: #262626 !important; }
 /* Footer entoure.svg (MAKE THE CAMPUS ALIVE) → blanc en dark mode */
 html.dark .footer-entoure { filter: invert(1); }
 
+/* Footer crédits (Designé par / Built by) → blanc en dark mode */
+html.dark .footer-credit { color: #FFFFFA !important; border-color: #FFFFFA !important; }
+html.dark .footer-credit a { color: #FFFFFA !important; }
+html.dark .footer-credit svg { stroke: #FFFFFA !important; }
+
 /* ── Responsive ── */
 @media (max-width: 1180px) {
   .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
