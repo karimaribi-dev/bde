@@ -28,14 +28,7 @@ export default async function AdminDashboard() {
 
   return (
     <>
-      <header className="admin-header">
-        <h1>Hi, {username} !</h1>
-        <Link href="/admin/articles/new" className="admin-btn-primary">
-          <i className="fa-solid fa-plus"></i> Nouvel article
-        </Link>
-      </header>
-
-      {/* ── Notification demandes d'adhésion ── */}
+      {/* ── Notifications en haut ── */}
       {unread > 0 && (
         <Link href="/admin/club-requests" style={{ textDecoration: 'none', display: 'block', marginBottom: 20 }}>
           <div style={{
@@ -148,8 +141,16 @@ export default async function AdminDashboard() {
         </Link>
       )}
 
+      {/* ── Header ── */}
+      <header className="admin-header">
+        <h1>Hi, {username} !</h1>
+        <Link href="/admin/articles/new" className="admin-btn-primary admin-btn-new-article">
+          <i className="fa-solid fa-plus"></i> Nouvel article
+        </Link>
+      </header>
+
       {/* ── Raccourcis BDE ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14, marginBottom: 24 }}>
+      <div className="admin-shortcuts-grid">
         <Link href="/admin/clubs" style={{ textDecoration: 'none' }}>
           <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 36, height: 36, background: '#FFB3F0', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, flexShrink: 0 }}>
