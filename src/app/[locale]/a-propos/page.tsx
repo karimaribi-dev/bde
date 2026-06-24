@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import GalleryForPage from '@/components/GalleryForPage'
 import AProposProposerClient from '@/components/AProposProposerClient'
 import { Category } from '@/lib/types'
 
@@ -155,6 +156,8 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
           </div>
         </section>
 
+        <GalleryForPage page="a-propos" position="after_team" locale={locale} />
+
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0 0 0' }} />
 
         {/* ══════════════ MANIFESTO ══════════════ */}
@@ -212,6 +215,8 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
 
           </div>
         </section>
+
+        <GalleryForPage page="a-propos" position="after_manifesto" locale={locale} />
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0 0 0' }} />
 
@@ -277,6 +282,8 @@ export default async function AProposPage({ params }: { params: Promise<{ locale
             </div>
           </section>
         )}
+
+        <GalleryForPage page="a-propos" position="after_partners" locale={locale} />
 
       </main>
 

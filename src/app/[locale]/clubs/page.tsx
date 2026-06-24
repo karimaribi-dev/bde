@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import GalleryForPage from '@/components/GalleryForPage'
 import ClubsCarouselClient from '@/components/ClubsCarouselClient'
 import AgendaProposerForm from '@/components/AgendaProposerForm'
 import Link from 'next/link'
@@ -27,6 +28,8 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
       <NavbarClient categories={cats} locale={locale} activeSlug="clubs" />
 
       <main className="clubs-main" style={{ padding: '0 40px' }}>
+
+        <GalleryForPage page="clubs" position="top" locale={locale} />
 
         {/* ═══════════ HERO ═══════════ */}
         <section style={{ padding: '18px 0 50px' }}>
@@ -156,6 +159,8 @@ export default async function ClubsPage({ params }: { params: Promise<{ locale: 
             </Link>
           </div>
         </section>
+
+        <GalleryForPage page="clubs" position="bottom" locale={locale} />
 
       </main>
 

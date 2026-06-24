@@ -9,6 +9,7 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import PhotoGallery from '@/components/PhotoGallery'
 import AdSectionClient from '@/components/AdSectionClient'
 import SubscribeForm from '@/components/SubscribeForm'
 import { use } from 'react'
@@ -21,6 +22,28 @@ function formatDate(dateStr: string | null) {
 
 function PhotoDiv({ className, style, children }: { className?: string; style?: React.CSSProperties; children?: React.ReactNode }) {
   return <div className={`photo ${className ?? ''}`} style={style}>{children}</div>
+}
+
+function GallerySlot({ section, isEn, isMobile, locale }: {
+  section: { id: string; title: string | null; drive_folder_id: string | null; position: string }
+  isEn: boolean; isMobile: boolean; locale: string
+}) {
+  if (!section.drive_folder_id) return null
+  return (
+    <section style={{ padding: isMobile ? '32px 0 40px' : '48px 0 60px', borderTop: '1px solid var(--border)' }}>
+      <div style={{ padding: '0 40px', marginBottom: 24 }}>
+        <h2 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: isMobile ? 'clamp(28px, 8vw, 44px)' : 'clamp(36px, 4vw, 64px)',
+          fontWeight: 900, fontStyle: 'italic', textTransform: 'uppercase',
+          margin: 0, lineHeight: 1,
+        }}>
+          {section.title ?? (isEn ? 'Photo gallery' : 'Galerie photos')}
+        </h2>
+      </div>
+      <PhotoGallery folderId={section.drive_folder_id} locale={locale} />
+    </section>
+  )
 }
 
 function SiteHeader({ categories, locale, labels }: { categories: Category[], locale: string, labels: { home: string; contact: string; search_placeholder: string; no_results: string; tagline: string } }) {
@@ -83,6 +106,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
   const [dbEvents, setDbEvents] = useState<Event[]>([])
   const [homeClubs, setHomeClubs] = useState<Club[]>([])
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(FALLBACK_MEMBERS)
+  const [gallerySections, setGallerySections] = useState<{ id: string; title: string | null; drive_folder_id: string | null; position: string }[]>([])
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -133,9 +157,12 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           .order('event_date', { ascending: true }),
         supabase.from('team_members').select('*').order('sort_order', { ascending: true }),
       ])
-      const { data: clubsData } = await supabase
-        .from('clubs').select('*').eq('is_published', true)
-        .order('sort_order', { ascending: true }).limit(3)
+      const [{ data: clubsData }, { data: galleryData }] = await Promise.all([
+        supabase.from('clubs').select('*').eq('is_published', true)
+          .order('sort_order', { ascending: true }).limit(3),
+        supabase.from('gallery_sections').select('id, title, drive_folder_id, position')
+          .contains('page', ['home']).eq('is_visible', true).order('sort_order', { ascending: true }),
+      ])
       const all = (arts ?? []) as ArticleWithCat[]
       setFeatured(all[0] ?? null)
       setLatest(all.slice(1, 6))
@@ -148,6 +175,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       setDbEvents((evts ?? []) as Event[])
       if (team && team.length > 0) setTeamMembers(team as TeamMember[])
       setHomeClubs((clubsData ?? []) as Club[])
+      setGallerySections(galleryData ?? [])
       setInitialized(true)
     }
     load()
@@ -217,6 +245,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
 
       {/* ── MAIN ── */}
       <main className="home-main" style={{ padding: '0 clamp(16px, 5.5vw, 80px)' }}>
+
+      {/* Gallery slot: top */}
+      {gallerySections.filter(s => s.position === 'top' && s.drive_folder_id).map(s => (
+        <GallerySlot key={s.id} section={s} isEn={isEn} isMobile={isMobile} locale={locale} />
+      ))}
 
       {/* ── Hero BDE ── */}
       <section style={{ padding: '24px 0 36px', position: 'relative' }}>
@@ -444,6 +477,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         )}
       </div>
 
+      {/* Gallery slot: after_events */}
+      {gallerySections.filter(s => s.position === 'after_events').map(s => (
+        <GallerySlot key={s.id} section={s} isEn={isEn} isMobile={isMobile} locale={locale} />
+      ))}
+
       {/* section-divider — CDC masquée temporairement */}
       {/* ── VOTE POUR TON COUP DE CŒUR DU MOIS — masqué, à produire plus tard ── */}
       {false && <section style={{ padding: '6px 0 12px' }}>
@@ -657,6 +695,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
         </div>
       </section>
 
+      {/* Gallery slot: after_clubs */}
+      {gallerySections.filter(s => s.position === 'after_clubs').map(s => (
+        <GallerySlot key={s.id} section={s} isEn={isEn} isMobile={isMobile} locale={locale} />
+      ))}
+
       {/* section-divider */}
       <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: isMobile ? '40px 0' : '60px 0' }} />
 
@@ -722,6 +765,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           </div>
         </section>
       )}
+
+      {/* Gallery slot: after_shop */}
+      {gallerySections.filter(s => s.position === 'after_shop').map(s => (
+        <GallerySlot key={s.id} section={s} isEn={isEn} isMobile={isMobile} locale={locale} />
+      ))}
 
       {/* section-divider */}
       <hr style={{ border: 'none', borderTop: '1px solid #e6e6e6', margin: isMobile ? '40px 0' : '60px 0' }} />
@@ -802,6 +850,11 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       </section>
 
       </main>{/* fin main padding: 0 40px */}
+
+      {/* Gallery slot: after_team */}
+      {gallerySections.filter(s => s.position === 'after_team' || !s.position || s.position === 'bottom').map(s => (
+        <GallerySlot key={s.id} section={s} isEn={isEn} isMobile={isMobile} locale={locale} />
+      ))}
 
       <SiteFooter categories={categories} />
     </>

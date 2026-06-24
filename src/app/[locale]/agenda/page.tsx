@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import GalleryForPage from '@/components/GalleryForPage'
 import AgendaCalendarClient from '@/components/AgendaCalendarClient'
 import AgendaProposerForm from '@/components/AgendaProposerForm'
 import { Event, Category } from '@/lib/types'
@@ -35,6 +36,8 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
       <NavbarClient categories={cats} locale={locale} activeSlug="agenda" />
 
       <main className="agenda-main" style={{ padding: '0 40px' }}>
+
+        <GalleryForPage page="agenda" position="top" locale={locale} />
 
         {/* ═══════════ HERO ═══════════ */}
         <section style={{ padding: '30px 0 14px' }}>
@@ -306,6 +309,8 @@ export default async function AgendaPage({ params }: { params: Promise<{ locale:
             </Link>
           </div>
         </section>
+
+        <GalleryForPage page="agenda" position="bottom" locale={locale} />
 
       </main>
 

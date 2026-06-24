@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import NavbarClient from '@/components/NavbarClient'
 import SiteFooter from '@/components/SiteFooter'
+import GalleryForPage from '@/components/GalleryForPage'
 import AddToCartButton from '@/components/AddToCartButton'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -33,6 +34,8 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
       <NavbarClient categories={cats} locale={locale} activeSlug="shop" />
 
       <main className="shop-main" style={{ padding: '0 40px' }}>
+
+        <GalleryForPage page="shop" position="top" locale={locale} />
 
         {/* ── Breadcrumb ── */}
         <nav style={{ padding: '14px 0 0', fontSize: 11, fontFamily: 'var(--font-display)', fontStyle: 'italic', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--ink)', opacity: 0.6 }}>
@@ -232,6 +235,8 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: s
           z-index: 5;
         }
       `}</style>
+
+        <GalleryForPage page="shop" position="bottom" locale={locale} />
 
       <SiteFooter categories={cats} />
     </>
