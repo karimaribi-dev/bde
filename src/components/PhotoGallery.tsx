@@ -14,7 +14,13 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
   const [photos, setPhotos]     = useState<Photo[]>([])
   const [loading, setLoading]   = useState(true)
   const [lightbox, setLightbox] = useState<number | null>(null)
-  const sliderRef               = useRef<HTMLDivElement>(null)
+
+  const trackRef  = useRef<HTMLDivElement>(null)
+  const pausedRef = useRef(false)
+  const offsetRef = useRef(0)
+  const halfRef   = useRef(0)
+  const lastRef   = useRef(0)
+  const rafRef    = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     if (!folderId) return
@@ -25,7 +31,41 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
       .catch(() => setLoading(false))
   }, [folderId])
 
-  const openLightbox  = (idx: number) => setLightbox(idx)
+  // Auto-scroll infini
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track || photos.length === 0) return
+
+    const measure = () => { halfRef.current = track.scrollWidth / 3 }
+    const timer = setTimeout(() => {
+      measure()
+      offsetRef.current = halfRef.current
+      track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`
+    }, 60)
+    window.addEventListener('resize', measure)
+    lastRef.current = performance.now()
+
+    function tick(now: number) {
+      const dt = (now - lastRef.current) / 1000
+      lastRef.current = now
+      if (!pausedRef.current && halfRef.current > 0) {
+        offsetRef.current += 40 * dt
+        if (offsetRef.current >= halfRef.current * 2) offsetRef.current -= halfRef.current
+        if (offsetRef.current < 0) offsetRef.current += halfRef.current
+        if (track) track.style.transform = `translate3d(${-offsetRef.current}px,0,0)`
+      }
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', measure)
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
+  }, [photos])
+
+  const openLightbox  = (idx: number) => setLightbox(idx % photos.length)
   const closeLightbox = useCallback(() => setLightbox(null), [])
   const prev = useCallback(() => setLightbox(i => i !== null ? (i - 1 + photos.length) % photos.length : null), [photos.length])
   const next = useCallback(() => setLightbox(i => i !== null ? (i + 1) % photos.length : null), [photos.length])
@@ -41,8 +81,7 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
     return () => window.removeEventListener('keydown', handler)
   }, [lightbox, closeLightbox, prev, next])
 
-  const driveThumb = (photo: Photo) => `/api/gallery/image/${photo.id}`
-  const driveFull  = (photo: Photo) => `/api/gallery/image/${photo.id}`
+  const driveImg = (photo: Photo) => `/api/gallery/image/${photo.id}`
 
   if (loading) {
     return (
@@ -54,29 +93,31 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
 
   if (photos.length === 0) return null
 
+  // Triple les photos pour le défilement infini
+  const repeated = [...photos, ...photos, ...photos]
+
   return (
-    <div style={{ position: 'relative' }}>
-      {/* Slider */}
+    <div
+      style={{ position: 'relative', overflow: 'hidden' }}
+      onMouseEnter={() => { pausedRef.current = true }}
+      onMouseLeave={() => { pausedRef.current = false }}
+    >
+      {/* Track */}
       <div
-        ref={sliderRef}
+        ref={trackRef}
         style={{
           display: 'flex',
           gap: 12,
-          overflowX: 'auto',
-          scrollSnapType: 'x mandatory',
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'none',
-          padding: '0 40px 12px',
-          cursor: 'grab',
+          willChange: 'transform',
+          padding: '0 0 12px',
+          width: 'max-content',
         }}
-        className="gallery-slider"
       >
-        {photos.map((photo, idx) => (
+        {repeated.map((photo, idx) => (
           <div
-            key={photo.id}
+            key={`${photo.id}-${idx}`}
             onClick={() => openLightbox(idx)}
             style={{
-              scrollSnapAlign: 'start',
               flex: '0 0 auto',
               width: 'clamp(200px, 28vw, 380px)',
               aspectRatio: '4/3',
@@ -90,14 +131,13 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={driveThumb(photo)}
+              src={driveImg(photo)}
               alt={photo.name}
               loading="lazy"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           </div>
         ))}
-        <div style={{ flex: '0 0 28px' }} />
       </div>
 
       {/* Counter */}
@@ -115,19 +155,16 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
-          {/* Close */}
           <button
             onClick={closeLightbox}
             aria-label="Fermer"
             style={{
               position: 'absolute', top: 20, right: 24,
               background: 'none', border: 'none', cursor: 'pointer',
-              color: '#fff', fontSize: 32, lineHeight: 1, padding: 8,
-              zIndex: 1,
+              color: '#fff', fontSize: 32, lineHeight: 1, padding: 8, zIndex: 1,
             }}
           >✕</button>
 
-          {/* Prev */}
           <button
             onClick={(e) => { e.stopPropagation(); prev() }}
             aria-label="Photo précédente"
@@ -135,16 +172,14 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
               position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
               background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.3)',
               borderRadius: '50%', width: 48, height: 48, cursor: 'pointer',
-              color: '#fff', fontSize: 20, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 1,
+              color: '#fff', fontSize: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1,
             }}
           >←</button>
 
-          {/* Image */}
           <div onClick={e => e.stopPropagation()} style={{ maxWidth: '88vw', maxHeight: '88vh', position: 'relative' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={driveFull(photos[lightbox])}
+              src={driveImg(photos[lightbox])}
               alt={photos[lightbox].name}
               style={{ maxWidth: '88vw', maxHeight: '88vh', objectFit: 'contain', display: 'block', borderRadius: 4 }}
             />
@@ -153,7 +188,6 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
             </div>
           </div>
 
-          {/* Next */}
           <button
             onClick={(e) => { e.stopPropagation(); next() }}
             aria-label="Photo suivante"
@@ -161,15 +195,13 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
               position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
               background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.3)',
               borderRadius: '50%', width: 48, height: 48, cursor: 'pointer',
-              color: '#fff', fontSize: 20, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 1,
+              color: '#fff', fontSize: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1,
             }}
           >→</button>
         </div>
       )}
 
       <style>{`
-        .gallery-slider::-webkit-scrollbar { display: none; }
         .gallery-thumb:hover { transform: scale(1.02); }
       `}</style>
     </div>
