@@ -55,7 +55,7 @@ export default async function AdminDashboard() {
                 <div style={{ fontWeight: 700, fontSize: 15, color: '#262626' }}>
                   {unread} nouvelle{unread > 1 ? 's' : ''} demande{unread > 1 ? 's' : ''} d&apos;adhésion
                 </div>
-                <div style={{ fontSize: 13, color: '#92400e', marginTop: 2 }}>
+                <div className="admin-notif-subtitle" style={{ fontSize: 13, color: '#92400e', marginTop: 2 }}>
                   Des étudiants souhaitent rejoindre un club — cliquez pour voir
                 </div>
               </div>
@@ -97,7 +97,7 @@ export default async function AdminDashboard() {
                 <div style={{ fontWeight: 700, fontSize: 15, color: '#262626' }}>
                   {unreadSugg} nouvelle{unreadSugg > 1 ? 's' : ''} suggestion{unreadSugg > 1 ? 's' : ''}
                 </div>
-                <div style={{ fontSize: 13, color: '#1d4ed8', marginTop: 2 }}>
+                <div className="admin-notif-subtitle" style={{ fontSize: 13, color: '#1d4ed8', marginTop: 2 }}>
                   Des idées ont été proposées — cliquez pour voir
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default async function AdminDashboard() {
                 <div style={{ fontWeight: 700, fontSize: 15, color: '#262626' }}>
                   {pending} commande{pending > 1 ? 's' : ''} en attente
                 </div>
-                <div style={{ fontSize: 13, color: '#166534', marginTop: 2 }}>
+                <div className="admin-notif-subtitle" style={{ fontSize: 13, color: '#166534', marginTop: 2 }}>
                   Des élèves ont passé commande — cliquez pour voir
                 </div>
               </div>
@@ -140,14 +140,6 @@ export default async function AdminDashboard() {
           </div>
         </Link>
       )}
-
-      {/* ── Header ── */}
-      <header className="admin-header">
-        <h1>Hi, {username} !</h1>
-        <Link href="/admin/articles/new" className="admin-btn-primary admin-btn-new-article">
-          <i className="fa-solid fa-plus"></i> Nouvel article
-        </Link>
-      </header>
 
       {/* ── Raccourcis BDE ── */}
       <div className="admin-shortcuts-grid">
