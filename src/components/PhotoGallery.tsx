@@ -179,28 +179,6 @@ export default function PhotoGallery({ folderId, title, locale = 'fr', allowDown
             }}
           >✕</button>
 
-          {allowDownload && lightbox !== null && (
-            <a
-              href={`/api/gallery/image/${photos[lightbox].id}?download=1`}
-              download
-              onClick={e => e.stopPropagation()}
-              aria-label="Télécharger"
-              style={{
-                position: 'absolute', top: 20, right: 72,
-                background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.3)',
-                borderRadius: 8, padding: '8px 12px', cursor: 'pointer',
-                color: '#fff', fontSize: 14, fontWeight: 600,
-                display: 'flex', alignItems: 'center', gap: 7,
-                textDecoration: 'none', zIndex: 1,
-                transition: 'background 0.15s',
-              }}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3v13M7 11l5 5 5-5"/><rect x="3" y="18" width="18" height="3" rx="1"/>
-              </svg>
-              {locale === 'en' ? 'Download' : 'Télécharger'}
-            </a>
-          )}
 
           <button
             onClick={(e) => { e.stopPropagation(); prev() }}
@@ -213,7 +191,7 @@ export default function PhotoGallery({ folderId, title, locale = 'fr', allowDown
             }}
           >←</button>
 
-          <div onClick={e => e.stopPropagation()} style={{ maxWidth: '88vw', maxHeight: '88vh', position: 'relative' }}>
+          <div onClick={e => e.stopPropagation()} style={{ maxWidth: '88vw', maxHeight: '88vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={driveImg(photos[lightbox], true)}
@@ -223,6 +201,28 @@ export default function PhotoGallery({ folderId, title, locale = 'fr', allowDown
             <div style={{ textAlign: 'center', marginTop: 12, color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.12em' }}>
               {lightbox + 1} / {photos.length}
             </div>
+            {allowDownload && lightbox !== null && (
+              <a
+                href={`/api/gallery/image/${photos[lightbox].id}?download=1`}
+                download
+                onClick={e => e.stopPropagation()}
+                aria-label="Télécharger"
+                style={{
+                  marginTop: 12,
+                  background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.3)',
+                  borderRadius: 8, padding: '8px 12px', cursor: 'pointer',
+                  color: '#fff', fontSize: 14, fontWeight: 600,
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  textDecoration: 'none',
+                  transition: 'background 0.15s',
+                }}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3v13M7 11l5 5 5-5"/><rect x="3" y="18" width="18" height="3" rx="1"/>
+                </svg>
+                {locale === 'en' ? 'Download' : 'Télécharger'}
+              </a>
+            )}
           </div>
 
           <button
