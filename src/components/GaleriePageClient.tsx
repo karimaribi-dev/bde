@@ -89,8 +89,13 @@ export default function GaleriePageClient({ sections, locale }: Props) {
           lineHeight: 0.9,
           margin: 0,
           color: 'var(--ink)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 'clamp(12px, 1.5vw, 24px)',
         }}>
           {locale === 'en' ? 'Gallery' : 'Galerie'}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/smiley-handdrawn.svg" alt="" style={{ width: 'clamp(44px, 7vw, 96px)', height: 'clamp(44px, 7vw, 96px)', objectFit: 'contain', display: 'block' }} />
         </h1>
       </div>
 
