@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Pas de force-dynamic : permet au CDN Vercel de mettre en cache la réponse
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   req: NextRequest,
