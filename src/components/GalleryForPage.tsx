@@ -11,7 +11,7 @@ export default async function GalleryForPage({ page, position, locale = 'fr' }: 
   const supabase = await createClient()
   const { data: sections } = await supabase
     .from('gallery_sections')
-    .select('id, title, drive_folder_id, allow_download')
+    .select('id, title, title_en, drive_folder_id, allow_download')
     .contains('page', [page])
     .eq('position', position)
     .eq('is_visible', true)
@@ -38,7 +38,7 @@ export default async function GalleryForPage({ page, position, locale = 'fr' }: 
                 margin: 0,
                 lineHeight: 1,
               }}>
-                {section.title ?? (locale === 'en' ? 'Photo gallery' : 'Galerie photos')}
+                {(locale === 'en' ? (section.title_en || section.title) : section.title) ?? (locale === 'en' ? 'Photo gallery' : 'Galerie photos')}
               </h2>
             </div>
             <PhotoGallery

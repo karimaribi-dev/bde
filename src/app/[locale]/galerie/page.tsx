@@ -13,7 +13,7 @@ export default async function GaleriePage({ params }: { params: Promise<{ locale
   const [{ data: sections }, { data: categories }] = await Promise.all([
     supabase
       .from('gallery_sections')
-      .select('id, title, drive_folder_id, allow_download')
+      .select('id, title, title_en, drive_folder_id, allow_download')
       .eq('is_visible', true)
       .not('drive_folder_id', 'is', null)
       .order('sort_order', { ascending: true }),

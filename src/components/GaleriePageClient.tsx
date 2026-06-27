@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 
-interface Section { id: string; title: string | null; drive_folder_id: string; allow_download?: boolean }
+interface Section { id: string; title: string | null; title_en?: string | null; drive_folder_id: string; allow_download?: boolean }
 interface Photo   { id: string; name: string; thumbUrl: string; fullUrl: string; sectionId: string }
 
 interface Props { sections: Section[]; locale: string }
@@ -103,7 +103,7 @@ export default function GaleriePageClient({ sections, locale }: Props) {
       {sections.map((section) => {
         const photos = photosBySection[section.id] ?? []
         if (photos.length === 0) return null
-        const sectionTitle = section.title ?? (locale === 'en' ? 'Photos' : 'Photos')
+        const sectionTitle = (locale === 'en' ? (section.title_en || section.title) : section.title) ?? 'Photos'
         const startIdx = sectionOffset[section.id]
 
         return (

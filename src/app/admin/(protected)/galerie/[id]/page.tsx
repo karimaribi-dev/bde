@@ -21,6 +21,7 @@ export default function GalerieEditPage() {
   const isNew = id === 'new'
 
   const [title, setTitle]               = useState('')
+  const [titleEn, setTitleEn]           = useState('')
   const [pages, setPages]               = useState<string[]>(['home'])
   const [position, setPosition]         = useState('bottom')
   const [isVisible, setIsVisible]       = useState(false)
@@ -46,6 +47,7 @@ export default function GalerieEditPage() {
         .single()
       if (data) {
         setTitle(data.title ?? '')
+        setTitleEn(data.title_en ?? '')
         // page can be text[] or legacy text
         const p = data.page
         setPages(Array.isArray(p) ? p : (p ? [p] : ['home']))
@@ -96,6 +98,7 @@ export default function GalerieEditPage() {
     const folderId = folderUrl.trim() ? extractFolderId(folderUrl) : null
     const payload = {
       title: title || 'Galerie photos',
+      title_en: titleEn || null,
       page: pages,
       position,
       is_visible: isVisible,
@@ -284,11 +287,20 @@ export default function GalerieEditPage() {
         {/* Title + sort */}
         <div style={{ background: '#fff', borderRadius: 10, padding: '18px 22px', border: '1px solid #eee', display: 'flex', gap: 12 }}>
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: 600, fontSize: 14, marginBottom: 8 }}>Titre</label>
+            <label style={{ display: 'block', fontWeight: 600, fontSize: 14, marginBottom: 8 }}>Titre (FR)</label>
             <input
               type="text" value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="Galerie photos"
+              style={{ width: '100%', padding: '9px 12px', borderRadius: 7, border: '1.5px solid #e0e0e0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label style={{ display: 'block', fontWeight: 600, fontSize: 14, marginBottom: 8 }}>Titre (EN)</label>
+            <input
+              type="text" value={titleEn}
+              onChange={e => setTitleEn(e.target.value)}
+              placeholder="Photo gallery"
               style={{ width: '100%', padding: '9px 12px', borderRadius: 7, border: '1.5px solid #e0e0e0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
             />
           </div>
