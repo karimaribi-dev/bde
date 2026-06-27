@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 
 interface Section { id: string; title: string | null; drive_folder_id: string }
-interface Photo   { id: string; name: string; sectionId: string }
+interface Photo   { id: string; name: string; thumbUrl: string; fullUrl: string; sectionId: string }
 
 interface Props { sections: Section[]; locale: string }
 
@@ -18,8 +18,8 @@ export default function GaleriePageClient({ sections, locale }: Props) {
       sections.map(async (s) => {
         const res = await fetch(`/api/gallery/photos?folderId=${s.drive_folder_id}`)
         const data = await res.json()
-        const photos: Photo[] = (data.photos ?? []).map((p: { id: string; name: string }) => ({
-          id: p.id, name: p.name, sectionId: s.id,
+        const photos: Photo[] = (data.photos ?? []).map((p: { id: string; name: string; thumbUrl: string; fullUrl: string }) => ({
+          id: p.id, name: p.name, thumbUrl: p.thumbUrl, fullUrl: p.fullUrl, sectionId: s.id,
         }))
         return { id: s.id, photos }
       })
@@ -130,7 +130,7 @@ export default function GaleriePageClient({ sections, locale }: Props) {
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={`/api/gallery/image/${photo.id}`}
+                    src={photo.thumbUrl}
                     alt={photo.name}
                     loading="lazy"
                   />
@@ -172,7 +172,7 @@ export default function GaleriePageClient({ sections, locale }: Props) {
           <div onClick={e => e.stopPropagation()} style={{ maxWidth: '90vw', maxHeight: '90vh' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`/api/gallery/image/${currentPhoto.id}`}
+              src={currentPhoto.fullUrl}
               alt={currentPhoto.name}
               style={{ maxWidth: '90vw', maxHeight: '86vh', objectFit: 'contain', display: 'block', borderRadius: 2 }}
             />

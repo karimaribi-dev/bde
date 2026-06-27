@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 
-interface Photo { id: string; name: string; thumbnailLink: string | null }
+interface Photo { id: string; name: string; thumbUrl: string; fullUrl: string }
 
 interface Props {
   folderId: string
@@ -81,7 +81,7 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
     return () => window.removeEventListener('keydown', handler)
   }, [lightbox, closeLightbox, prev, next])
 
-  const driveImg = (photo: Photo) => `/api/gallery/image/${photo.id}`
+  const driveImg = (photo: Photo, full = false) => full ? photo.fullUrl : photo.thumbUrl
 
   if (loading) {
     return (
@@ -179,7 +179,7 @@ export default function PhotoGallery({ folderId, title, locale = 'fr' }: Props) 
           <div onClick={e => e.stopPropagation()} style={{ maxWidth: '88vw', maxHeight: '88vh', position: 'relative' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={driveImg(photos[lightbox])}
+              src={driveImg(photos[lightbox], true)}
               alt={photos[lightbox].name}
               style={{ maxWidth: '88vw', maxHeight: '88vh', objectFit: 'contain', display: 'block', borderRadius: 4 }}
             />
