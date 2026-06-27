@@ -20,12 +20,13 @@ export default function GalerieEditPage() {
   const id = params.id as string
   const isNew = id === 'new'
 
-  const [title, setTitle]         = useState('')
-  const [pages, setPages]         = useState<string[]>(['home'])
-  const [position, setPosition]   = useState('bottom')
-  const [isVisible, setIsVisible] = useState(false)
-  const [folderUrl, setFolderUrl] = useState('')
-  const [sortOrder, setSortOrder] = useState(0)
+  const [title, setTitle]               = useState('')
+  const [pages, setPages]               = useState<string[]>(['home'])
+  const [position, setPosition]         = useState('bottom')
+  const [isVisible, setIsVisible]       = useState(false)
+  const [allowDownload, setAllowDownload] = useState(false)
+  const [folderUrl, setFolderUrl]       = useState('')
+  const [sortOrder, setSortOrder]       = useState(0)
   const [loading, setLoading]     = useState(!isNew)
   const [saving, setSaving]       = useState(false)
   const [saved, setSaved]         = useState(false)
@@ -50,6 +51,7 @@ export default function GalerieEditPage() {
         setPages(Array.isArray(p) ? p : (p ? [p] : ['home']))
         setPosition(data.position ?? 'bottom')
         setIsVisible(data.is_visible ?? false)
+        setAllowDownload(data.allow_download ?? false)
         setFolderUrl(data.drive_folder_id
           ? `https://drive.google.com/drive/folders/${data.drive_folder_id}`
           : '')
@@ -97,6 +99,7 @@ export default function GalerieEditPage() {
       page: pages,
       position,
       is_visible: isVisible,
+      allow_download: allowDownload,
       drive_folder_id: folderId,
       sort_order: sortOrder,
       updated_at: new Date().toISOString(),
@@ -155,6 +158,30 @@ export default function GalerieEditPage() {
           >
             <div style={{
               position: 'absolute', top: 3, left: isVisible ? 25 : 3,
+              width: 20, height: 20, borderRadius: '50%',
+              background: '#fff', transition: 'left 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+            }} />
+          </div>
+        </div>
+
+        {/* Allow download */}
+        <div style={{ background: '#fff', borderRadius: 10, padding: '18px 22px', border: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 2 }}>Autoriser le téléchargement</div>
+            <div style={{ fontSize: 13, color: '#888' }}>Affiche une icône de téléchargement sur chaque photo en grand</div>
+          </div>
+          <div
+            onClick={() => setAllowDownload(v => !v)}
+            style={{
+              width: 48, height: 26, borderRadius: 13,
+              background: allowDownload ? '#FF5500' : '#ccc',
+              position: 'relative', cursor: 'pointer',
+              transition: 'background 0.2s', flexShrink: 0,
+            }}
+          >
+            <div style={{
+              position: 'absolute', top: 3, left: allowDownload ? 25 : 3,
               width: 20, height: 20, borderRadius: '50%',
               background: '#fff', transition: 'left 0.2s',
               boxShadow: '0 1px 3px rgba(0,0,0,0.2)',

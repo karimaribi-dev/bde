@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 
-interface Section { id: string; title: string | null; drive_folder_id: string }
+interface Section { id: string; title: string | null; drive_folder_id: string; allow_download?: boolean }
 interface Photo   { id: string; name: string; thumbUrl: string; fullUrl: string; sectionId: string }
 
 interface Props { sections: Section[]; locale: string }
@@ -162,6 +162,29 @@ export default function GaleriePageClient({ sections, locale }: Props) {
             background: 'none', border: 'none', cursor: 'pointer',
             color: '#fff', fontSize: 32, lineHeight: 1, padding: 8, zIndex: 1,
           }}>✕</button>
+
+          {/* Download */}
+          {sections.find(s => s.id === currentPhoto.sectionId)?.allow_download && (
+            <a
+              href={`/api/gallery/image/${currentPhoto.id}?download=1`}
+              download
+              onClick={e => e.stopPropagation()}
+              aria-label="Télécharger"
+              style={{
+                position: 'absolute', top: 20, right: 72,
+                background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.3)',
+                borderRadius: 8, padding: '8px 12px', cursor: 'pointer',
+                color: '#fff', fontSize: 14, fontWeight: 600,
+                display: 'flex', alignItems: 'center', gap: 7,
+                textDecoration: 'none', zIndex: 1,
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3v13M7 11l5 5 5-5"/><rect x="3" y="18" width="18" height="3" rx="1"/>
+              </svg>
+              Télécharger
+            </a>
+          )}
 
           {/* Prev */}
           {total > 1 && (

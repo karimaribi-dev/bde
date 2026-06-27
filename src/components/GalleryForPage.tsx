@@ -11,7 +11,7 @@ export default async function GalleryForPage({ page, position, locale = 'fr' }: 
   const supabase = await createClient()
   const { data: sections } = await supabase
     .from('gallery_sections')
-    .select('id, title, drive_folder_id')
+    .select('id, title, drive_folder_id, allow_download')
     .contains('page', [page])
     .eq('position', position)
     .eq('is_visible', true)
@@ -45,6 +45,7 @@ export default async function GalleryForPage({ page, position, locale = 'fr' }: 
               folderId={section.drive_folder_id}
               title={section.title}
               locale={locale}
+              allowDownload={section.allow_download ?? false}
             />
           </section>
         )
