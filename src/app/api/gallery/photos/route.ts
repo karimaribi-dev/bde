@@ -36,9 +36,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ photos: files.map(f => ({
       id: f.id,
       name: f.name,
-      // URLs CDN Google directes (pas de proxy) — fonctionne si le dossier est partagé publiquement
-      thumbUrl: `https://drive.google.com/thumbnail?id=${f.id}&sz=w600`,
-      fullUrl:  `https://drive.google.com/thumbnail?id=${f.id}&sz=w2000`,
+      thumbUrl: `/api/gallery/image/${f.id}`,
+      fullUrl:  `/api/gallery/image/${f.id}`,
     })) })
   } catch {
     return NextResponse.json({ error: 'Failed to fetch from Google Drive' }, { status: 500 })
