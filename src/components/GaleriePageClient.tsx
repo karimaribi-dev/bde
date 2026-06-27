@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 
 interface Section { id: string; title: string | null; title_en?: string | null; drive_folder_id: string; allow_download?: boolean }
 interface Photo   { id: string; name: string; thumbUrl: string; fullUrl: string; sectionId: string }
@@ -38,6 +38,17 @@ export default function GaleriePageClient({ sections, locale }: Props) {
   const closeLightbox = useCallback(() => setLightboxIdx(null), [])
   const prev = useCallback(() => setLightboxIdx(i => i !== null ? (i - 1 + total) % total : null), [total])
   const next = useCallback(() => setLightboxIdx(i => i !== null ? (i + 1) % total : null), [total])
+
+  const touchStartX = useRef<number | null>(null)
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }, [])
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 50) dx < 0 ? next() : prev()
+    touchStartX.current = null
+  }, [next, prev])
 
   useEffect(() => {
     if (lightboxIdx === null) return
@@ -150,6 +161,8 @@ export default function GaleriePageClient({ sections, locale }: Props) {
       {lightboxIdx !== null && currentPhoto && (
         <div
           onClick={closeLightbox}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
             background: 'rgba(0,0,0,0.94)',

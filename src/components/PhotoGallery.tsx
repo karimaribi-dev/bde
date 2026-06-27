@@ -71,6 +71,17 @@ export default function PhotoGallery({ folderId, title, locale = 'fr', allowDown
   const prev = useCallback(() => setLightbox(i => i !== null ? (i - 1 + photos.length) % photos.length : null), [photos.length])
   const next = useCallback(() => setLightbox(i => i !== null ? (i + 1) % photos.length : null), [photos.length])
 
+  const touchStartX = useRef<number | null>(null)
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }, [])
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 50) dx < 0 ? next() : prev()
+    touchStartX.current = null
+  }, [next, prev])
+
   useEffect(() => {
     if (lightbox === null) return
     const handler = (e: KeyboardEvent) => {
@@ -150,6 +161,8 @@ export default function PhotoGallery({ folderId, title, locale = 'fr', allowDown
       {lightbox !== null && (
         <div
           onClick={closeLightbox}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
             background: 'rgba(0,0,0,0.92)',
