@@ -33,10 +33,11 @@ interface SearchResult {
 
 /* Nav links — hardcodés, pas liés aux catégories */
 const NAV_ITEMS = [
-  { key: 'agenda', label: 'AGENDA & EVENTS', labelEn: 'AGENDA & EVENTS', href: (l: string) => `/${l}/agenda` },
-  { key: 'clubs',  label: 'NOS CLUBS',       labelEn: 'OUR CLUBS',       href: (l: string) => `/${l}/clubs` },
-  { key: 'shop',   label: 'SHOP',            labelEn: 'SHOP',            href: (l: string) => `/${l}/shop` },
-  { key: 'propos', label: 'À PROPOS',        labelEn: 'ABOUT',           href: (l: string) => `/${l}/a-propos` },
+  { key: 'agenda',  label: 'AGENDA & EVENTS', labelEn: 'AGENDA & EVENTS', href: (l: string) => `/${l}/agenda` },
+  { key: 'clubs',   label: 'NOS CLUBS',       labelEn: 'OUR CLUBS',       href: (l: string) => `/${l}/clubs` },
+  { key: 'shop',    label: 'SHOP',            labelEn: 'SHOP',            href: (l: string) => `/${l}/shop` },
+  { key: 'galerie', label: 'GALERIE',         labelEn: 'GALLERY',         href: (l: string) => `/${l}/galerie` },
+  { key: 'propos',  label: 'À PROPOS',        labelEn: 'ABOUT',           href: (l: string) => `/${l}/a-propos` },
 ]
 
 export default function NavbarClient({ categories: _cats, activeSlug, withSearch = false, locale = 'fr', labels }: Props) {
