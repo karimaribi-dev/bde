@@ -1,10 +1,17 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-// Cron endpoint — appelé toutes les 15 minutes
-// Sur Vercel : vercel.json cron
-// Sur VPS : */15 * * * * curl -X GET https://aitrendsnews.com/api/newsletter/cron
+// Cron endpoint — envoie les newsletters programmées dont la date est passée.
+// Protégé par CRON_SECRET : sans secret configuré, la route refuse tout appel
+// (elle déclenche des envois, on ne la laisse jamais ouverte par défaut).
 
-export async function GET() {
+export const dynamic = 'force-dynamic'
+
+export async function GET(req: NextRequest) {
+  const secret = process.env.CRON_SECRET
+  if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
   const { createClient } = await import('@/lib/supabase/server')
   const supabase = await createClient()
 
@@ -17,13 +24,17 @@ export async function GET() {
 
   if (!due?.length) return NextResponse.json({ sent: 0 })
 
-  let sent = 0
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://aitrendsnews.com'
+  // URL dérivée de la requête entrante : le secret ne quitte jamais cet hôte.
+  const sendUrl = new URL('/api/newsletter/send', req.url).toString()
 
+  let sent = 0
   for (const nl of due) {
-    const res = await fetch(`${siteUrl}/api/newsletter/send`, {
+    const res = await fetch(sendUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${secret}`,
+      },
       body: JSON.stringify({ id: nl.id }),
     })
     if (res.ok) sent++

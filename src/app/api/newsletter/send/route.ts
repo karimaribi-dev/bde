@@ -3,10 +3,25 @@ import { NextRequest, NextResponse } from 'next/server'
 import { buildNewsletterHtml } from '@/lib/newsletter-template'
 
 export async function POST(req: NextRequest) {
-  const { id } = await req.json()
-  if (!id) return NextResponse.json({ error: 'ID manquant' }, { status: 400 })
-
   const supabase = await createClient()
+
+  // Accès réservé : soit un admin connecté (appel depuis l'interface),
+  // soit le cron interne porteur de CRON_SECRET.
+  const secret = process.env.CRON_SECRET
+  const isCron = Boolean(secret) && req.headers.get('authorization') === `Bearer ${secret}`
+
+  if (!isCron) {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
+  let id: string | undefined
+  try {
+    ({ id } = await req.json())
+  } catch {
+    return NextResponse.json({ error: 'Corps JSON invalide' }, { status: 400 })
+  }
+  if (!id) return NextResponse.json({ error: 'ID manquant' }, { status: 400 })
 
   // Load newsletter
   const { data: newsletter, error: nlErr } = await supabase
